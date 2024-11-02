@@ -8,6 +8,19 @@ const ThemeToggle = () => {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme();
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 't') {
+        handleClick();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
   
   useEffect(() => {
     setMounted(true)
