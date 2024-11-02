@@ -1,12 +1,13 @@
-import { source } from '@/lib/source';
+import { source } from "@/lib/source";
 import {
   DocsPage,
   DocsBody,
   DocsDescription,
   DocsTitle,
-} from 'fumadocs-ui/page';
-import { notFound } from 'next/navigation';
-import defaultMdxComponents from 'fumadocs-ui/mdx';
+} from "fumadocs-ui/page";
+import { notFound } from "next/navigation";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -18,9 +19,17 @@ export default async function Page(props: {
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={page.data.toc}
+      tableOfContentPopover={{ enabled: true }}
+      tableOfContent={{ style: "clerk" }}
+      full={page.data.full}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
+      {/* <div className="md:hidden mb-2">
+          <InlineTOC items={page.data.toc} />
+        </div> */}
       <DocsBody>
         <MDX components={{ ...defaultMdxComponents }} />
       </DocsBody>
