@@ -10,7 +10,7 @@ const ThemeToggle = () => {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 't') {
+      if (event.shiftKey && event.key === 't') {
         handleClick();
       }
     };
