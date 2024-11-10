@@ -11,7 +11,7 @@
 }
 
 #nd-sidebar {
-  @apply max-md:data-[open=false]:translate-y-full  max-md:transition-transform max-md:duration-500 bg-fd-background border-none ;
+  @apply max-md:data-[open=false]:-translate-x-full translate-x-0  max-md:transition-transform max-md:duration-500 bg-fd-background border-none ;
 }
 #nd-sidebar > div > div:last-child {
   @apply hidden;

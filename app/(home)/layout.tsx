@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/docs/Navbar";
 
 export default function Layout({
   children,
@@ -8,7 +8,7 @@ export default function Layout({
 }): React.ReactElement {
   return (
     <div className="w-screen min-h-screen ">
-      <Navbar />
+      <Navbar  />
       {children}
     </div>
   );
