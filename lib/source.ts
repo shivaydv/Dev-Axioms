@@ -2,6 +2,8 @@ import { docs, meta } from "@/.source";
 import { createMDXSource } from "fumadocs-mdx";
 import { loader } from "fumadocs-core/source";
 import { PageTree } from "fumadocs-core/server";
+import { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import LogoComponent from "@/components/docs/LogoComponent";
 
 export const source = loader({
   baseUrl: "/docs",
@@ -10,6 +12,14 @@ export const source = loader({
 
 //Source.pagetree
 
+export const BaseOptions: BaseLayoutProps = {
+  nav: {
+    title: (
+      typeof LogoComponent
+    ),
+  },
+  githubUrl: "https://github.com/shivaydv/dev-axioms",
+};
 
 export const SidebarTree: PageTree.Root = {
   name: "Sidebar",

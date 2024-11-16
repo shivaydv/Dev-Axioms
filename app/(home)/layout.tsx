@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import Navbar from "@/components/docs/Navbar";
+import { HomeLayout } from "fumadocs-ui/layouts/home";
+import { BaseOptions } from "@/lib/source";
 
 export default function Layout({
   children,
@@ -7,9 +9,8 @@ export default function Layout({
   children: ReactNode;
 }): React.ReactElement {
   return (
-    <div className="w-screen min-h-screen ">
-      <Navbar float />
+    <HomeLayout {...BaseOptions}>
       {children}
-    </div>
+    </HomeLayout>
   );
 }

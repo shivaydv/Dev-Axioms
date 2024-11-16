@@ -2,7 +2,7 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { MenuLinks } from "@/components/docs/MobileNavigation";
 import Navbar from "@/components/docs/Navbar";
-import { SidebarTree } from "@/lib/source";
+import { BaseOptions, SidebarTree } from "@/lib/source";
 import { RootToggle } from "fumadocs-ui/layouts/docs.client";
 import { FaHtml5, FaCss3Alt, FaReact } from "react-icons/fa";
 import { SiJavascript } from "react-icons/si";
@@ -11,9 +11,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
       disableThemeSwitch
-      nav={{
-        component: <Navbar menu="Sidebar" />,
-      }}
+      {...BaseOptions}
       sidebar={{
         banner: (
           <>
