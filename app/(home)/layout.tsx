@@ -8,7 +8,7 @@ export default function Layout({
 }): React.ReactElement {
   return (
     <div className="w-screen min-h-screen ">
-      <Navbar  />
+      <Navbar float />
       {children}
     </div>
   );

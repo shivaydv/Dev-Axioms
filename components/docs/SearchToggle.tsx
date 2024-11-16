@@ -9,12 +9,10 @@ const SearchToggle = () => {
     <>
       <button
         onClick={() => setOpenSearch(true)}
-        className="max-md:hidden border border-fd-border rounded-lg px-2 py-1 flex items-center gap-3 hover:bg-fd-foreground/10 transition-colors select-none"
+        className="max-md:hidden border border-fd-border rounded-xl px-3 py-2 flex items-center  gap-3 hover:bg-fd-foreground/10 transition-colors select-none"
       >
-        <p className="text-sm max-md:hidden">Search in Documentation...</p>
-        <kbd className="text-sm flex items-center justify-center bg-fd-foreground/10 rounded-lg py-1 px-2 max-md:hidden">
-          <span>⌘</span>K
-        </kbd>
+        <p className="text-sm">Search in Documentation...</p>
+        <kbd className="text-sm">⌘K</kbd>
       </button>
       <button
         onClick={() => setOpenSearch(true)}

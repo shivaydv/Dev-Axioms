@@ -87,7 +87,7 @@ const MobileNavigation = ({ socialLinks = true }: { socialLinks?: boolean }) => 
     <>
       <button
         onClick={toggleMenu}
-        className={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md md:hidden")}
+        className={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md md:hidden z-50 relative")}
         type="button"
       >
         {isMenuOpen ? (
@@ -96,15 +96,23 @@ const MobileNavigation = ({ socialLinks = true }: { socialLinks?: boolean }) => 
           <HiMenu className="h-5 w-5" />
         )}
       </button>
-      <div className="md:hidden overflow-hidden absolute top-[var(--fd-nav-height)] left-0 w-full">
+      <div
+        className={`md:hidden overflow-hidden fixed top-[var(--fd-nav-height)] right-0 w-full max-w-xs transition-transform duration-300
+          ${isMenuOpen ? "translate-x-0 bg-fd-background/50 backdrop-blur-lg z-50" : "translate-x-full"}`}
+      >
         <div
           className={cn(
-            "w-full bg-fd-background border-b border-fd-border transform transition-transform duration-300",
-            isMenuOpen ? "translate-y-0" : "-translate-y-full"
+            "w-full  border bg-fd-background/50 rounded-xl transform transition-transform duration-300",
+            isMenuOpen ? "translate-y-0  " : "-translate-y-full"
           )}
         >
           <div className="p-4">
-            <MenuLinks onItemClick={toggleMenu} socialLinks={socialLinks} className="flex-col" itemClassName={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md")} />
+            <MenuLinks
+              onItemClick={toggleMenu}
+              socialLinks={socialLinks}
+              className="flex-col"
+              itemClassName={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md")}
+            />
           </div>
         </div>
       </div>

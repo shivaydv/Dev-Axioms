@@ -6,16 +6,44 @@ import LogoComponent from "./LogoComponent";
 import { FiGithub } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
-import MobileNavigation, { MenuLinks } from "./MobileNavigation";
+import { useState, useEffect } from "react";
+import { HiMenu, HiX } from "react-icons/hi";
+import { cn } from "fumadocs-ui/components/api";
+import { MenuLinks } from "./MobileNavigation";
 
-const Navbar = ({ menu = "Mobile" }: { menu?: "Sidebar" | "Mobile" }) => {
+const Navbar = ({
+  menu = "Mobile",
+  float = false,
+}: {
+  menu?: "Sidebar" | "Mobile";
+  float?: boolean;
+}) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <>
-      <div className="flex justify-between items-center  px-6 bg-fd-background/50 backdrop-blur-sm border-b border-fd-border z-30 sticky top-0 w-full h-[var(--fd-nav-height)]">
-        <div className="flex items-end gap-6 ">
+    <div
+      className={`flex flex-col justify-between items-center sticky px-6   border-fd-border z-30 ${
+        float
+          ? " h-auto rounded-2xl md:rounded-full top-4 w-11/12 mx-auto border backdrop-blur-lg bg-fd-background/50"
+          : "top-0 w-full border-b bg-fd-background h-[var(--fd-nav-height)]"
+      } `}
+    >
+      <div className="flex justify-between items-center w-full h-[var(--fd-nav-height)]">
+        <div className="flex items-end gap-6">
           <LogoComponent />
-          <div className=" flex justify-center items-center gap-4 max-md:hidden">
-            <MenuLinks socialLinks={false} className="flex-row " itemClassName="" />
+          <div className="flex justify-center items-center gap-4 max-md:hidden">
+            <MenuLinks socialLinks={false} className="flex-row" itemClassName="" />
           </div>
         </div>
         <div className="flex gap-1 items-center justify-center">
@@ -36,10 +64,36 @@ const Navbar = ({ menu = "Mobile" }: { menu?: "Sidebar" | "Mobile" }) => {
             <FiGithub className="h-5 w-5" />
           </Link>
 
-          {menu === "Sidebar" ? <SidebarNavBtn /> : <MobileNavigation />}
+          {menu === "Sidebar" ? (
+            <SidebarNavBtn />
+          ) : (
+            <button
+              onClick={toggleMenu}
+              className={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md md:hidden z-50 relative")}
+              type="button"
+            >
+              {isMenuOpen ? <HiX className="h-5 w-5" /> : <HiMenu className="h-5 w-5" />}
+            </button>
+          )}
         </div>
       </div>
-    </>
+      {menu === "Mobile" && (
+        <div
+          className={`overflow-hidden transition-max-height  duration-300 ease-in-out ${
+            isMenuOpen ? "max-h-screen border-t" : "max-h-0"
+          } w-full   rounded-b-xl`}
+        >
+          <div className="p-4">
+            <MenuLinks
+              onItemClick={toggleMenu}
+              socialLinks={true}
+              className="flex-col"
+              itemClassName={cn("p-2 hover:bg-fd-foreground/10 transition-colors rounded-md")}
+            />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

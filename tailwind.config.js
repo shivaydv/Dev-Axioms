@@ -9,6 +9,7 @@ export default {
     './mdx-components.{ts,tsx}',
     './node_modules/fumadocs-ui/dist/**/*.js',
   ],
-  presets: [createPreset(
-  )],
+  presets: [
+    createPreset(),
+  ],
 };
