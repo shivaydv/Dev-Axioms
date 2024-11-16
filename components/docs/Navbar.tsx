@@ -54,6 +54,7 @@ const Navbar = ({
             className="p-2 hover:bg-fd-foreground/10 transition-colors rounded-md max-md:hidden"
             target="_blank"
           >
+            
             <FaXTwitter className="h-5 w-5" />
           </Link>
           <Link
