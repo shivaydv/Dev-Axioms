@@ -1,31 +1,27 @@
-import './global.css';
-import { RootProvider } from 'fumadocs-ui/provider';
-import { Inter } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
-import type { ReactNode } from 'react';
+import "./global.css";
+import { RootProvider } from "fumadocs-ui/provider";
+import { Inter } from "next/font/google";
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
 
-import type { Metadata } from 'next'
- 
 export const metadata: Metadata = {
-  title: 'Dev Axioms',
-  description: 'Dev Axioms is a platform to practice and learn frontend development interview questions.',
+  title: "Dev Axioms",
+  description:
+    "Dev Axioms is a platform to practice and learn frontend development interview questions.",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
   },
-}
+};
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ["latin"],
 });
-
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen ">
-        <ThemeProvider attribute="class" defaultTheme="light">
-        <RootProvider >{children}</RootProvider>
-        </ThemeProvider>
+    <html lang="en" className={inter.className} suppressHydrationWarning >
+      <body suppressHydrationWarning>
+        <RootProvider>{children}</RootProvider>
       </body>
     </html>
   );

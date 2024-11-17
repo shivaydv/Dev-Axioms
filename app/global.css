@@ -2,18 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
+
 :root {
-  --fd-nav-height: 4rem !important;
+  --primary: 250 80% 54%;
 }
 
-#nd-sidebar > div {
-  @apply border-none pt-0;
+.dark {
+  --primary: 250 100% 80%;
+  
+}
+
+
+
+
+
+
+
+
+/* :root {
+  --fd-nav-height: 4rem !important;
+} */
+
+#nd-nav  {
+  @apply  top-2 bg-fd-background/50 backdrop-blur-md ;
+}
+
+#nd-home-layout {
+  @apply  min-h-screen pt-[calc(var(--fd-nav-height)+0.5rem)];
+}
+#nd-home-layout > div {
+  @apply  h-12 ;
 }
 
 #nd-sidebar {
-  @apply max-md:data-[open=false]:-translate-x-full translate-x-0   max-md:transition-transform max-md:duration-500 bg-fd-background border-none ;
-}
-#nd-sidebar > div > div:last-child {
-  @apply hidden;
+  @apply max-md:data-[open=false]:-translate-x-full max-md:translate-x-0   max-md:transition-transform max-md:duration-500 bg-fd-background;
 }
 
+/* #nd-sidebar > div {
+  @apply border-none;
+} */
+
+/* #nd-sidebar > div > div:last-child {
+  @apply hidden;
+} */
+
+/* :root {
+  --primary: 221 83% 53%;
+} */
+/* 
+.dark {
+  --background: 247 82% 2%;
+  --primary: 221 83% 53%;
+} */
+
+/* 221, 83%, 53% blue  */

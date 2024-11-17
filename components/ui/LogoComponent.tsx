@@ -1,36 +1,5 @@
 import React from "react";
 import { cn } from "fumadocs-ui/components/api";
-import Link from "next/link";
-
-const LogoComponent = ({
-  className,
-  textClassName,
-  logoClassName,
-}: {
-  className?: string;
-  textClassName?: string;
-  logoClassName?: string;
-}) => {
-  return (
-    <Link
-      className={cn(
-        "flex items-center gap-2 w-fit select-none drag",
-        className
-      )}
-      href="/"
-    >
-      <Logo className={logoClassName} />
-      <h1
-        className={cn(
-          "text-xl font-semibold text-black dark:text-white text-nowrap",
-          textClassName
-        )}
-      >
-        Dev Axioms
-      </h1>
-    </Link>
-  );
-};
 
 interface LogoProps {
   className?: string;
@@ -73,5 +42,4 @@ const Logo = ({ className }: LogoProps) => {
   );
 };
 
-export { Logo };
-export default LogoComponent;
+export default Logo;
