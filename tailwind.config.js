@@ -10,6 +10,12 @@ export default {
     './node_modules/fumadocs-ui/dist/**/*.js',
   ],
   presets: [
-    createPreset(),
+    createPreset(
+      {
+        addGlobalColors: true,
+        preset: 'neutral',
+      }
+    ),
   ],
+  darkMode: 'class',
 };
