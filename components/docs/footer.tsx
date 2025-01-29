@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { CommandIcon, HeartIcon, TriangleIcon } from "lucide-react";
+import { CommandIcon, HeartIcon } from "lucide-react";
 
 export function Footer() {
   return (

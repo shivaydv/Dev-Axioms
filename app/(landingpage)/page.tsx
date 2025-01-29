@@ -7,18 +7,18 @@ import {
   type LucideIcon,
   BrainIcon,
   CodeIcon,
-  MousePointer,
+  // MousePointer,
   BookOpen,
   User,
   CircleHelp,
   RocketIcon,
-  TwitterIcon,
-  GithubIcon,
+  // TwitterIcon,
+  // GithubIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { LogoIcon, Navbar } from "@/components/docs/navbar";
-import { ModeToggle } from "@/components/docs/theme-toggle";
-import Search from "@/components/docs/search";
+import { Navbar } from "@/components/docs/navbar";
+// import { ModeToggle } from "@/components/docs/theme-toggle";
+// import Search from "@/components/docs/search";
 
 const page = () => {
   return (
@@ -176,126 +176,126 @@ function Hero(): React.ReactElement {
   );
 }
 
-function Headline(): React.ReactElement {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8 }}
-      className="container relative overflow-hidden border-x border-t py-16 sm:py-24"
-      style={{
-        backgroundImage:
-          "radial-gradient(circle at bottom center, hsl(var(--secondary)), hsl(var(--background)))",
-      }}
-    >
-      <motion.h2
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="bg-gradient-to-b from-primary to-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl"
-      >
-        Interactive Learning Experience.
-        <br />
-        Code, Practice, Excel.
-      </motion.h2>
-    </motion.div>
-  );
-}
+// function Headline(): React.ReactElement {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0 }}
+//       whileInView={{ opacity: 1 }}
+//       viewport={{ once: true, margin: "-100px" }}
+//       transition={{ duration: 0.8 }}
+//       className="container relative overflow-hidden border-x border-t py-16 sm:py-24"
+//       style={{
+//         backgroundImage:
+//           "radial-gradient(circle at bottom center, hsl(var(--secondary)), hsl(var(--background)))",
+//       }}
+//     >
+//       <motion.h2
+//         initial={{ opacity: 0, y: 30 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.6, delay: 0.3 }}
+//         className="bg-gradient-to-b from-primary to-foreground/40 bg-clip-text text-center text-2xl font-semibold text-transparent sm:text-3xl"
+//       >
+//         Interactive Learning Experience.
+//         <br />
+//         Code, Practice, Excel.
+//       </motion.h2>
+//     </motion.div>
+//   );
+// }
 
-function Feedback(): React.ReactElement {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-      className="relative flex flex-col items-center overflow-hidden border-x border-y px-6 py-8 md:py-16"
-    >
-      <div
-        className="absolute inset-x-0 bottom-0 z-[-1] h-24 opacity-30 duration-1000 animate-in fade-in"
-        style={{
-          maskImage: "linear-gradient(to bottom,transparent,white)",
-          backgroundImage:
-            "linear-gradient(to right, #4ebfff, transparent, #e92a67)",
-        }}
-      />
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-center font-medium text-muted-foreground"
-      >
-        Your Path to Interview Success
-      </motion.p>
+// function Feedback(): React.ReactElement {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0 }}
+//       whileInView={{ opacity: 1 }}
+//       viewport={{ once: true }}
+//       transition={{ duration: 0.6 }}
+//       className="relative flex flex-col items-center overflow-hidden border-x border-y px-6 py-8 md:py-16"
+//     >
+//       <div
+//         className="absolute inset-x-0 bottom-0 z-[-1] h-24 opacity-30 duration-1000 animate-in fade-in"
+//         style={{
+//           maskImage: "linear-gradient(to bottom,transparent,white)",
+//           backgroundImage:
+//             "linear-gradient(to right, #4ebfff, transparent, #e92a67)",
+//         }}
+//       />
+//       <motion.p
+//         initial={{ opacity: 0, y: 20 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.5, delay: 0.3 }}
+//         className="text-center font-medium text-muted-foreground"
+//       >
+//         Your Path to Interview Success
+//       </motion.p>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="mt-6 rounded-xl border bg-gradient-to-b from-secondary p-4 shadow-lg"
-      >
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-sm font-medium"
-        >
-          {`"I built Dev Axioms to help developers ace their tech interviews."`}
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="mt-4 flex flex-row items-center justify-between "
-        >
-          <div className="flex flex-row items-center gap-2">
-            <motion.img
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.8 }}
-              src="https://avatars.githubusercontent.com/shivaydv"
-              alt="Shiva Yadav"
-              width="32"
-              height="32"
-              className="size-8 rounded-full"
-            />
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-            >
-              <a
-                href="https://x.com/shivay1256"
-                rel="noreferrer noopener"
-                className="text-sm font-medium"
-              >
-                Shiva Yadav
-              </a>
-              <p className="text-xs text-muted-foreground">
-                Creator of Dev Axioms
-              </p>
-            </motion.div>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 1.0 }}
-          >
-            <Link
-              href="https://github.com/shivaydv/dev-axioms"
-              className={cn(
-                buttonVariants({ variant: "outline", className: "self-end" })
-              )}
-            >
-              GitHub
-            </Link>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
-  );
-}
+//       <motion.div
+//         initial={{ opacity: 0, scale: 0.95 }}
+//         whileInView={{ opacity: 1, scale: 1 }}
+//         transition={{ duration: 0.5, delay: 0.5 }}
+//         className="mt-6 rounded-xl border bg-gradient-to-b from-secondary p-4 shadow-lg"
+//       >
+//         <motion.p
+//           initial={{ opacity: 0, y: 20 }}
+//           whileInView={{ opacity: 1, y: 0 }}
+//           transition={{ duration: 0.5, delay: 0.6 }}
+//           className="text-sm font-medium"
+//         >
+//           {`"I built Dev Axioms to help developers ace their tech interviews."`}
+//         </motion.p>
+//         <motion.div
+//           initial={{ opacity: 0, x: -20 }}
+//           whileInView={{ opacity: 1, x: 0 }}
+//           transition={{ duration: 0.5, delay: 0.7 }}
+//           className="mt-4 flex flex-row items-center justify-between "
+//         >
+//           <div className="flex flex-row items-center gap-2">
+//             <motion.img
+//               initial={{ scale: 0 }}
+//               whileInView={{ scale: 1 }}
+//               transition={{ duration: 0.4, delay: 0.8 }}
+//               src="https://avatars.githubusercontent.com/shivaydv"
+//               alt="Shiva Yadav"
+//               width="32"
+//               height="32"
+//               className="size-8 rounded-full"
+//             />
+//             <motion.div
+//               initial={{ opacity: 0, x: 20 }}
+//               whileInView={{ opacity: 1, x: 0 }}
+//               transition={{ duration: 0.5, delay: 0.9 }}
+//             >
+//               <a
+//                 href="https://x.com/shivay1256"
+//                 rel="noreferrer noopener"
+//                 className="text-sm font-medium"
+//               >
+//                 Shiva Yadav
+//               </a>
+//               <p className="text-xs text-muted-foreground">
+//                 Creator of Dev Axioms
+//               </p>
+//             </motion.div>
+//           </div>
+//           <motion.div
+//             initial={{ opacity: 0, x: 20 }}
+//             whileInView={{ opacity: 1, x: 0 }}
+//             transition={{ duration: 0.5, delay: 1.0 }}
+//           >
+//             <Link
+//               href="https://github.com/shivaydv/dev-axioms"
+//               className={cn(
+//                 buttonVariants({ variant: "outline", className: "self-end" })
+//               )}
+//             >
+//               GitHub
+//             </Link>
+//           </motion.div>
+//         </motion.div>
+//       </motion.div>
+//     </motion.div>
+//   );
+// }
 
 function Highlights(): React.ReactElement {
   return (
@@ -324,7 +324,7 @@ function Highlights(): React.ReactElement {
         companies.
       </Highlight>
       <Highlight icon={User} heading="Community Contributions">
-        It's open-source and anyone can contribute.
+        It&apos;s open-source and anyone can contribute.
       </Highlight>
       <Highlight icon={CircleHelp} heading="Interview Tips">
         Get valuable tips and tricks to ace your technical interviews.
