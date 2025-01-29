@@ -15,9 +15,9 @@ type PageProps = {
 };
 
 export default async function DocsPage({ params }: PageProps) {
-  const parameters = await params;
-  const section = parameters.section;
-  const slug = parameters.slug || [];
+  // const parameters = await params;
+  const section = params.section;
+  const slug = params.slug || [];
 
   // Verify valid section
   if (!DOCS_SECTIONS.find(s => s.id === section)) {
@@ -48,8 +48,8 @@ export default async function DocsPage({ params }: PageProps) {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const parameters = await params;
-  const section = parameters.section;
+  // const parameters = await params;
+  const section = params.section;
   const sectionCapitalized = section.charAt(0).toUpperCase() + section.slice(1);
   
   return {
