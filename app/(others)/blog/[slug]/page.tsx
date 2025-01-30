@@ -69,13 +69,13 @@ export default async function BlogPage(props: PageProps) {
       <div className="!w-full">
           {
             res.frontmatter.cover && (
-              <div className="w-full mt-6">
+              <div className="w-full mt-6 aspect-video  content-center">
               <Image
                 src={res.frontmatter.cover}
                 alt="cover"
                 width={700}
                 height={400}
-                className="w-full h-[400px] rounded-md border object-cover"
+                className="w-full h-full rounded-md border object-cover"
               />
         </div>
             )
