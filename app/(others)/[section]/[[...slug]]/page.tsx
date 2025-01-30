@@ -5,7 +5,7 @@ import { DOCS_SECTIONS } from "@/lib/docs-config";
 import { getDocsForSlug } from "@/lib/markdown";
 import { Typography } from "@/components/docs/typography";
 import { notFound } from "next/navigation";
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
 type PageProps = {
   params: {
@@ -14,13 +14,10 @@ type PageProps = {
   };
 };
 
-export default async function DocsPage({ params }: PageProps) {
-  // const parameters = await params;
-  const section = params.section;
-  const slug = params.slug || [];
+export default async function DocsPage({ params }: { params: Promise<PageProps['params']> }) {
+  const { section, slug = [] } = await params; // ✅ Awaiting params
 
-  // Verify valid section
-  if (!DOCS_SECTIONS.find(s => s.id === section)) {
+  if (!DOCS_SECTIONS.find((s) => s.id === section)) {
     notFound();
   }
 
@@ -47,12 +44,11 @@ export default async function DocsPage({ params }: PageProps) {
   );
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // const parameters = await params;
-  const section = params.section;
+export async function generateMetadata({ params }: { params: Promise<PageProps['params']> }): Promise<Metadata> {
+  const { section } = await params; // ✅ Awaiting params
   const sectionCapitalized = section.charAt(0).toUpperCase() + section.slice(1);
-  
+
   return {
     title: `Dev Axioms - ${sectionCapitalized}`,
   };
-} 
+}
