@@ -7,24 +7,44 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
+import { generateDynamicMetadata } from "@/app/layout";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata(props: PageProps) {
-  const params = await props.params;
-
-  const {
-    slug
-  } = params;
-
+  const { slug } = await props.params;
   const res = await getBlogForSlug(slug);
   if (!res) return null;
+  
   const { frontmatter } = res;
+  
   return {
     title: frontmatter.title,
     description: frontmatter.description,
+    openGraph: {
+      title: frontmatter.title,
+      description: frontmatter.description,
+      type: 'article',
+      url: `https://dev-axioms.vercel.app/blog/${slug}`,
+      images: [
+        {
+          url: frontmatter.cover || '/og-image.png', // Fallback to default if no cover
+          width: 1200,
+          height: 630,
+          alt: frontmatter.title,
+        },
+      ],
+      publishedTime: frontmatter.date,
+      authors: frontmatter.authors?.map(author => author.username) || [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: frontmatter.title,
+      description: frontmatter.description,
+      images: [frontmatter.cover || '/og-image.png'],
+    },
   };
 }
 
