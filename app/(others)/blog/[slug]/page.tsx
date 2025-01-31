@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
-import { generateDynamicMetadata } from "@/app/layout";
+
 
 type PageProps = {
   params: Promise<{ slug: string }>;

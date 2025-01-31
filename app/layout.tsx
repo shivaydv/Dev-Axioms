@@ -77,40 +77,4 @@ export default function RootLayout({
   );
 }
 
-type DynamicMetadataProps = {
-  title?: string;
-  description?: string;
-  path?: string;
-  image?: string;
-};
 
-export function generateDynamicMetadata({
-  title,
-  description,
-  path = "",
-  image,
-}: DynamicMetadataProps) {
-  const fullTitle = title 
-    ? `${title} | ${defaultSEOConfig.defaultTitle}`
-    : defaultSEOConfig.defaultTitle;
-    
-  const fullDescription = description || defaultSEOConfig.description;
-  const url = `${defaultSEOConfig.openGraph.url}${path}`;
-  
-  return {
-    title: fullTitle,
-    description: fullDescription,
-    openGraph: {
-      title: fullTitle,
-      description: fullDescription,
-      url,
-      images: image ? [{ url: image }] : defaultSEOConfig.openGraph.images,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: fullTitle,
-      description: fullDescription,
-      images: image ? [image] : defaultSEOConfig.openGraph.images,
-    },
-  };
-}
