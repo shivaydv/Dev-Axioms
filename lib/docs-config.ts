@@ -7,16 +7,6 @@ export type DocsSection = {
 
 export const DOCS_SECTIONS: DocsSection[] = [
   {
-    id: "docs",
-    title: "Documentation",
-    description: "Main documentation for the project",
-  },
-  {
-    id: "frontend",
-    title: "Frontend Guide",
-    description: "Frontend development documentation",
-  },
-  {
     id: "html",
     title: "HTML",
     description: "HTML documentation",

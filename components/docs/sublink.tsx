@@ -31,7 +31,7 @@ export default function SubLink({
 
   const Comp = (
     <Anchor
-      activeClassName="text-primary dark:font-medium font-semibold"
+      activeClassName="text-primary dark:font-medium font-semibold bg-accent"
       href={href}
       className="transition-colors duration-200 hover:bg-accent w-full text-left rounded-md px-2 py-1"
     >

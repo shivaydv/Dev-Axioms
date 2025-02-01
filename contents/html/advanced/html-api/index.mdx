@@ -1,0 +1,96 @@
+---
+title: "HTML APIs"
+description: "Learn about various HTML APIs including History API, Web Workers, and WebSockets."
+---
+
+## History API
+
+The History API allows manipulation of the browser session history, enabling navigation without full-page reloads.
+
+### Methods:
+- `history.pushState(state, title, url)`: Adds an entry to the session history stack.
+- `history.replaceState(state, title, url)`: Modifies the current history entry.
+- `history.back()`: Moves to the previous page.
+- `history.forward()`: Moves to the next page.
+- `history.go(n)`: Moves forward or backward `n` steps.
+
+Example:
+```js
+history.pushState({ page: 1 }, "", "page1.html");
+window.addEventListener("popstate", event => {
+    console.log("Location changed to:", document.location);
+});
+```
+
+---
+
+## Web Workers
+
+Web Workers allow running JavaScript in background threads, improving performance by offloading tasks from the main UI thread.
+
+### Creating a Worker:
+```js
+// worker.js
+self.onmessage = function(event) {
+    postMessage(`Received: ${event.data}`);
+};
+```
+
+```js
+// main.js
+const worker = new Worker("worker.js");
+worker.postMessage("Hello Worker");
+worker.onmessage = function(event) {
+    console.log(event.data);
+};
+```
+
+---
+
+## WebSockets
+
+WebSockets provide full-duplex communication between a client and a server.
+
+### Establishing a Connection:
+```js
+const socket = new WebSocket("wss://example.com/socket");
+
+socket.onopen = () => {
+    socket.send("Hello Server!");
+};
+
+socket.onmessage = event => {
+    console.log("Message from server:", event.data);
+};
+```
+
+---
+
+## Additional APIs
+
+### Fetch API
+Used to make HTTP requests.
+```js
+fetch("https://api.example.com/data")
+    .then(response => response.json())
+    .then(data => console.log(data));
+```
+
+### Clipboard API
+Allows copying and pasting content.
+```js
+navigator.clipboard.writeText("Hello World");
+navigator.clipboard.readText().then(text => console.log(text));
+```
+
+### Notification API
+Displays system notifications.
+```js
+Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+        new Notification("Hello, world!");
+    }
+});
+```
+
+These APIs enhance web application interactivity, performance, and real-time communication.

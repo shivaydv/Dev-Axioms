@@ -1,0 +1,90 @@
+---
+title: "HTML5 Features"
+description: "Learn about new semantic elements, multimedia tags, and powerful APIs in HTML5."
+---
+
+## New Semantic Elements
+
+HTML5 introduced semantic elements to provide meaningful structure to web pages, improving accessibility and SEO.
+
+- **`<header>`**: Represents introductory content or a navigational section.
+- **`<nav>`**: Defines a section with navigation links.
+- **`<section>`**: Represents a standalone thematic section.
+- **`<article>`**: Defines independent, self-contained content.
+- **`<aside>`**: Used for side content like advertisements or related links.
+- **`<footer>`**: Contains footer information like copyright details.
+
+
+---
+
+## Multimedia Tags
+
+HTML5 enhances multimedia support with `<video>` and `<audio>` elements.
+
+
+---
+
+## Canvas API
+
+The `<canvas>` element allows drawing graphics dynamically using JavaScript.
+
+Example:
+```html
+<canvas id="myCanvas" width="400" height="200"></canvas>
+<script>
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "blue";
+    ctx.fillRect(50, 50, 100, 100);
+</script>
+```
+
+---
+
+## Offline Storage
+
+HTML5 provides `localStorage` and `sessionStorage` for storing data in the browser.
+
+### Local Storage (Persistent Data)
+```js
+localStorage.setItem("username", "John");
+console.log(localStorage.getItem("username"));
+```
+
+### Session Storage (Temporary Data)
+```js
+sessionStorage.setItem("sessionID", "12345");
+console.log(sessionStorage.getItem("sessionID"));
+```
+
+---
+
+## Geolocation API
+
+The Geolocation API allows accessing the user's location with permission.
+
+Example:
+```js
+navigator.geolocation.getCurrentPosition(position => {
+    console.log(`Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`);
+});
+```
+
+---
+
+## Drag-and-Drop API
+
+Enables dragging and dropping elements within a webpage.
+
+Example:
+```html
+<div id="dragItem" draggable="true">Drag me</div>
+<script>
+    const item = document.getElementById("dragItem");
+    item.addEventListener("dragstart", event => {
+        event.dataTransfer.setData("text", event.target.id);
+    });
+</script>
+```
+
+These HTML5 features significantly enhance web development by providing better structure, multimedia handling, storage capabilities, geolocation, and interactive elements.

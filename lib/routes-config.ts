@@ -17,91 +17,45 @@ export const ROUTES: DocsRoutes = {
     {
       title: "Introduction",
       href: "/introduction",
-      openFolder: true,
-      items: [
-        { title: "What is HTML?", href: "/what-is-html" },
-        { title: "Role in Web Development", href: "/role-in-web-dev" },
-        { title: "Browser Rendering", href: "/browser-rendering" },
-        { title: "Doctype Declaration", href: "/doctype" },
-        { title: "HTML Elements", href: "/elements" },
-        { title: "Common Tags", href: "/common-tags" },
-        { title: "Semantic Tags", href: "/semantic-tags" }
-      ]
+    },
+    {
+      title: "Structure",
+      href: "/structure",
     },
     {
       title: "Attributes and Properties",
       href: "/attributes",
-      noLink: true,
-      items: [
-        { title: "Global Attributes", href: "/global" },
-        { title: "Event Attributes", href: "/events" },
-        { title: "Boolean Attributes", href: "/boolean" },
-        { title: "Custom Data Attributes", href: "/data-attributes" }
-      ]
     },
     {
       title: "Forms and Input",
-      href: "/forms",
-      noLink: true,
-      items: [
-        { title: "Form Elements", href: "/elements" },
-        { title: "Form Attributes", href: "/attributes" },
-        { title: "Input Types", href: "/types" },
-        { title: "Validation", href: "/validation" }
-      ]
+      href: "/inputs-and-forms",
     },
     {
       title: "Multimedia",
       href: "/multimedia",
-      noLink: true,
-      items: [
-        { title: "Images", href: "/images" },
-        { title: "Videos", href: "/videos" },
-        { title: "Audio", href: "/audio" }
-      ]
     },
     {
       title: "Tables",
       href: "/tables",
-      noLink: true,
-      items: [
-        { title: "Table Structure", href: "/structure" },
-        { title: "Table Attributes", href: "/attributes" }
-      ]
+    },
+    {
+      title: "HTML 5",
+      href: "/html5",
     },
     {
       title: "Advanced HTML",
       href: "/advanced",
       noLink: true,
       items: [
-        { title: "Semantic Elements", href: "/semantic" },
-        { title: "Canvas API", href: "/canvas" },
-        { title: "Storage APIs", href: "/storage" },
-        { title: "Geolocation", href: "/geolocation" },
-        { title: "HTML APIs", href: "/apis" },
-        { title: "HTML vs HTML5", href: "/html-vs-html5" }
+        {title: "Accessibility", href: "/accessibility"},
+        {title: "HTML API", href: "/html-api"},
+        {title: "SEO", href: "/seo"},
       ]
     },
     {
-      title: "Accessibility",
-      href: "/accessibility",
-      noLink: true,
-      items: [
-        { title: "ARIA Roles", href: "/aria" },
-        { title: "Screen Readers", href: "/screen-readers" },
-        { title: "Best Practices", href: "/best-practices" }
-      ]
+      title: "Interview Questions",
+      href: "/interview-questions",
     },
-    {
-      title: "SEO Essentials",
-      href: "/seo",
-      noLink: true,
-      items: [
-        { title: "Metadata", href: "/metadata" },
-        { title: "Open Graph", href: "/open-graph" },
-        { title: "Canonical Tags", href: "/canonical" }
-      ]
-    }
   ],
 };
 
