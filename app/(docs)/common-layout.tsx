@@ -28,14 +28,28 @@ export default function CommonLayout({
         ),
         mode: "top",
       }}
-      searchToggle={{enabled:true}}
+      searchToggle={{ enabled: true }}
       githubUrl="https://github.com/shivaydv/Dev-Axioms"
-    links={[{
-        type:"icon",
-        text:"Dev Axioms",
-        icon:<FaXTwitter />,
-        url:"https://devaxioms.com",
-    }]}
+      links={[
+        {
+          text: "Home",
+          url: "/",
+        },
+        {
+          text: "Practice",
+          url: "#",
+        },
+        {
+          text: "Blogs",
+          url: "/blog",
+        },
+        {
+          type: "icon",
+          text: "Dev Axioms",
+          icon: <FaXTwitter />,
+          url: "https://x.com/shivay1256",
+        },
+      ]}
       {...options}
     >
       {children}

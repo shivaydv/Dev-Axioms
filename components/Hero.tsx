@@ -13,18 +13,6 @@ function Hero(): React.ReactElement {
         transition={{ duration: 0.8 }}
         className="container relative z-[2] flex flex-col overflow-hidden border-x border-t bg-background/0 px-6 pt-12 pb-12 md:pb-24  md:px-12 md:pt-16 [.uwu_&]:hidden"
       >
-        {/* <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.7,
-            ease: [0.24, 0.25, 0.05, 1.0],
-          }}
-          className="mb-8 text-4xl font-medium md:hidden"
-        >
-          Dev Axioms
-        </motion.h1> */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
