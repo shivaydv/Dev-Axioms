@@ -3,7 +3,7 @@ import "./global.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
-
+import { Metadata } from "next";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -15,16 +15,15 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-
-
-export const metadata = createMetadata({
-  metadataBase: baseUrl,
+export const metadata: Metadata = {
+  metadataBase: new URL("https://devaxioms.vercel.app"),
   title: {
-    template: '%s | Dev Axioms',
-    default: 'Dev Axioms',
+    template: "%s | Dev Axioms",
+    default: "Dev Axioms",
   },
-  description:"All in one platform to learn and practice interview questions as a developer.",
-  keywords:keywords,
+  description:
+    "All in one platform to learn and practice interview questions as a developer.",
+  keywords: keywords,
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
@@ -36,7 +35,7 @@ export const metadata = createMetadata({
       },
     ],
   },
-});
+};
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
