@@ -1,0 +1,64 @@
+---
+title: "Introduction to HTML"
+description: "Learn about HTML, its role in web development, and how browsers render it."
+---
+
+## What is HTML?
+
+HTML (HyperText Markup Language) is the standard language used to create web pages. It provides the structure and meaning of web content by defining elements such as headings, paragraphs, links, images, and more.
+
+## Key Features of HTML:
+- It is a markup language, not a programming language.
+- Uses tags (`<tagname>`) to structure content.
+- Works with CSS for styling and JavaScript for interactivity.
+- Compatible with all modern web browsers.
+
+Example of a simple HTML document:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Page</title>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a basic HTML structure.</p>
+</body>
+</html>
+```
+
+---
+
+## Role of HTML in Web Development
+
+HTML plays a crucial role in web development as it serves as the backbone of every website. It:
+
+1. **Defines Content Structure**: Organizes text, images, and multimedia.
+2. **Works with CSS**: Provides hooks for styling with CSS.
+3. **Supports JavaScript**: Enables interactivity by integrating JavaScript.
+4. **Ensures Accessibility**: Uses semantic elements for screen readers.
+5. **Enables SEO**: Helps search engines understand content hierarchy.
+
+---
+
+## How Browsers Render HTML
+
+When a browser loads a web page, it follows these steps to render the content:
+
+1. **Parsing HTML:** The browser reads the HTML file and builds the Document Object Model (DOM).
+2. **Fetching Resources:** The browser retrieves external assets (CSS, JS, images, etc.).
+3. **Constructing the CSSOM:** CSS rules are processed into the CSS Object Model (CSSOM).
+4. **Rendering Tree Creation:** The browser combines the DOM and CSSOM to determine visible elements.
+5. **Layout Calculation:** The exact position of elements is computed.
+6. **Painting & Compositing:** Pixels are drawn to the screen in layers.
+
+### Simplified Rendering Flow:
+```
+HTML -> DOM Tree -> CSSOM Tree -> Render Tree -> Layout -> Paint -> Composite
+```
+
+Each step affects performance, and optimizing HTML structure improves load speed.
+

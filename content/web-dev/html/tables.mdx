@@ -1,0 +1,89 @@
+---
+title: "Tables"
+description: "Learn about HTML table structure, attributes, and best practices."
+---
+
+## Table Structure
+
+Tables are used to display data in a structured format using rows and columns. The main elements of an HTML table are:
+
+- **`<table>`**: The wrapper element for a table.
+- **`<tr>`**: Defines a row within a table.
+- **`<th>`**: Represents a header cell.
+- **`<td>`**: Represents a data cell.
+- **`<thead>`**: Groups header rows.
+- **`<tbody>`**: Groups body rows.
+- **`<tfoot>`**: Groups footer rows.
+
+Example:
+
+```html
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Alice</td>
+            <td>25</td>
+            <td>USA</td>
+        </tr>
+        <tr>
+            <td>Bob</td>
+            <td>30</td>
+            <td>UK</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">End of Table</td>
+        </tr>
+    </tfoot>
+</table>
+```
+
+---
+
+## Table Attributes
+
+- **`colspan`**: Merges multiple columns.
+- **`rowspan`**: Merges multiple rows.
+- **`border`**: Specifies the table border (deprecated in HTML5, use CSS instead).
+
+Example:
+
+```html
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th colspan="2">Details</th>
+    </tr>
+    <tr>
+        <td>John</td>
+        <td>Developer</td>
+        <td>USA</td>
+    </tr>
+</table>
+```
+
+For better styling, prefer using CSS:
+
+```html
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+</style>

@@ -1,0 +1,17 @@
+{
+    "title": "HTML",
+    "root": true,
+    "pages": [
+        "introduction",
+        "structure",
+        "attributes",
+        "inputs-and-forms",
+        "multimedia",
+        "tables",
+        "html5",
+        "advanced",
+        "interview-questions",
+        "!index"
+    ],
+    "defaultOpen": true
+}

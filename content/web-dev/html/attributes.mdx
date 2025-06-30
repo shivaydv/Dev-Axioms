@@ -1,0 +1,69 @@
+---
+title: "Attributes"
+description: "Learn about global, event, boolean, and custom data attributes in HTML."
+---
+
+## Global Attributes
+
+Global attributes can be used on any HTML element.
+
+- **`id`**: A unique identifier for an element.
+- **`class`**: Assigns one or more classes for styling.
+- **`style`**: Adds inline CSS styles.
+- **`title`**: Provides additional information as a tooltip.
+
+Example:
+```html
+<p id="intro" class="highlight" style="color: blue;" title="This is a paragraph">
+    Hello, World!
+</p>
+```
+
+---
+
+## Event Attributes
+
+Event attributes trigger JavaScript actions when events occur.
+
+- **`onclick`**: Runs JavaScript when the element is clicked.
+- **`onmouseover`**: Runs JavaScript when the mouse hovers over the element.
+
+Example:
+```html
+<button onclick="alert('Button clicked!')">Click Me</button>
+<p onmouseover="this.style.color='red'">Hover over this text</p>
+```
+
+---
+
+## Boolean Attributes
+
+Boolean attributes don’t need a value; their presence alone means "true."
+
+- **`checked`**: Marks an input (radio/checkbox) as selected.
+- **`disabled`**: Disables input fields.
+- **`readonly`**: Prevents users from editing input values.
+
+Example:
+```html
+<input type="checkbox" checked>
+<input type="text" disabled>
+<input type="text" value="Read-only text" readonly>
+```
+
+---
+
+## Custom Data Attributes
+
+Custom attributes (`data-*`) store extra information for JavaScript.
+
+Example:
+```html
+<div data-user="JohnDoe">User Info</div>
+<script>
+    let user = document.querySelector('div').dataset.user;
+    console.log(user); // Outputs: JohnDoe
+</script>
+```
+
+These attributes are useful for dynamic data handling in JavaScript applications.

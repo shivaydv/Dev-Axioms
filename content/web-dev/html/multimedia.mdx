@@ -1,0 +1,73 @@
+---
+title: "Multimedia"
+description: "Learn how to add images, videos, and audio in HTML."
+---
+
+## Adding Images
+
+Images enhance web content by providing visual representation. The `<img>` tag is used to embed images.
+
+### Basic Syntax
+```html
+<img src="image.jpg" alt="Description of image">
+```
+- **`src`**: Specifies the image path.
+- **`alt`**: Provides alternative text for accessibility and SEO.
+
+### Responsive Images with `srcset`
+```html
+<img src="default.jpg" srcset="small.jpg 480w, medium.jpg 1024w" alt="Responsive image">
+```
+- The `srcset` attribute helps the browser select the appropriate image based on the device width.
+
+---
+
+## Embedding Videos
+
+Videos can be embedded using the `<video>` tag. Multiple formats should be provided for better compatibility.
+
+### Basic Syntax
+```html
+<video controls>
+    <source src="video.mp4" type="video/mp4">
+    <source src="video.ogg" type="video/ogg">
+    Your browser does not support the video tag.
+</video>
+```
+- **`controls`**: Displays play, pause, and volume controls.
+- **`autoplay`**: Automatically starts the video (muted required in some browsers).
+- **`loop`**: Repeats the video.
+
+Example with autoplay:
+```html
+<video autoplay muted loop>
+    <source src="background.mp4" type="video/mp4">
+</video>
+```
+
+---
+
+## Embedding Audio
+
+Audio can be embedded using the `<audio>` tag, similar to `<video>`.
+
+### Basic Syntax
+```html
+<audio controls>
+    <source src="audio.mp3" type="audio/mpeg">
+    <source src="audio.ogg" type="audio/ogg">
+    Your browser does not support the audio tag.
+</audio>
+```
+- **`controls`**: Adds play/pause buttons.
+- **`loop`**: Repeats the audio.
+- **`muted`**: Mutes the audio by default.
+
+Example with autoplay:
+```html
+<audio autoplay loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+```
+
+Using multimedia effectively improves user experience and engagement.

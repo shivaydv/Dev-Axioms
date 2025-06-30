@@ -1,0 +1,111 @@
+---
+title: "Structure"
+description: "Learn about Doctype declaration, common HTML elements, and semantic tags."
+---
+
+## Doctype Declaration
+
+The `<!DOCTYPE>` declaration is required at the beginning of an HTML document. It tells the browser which version of HTML is being used and ensures proper rendering.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Title</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+</body>
+</html>
+```
+
+The `<!DOCTYPE html>` declaration specifies that the document uses HTML5, the latest version of HTML.
+
+---
+
+## HTML Elements
+
+An HTML document consists of:
+
+- **`<html>`**: The root element that wraps all content.
+- **`<head>`**: Contains metadata, links to stylesheets, and scripts.
+- **`<body>`**: Holds the visible content of the web page.
+
+Example structure:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Structure</title>
+</head>
+<body>
+    <h1>Welcome to HTML</h1>
+    <p>This is a simple HTML document.</p>
+</body>
+</html>
+```
+
+---
+
+## Common HTML Tags
+
+- **`<p>`**: Defines a paragraph.
+- **`<h1>`–`<h6>`**: Headings from largest (`<h1>`) to smallest (`<h6>`).
+- **`<a>`**: Creates hyperlinks.
+- **`<img>`**: Displays images.
+- **`<ul>` and `<ol>`**: Unordered and ordered lists.
+- **`<li>`**: List items inside `<ul>` or `<ol>`.
+- **`<div>`**: A block-level container for styling or layout.
+- **`<span>`**: An inline container for styling text.
+
+Example:
+
+```html
+<p>This is a paragraph.</p>
+<h1>Main Heading</h1>
+<a href="https://example.com">Visit Example</a>
+<img src="image.jpg" alt="Example Image">
+<ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+</ul>
+```
+
+---
+
+## Semantic HTML Tags
+
+Semantic tags provide meaning to the content, improving readability and accessibility.
+
+- **`<header>`**: Defines the top section of a page, usually containing a logo or navigation.
+- **`<footer>`**: Contains copyright, links, or contact info.
+- **`<article>`**: Represents self-contained content.
+- **`<section>`**: Groups related content.
+- **`<aside>`**: Represents side content (e.g., ads, related links).
+- **`<main>`**: Contains the main content of the page.
+- **`<nav>`**: Defines navigation links.
+
+Example:
+
+```html
+<header>
+    <h1>My Website</h1>
+</header>
+<main>
+    <article>
+        <h2>Article Title</h2>
+        <p>This is an article about web development.</p>
+    </article>
+    <aside>
+        <p>Related Links</p>
+    </aside>
+</main>
+<footer>
+    <p>&copy; 2025 My Website</p>
+</footer>
+```
+
+Using semantic tags improves SEO and makes content more accessible for screen readers and search engines.
