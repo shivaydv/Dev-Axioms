@@ -2,6 +2,7 @@
     "title": "HTML",
     "root": true,
     "pages": [
+        "---HTML---",
         "introduction",
         "structure",
         "attributes",
