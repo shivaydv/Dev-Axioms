@@ -1,4 +1,4 @@
-import { baseUrl, createMetadata, keywords } from "@/lib/metadata";
+import { baseUrl, keywords } from "@/lib/metadata";
 import "./global.css";
 import { RootProvider } from "fumadocs-ui/provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://devaxioms.vercel.app"),
+  metadataBase: new URL(baseUrl),
   title: {
     template: "%s | Dev Axioms",
     default: "Dev Axioms",
