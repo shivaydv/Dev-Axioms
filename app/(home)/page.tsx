@@ -2,13 +2,11 @@ import React from "react";
 import Hero from "@/components/Hero";
 import Highlights from "@/components/Highlights";
 
-const Page = () => {
+const Page = async() => {
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate loading delay
   return (
     <div className="h-full ">
       <div
-        // initial={{ opacity: 0, scale: 0.9 }}
-        // animate={{ opacity: 1, scale: 1 }}
-        // transition={{ duration: 1.2, ease: "easeOut" }}
         className="absolute inset-x-0 top-[180px] h-[250px] z-[1] border-b"
         style={{
           background: `

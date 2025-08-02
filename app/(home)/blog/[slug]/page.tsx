@@ -8,6 +8,7 @@ import { buttonVariants } from "@/components/ui/button-variants";
 // import { Control } from '@/app/(home)/blog/[slug]/page.client';
 import { getMDXComponents } from "@/mdx-components";
 import path from "node:path";
+import { ArrowLeftIcon } from "lucide-react";
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>;
@@ -40,6 +41,7 @@ export default async function Page(props: {
           href="/blog"
           className={buttonVariants({ size: "sm", variant: "secondary" })}
         >
+          <ArrowLeftIcon/>
           Back
         </Link>
       </div>
@@ -54,7 +56,7 @@ export default async function Page(props: {
             <p className="font-medium">{page.data.author}</p>
           </div>
           <div>
-            <p className="mb-1 text-sm text-fd-muted-foreground">At</p>
+            <p className="mb-1 text-sm text-fd-muted-foreground">On</p>
             <p className="font-medium">
               {new Date(
                 page.data.date ??
@@ -77,10 +79,26 @@ export async function generateMetadata(props: {
 
   if (!page) notFound();
 
+  const slug = params.slug || [];
+  const image = ["/og/blog",slug, "image.png"].join("/");
+
+
   return createMetadata({
     title: page.data.title,
     description:
       page.data.description ?? "The library for building documentation sites",
+      openGraph: {
+        title: page.data.title,
+        description: page.data.description,
+        images: [image],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: page.data.title,
+        description: page.data.description,
+        images: [image],
+      },
   });
 }
 

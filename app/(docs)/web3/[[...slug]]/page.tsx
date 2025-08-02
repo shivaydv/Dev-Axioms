@@ -18,7 +18,7 @@ export default async function Page(props: {
 
   if (!params.slug || params.slug.length === 0) {
     // If no slug is provided, redirect to prev page if there is no index page
-    if (!page) return redirect("/docs");
+    if (!page) return redirect("/");
   }
 
   if (!page) notFound();
@@ -26,7 +26,11 @@ export default async function Page(props: {
   const MDXContent = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full} tableOfContent={{style:"clerk"}}>
+    <DocsPage
+      toc={page.data.toc}
+      full={page.data.full}
+      tableOfContent={{ style: "clerk" }}
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
@@ -52,8 +56,25 @@ export async function generateMetadata(props: {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  // Create the OpenGraph image URL
+  const slug = params.slug || [];
+  const image = ["/og/web3", ...slug, "image.png"].join("/");
+
   return {
     title: page.data.title,
     description: page.data.description,
+
+    openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      images: [image],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.data.title,
+      description: page.data.description,
+      images: [image],
+    },
   };
 }
