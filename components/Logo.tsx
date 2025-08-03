@@ -11,13 +11,17 @@ export function Logo() {
 }
 
 interface LogoProps {
+  width?: number;
+  height?: number;
   className?: string;
 }
 
-export const LogoIcon = ({ className }: LogoProps) => {
+export const LogoIcon = ({ className  , width ,height}: LogoProps) => {
   return (
     <svg
       className={cn("w-6 h-6 dark:fill-white", className)}
+      width={width || 70}
+      height={height || 70} 
       viewBox="0 0 70 69.96970834763681"
     >
       <g transform="translate(-22.207152258424557, -22.23577583940203) scale(0.2861746762684532)">

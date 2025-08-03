@@ -1,4 +1,4 @@
-import { baseUrl } from "@/lib/metadata";
+import { LogoIcon } from "@/components/Logo";
 import { ImageResponse } from "next/og";
 
 export const alt = "Open Graph Image for Dev Axioms Web Dev";
@@ -10,7 +10,6 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
-  const logoUrl = new URL("images/logo.svg", baseUrl).toString();
   const primaryColor = "#3b82f6"; // Blue
 
   return new ImageResponse(
@@ -90,14 +89,7 @@ export default async function Image() {
                 gap: "16px",
               }}
             >
-              <img
-                src={logoUrl}
-                width={48}
-                height={48}
-                style={{
-                  borderRadius: "12px",
-                }}
-              />
+              <LogoIcon width={48} height={48} />
               <span
                 style={{
                   fontSize: "28px",
