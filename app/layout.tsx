@@ -4,6 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Metadata } from "next";
+import Analytics from "@/analytics/analytics";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     >
       <body className="flex flex-col min-h-screen ">
         <RootProvider>{children}</RootProvider>
+        <Analytics />
       </body>
     </html>
   );
