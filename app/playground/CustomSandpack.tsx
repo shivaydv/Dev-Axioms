@@ -61,9 +61,9 @@ const files = {
     active: true,
   },
 
-  "/Button.jsx": {
+  "/Button.tsx": {
     code: `
-  export const Button = ({children }) => {
+  export const Button = ({children}:{children: string}) => {
     return (
       <button>
         {children}
