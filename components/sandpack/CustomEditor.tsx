@@ -7,7 +7,17 @@ import {
 } from "@codesandbox/sandpack-react";
 import FileTabs from "./FileTabs";
 import { getLanguageFromFileName } from "@/lib/getLanguageFromFileName";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+
+// Custom loading component
+const EditorLoading = () => (
+  <div className="h-full w-full bg-[#1e1e1e] flex items-center justify-center">
+    <div className="flex items-center gap-3">
+      <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-600 border-t-blue-500"></div>
+      <span className="text-gray-400 text-sm">Loading editor...</span>
+    </div>
+  </div>
+);
 
 export default function CustomEditor() {
   const { code, updateCode } = useActiveCode();
@@ -16,6 +26,8 @@ export default function CustomEditor() {
   const shikiInitialized = useRef(false);
 
   const handleEditorDidMount = async (editor: any, monaco: any) => {
+    // Set theme immediately to prevent white flash
+    monaco.editor.setTheme('vs-dark');
 
     // Disable error diagnostics but keep suggestions and auto-imports
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
@@ -29,7 +41,6 @@ export default function CustomEditor() {
       noSyntaxValidation: true,
       noSuggestionDiagnostics: true,
     });
-
 
     // Initialize Shiki for syntax highlighting
     if (typeof window !== 'undefined' && !shikiInitialized.current) {
@@ -54,15 +65,21 @@ export default function CustomEditor() {
     }
   };
 
+  const handleEditorWillMount = (monaco: any) => {
+    // Set dark theme before editor mounts to prevent white flash
+    monaco.editor.setTheme('vs-dark');
+  };
+
   return (
-    <SandpackStack className="w-full h-full">
+    <SandpackStack className="w-full h-full flex flex-col">
       <FileTabs />
-      <div style={{ flex: 1, paddingTop: 8, background: "#1e1e1e" }}>
+      <div className="flex-1 min-h-0 bg-[#1e1e1e]" style={{ paddingTop: 8 }}>
         <Editor
           width="100%"
           height="100%"
           language={language}
-          theme="dark-plus"
+          theme="vs-dark" // Start with vs-dark to prevent white flash
+          loading={<EditorLoading />}
           options={{
             minimap: { enabled: false },
             fontSize: 14,
@@ -76,6 +93,16 @@ export default function CustomEditor() {
             autoIndent: "full",
             formatOnType: false,
             formatOnPaste: false,
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            overviewRulerBorder: false,
+            scrollbar: {
+              vertical: "auto",
+              horizontal: "auto",
+              verticalScrollbarSize: 14,
+              horizontalScrollbarSize: 14,
+              alwaysConsumeMouseWheel: false,
+            },
             suggest: {
               showKeywords: true,
               showSnippets: true,
@@ -97,6 +124,7 @@ export default function CustomEditor() {
             suggestOnTriggerCharacters: true,
             wordBasedSuggestions: "matchingDocuments",
           }}
+          beforeMount={handleEditorWillMount}
           onMount={handleEditorDidMount}
           key={sandpack.activeFile}
           defaultValue={code}

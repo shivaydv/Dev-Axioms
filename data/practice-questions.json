@@ -1,0 +1,113 @@
+{
+  "questions": [
+    {
+      "id": "faq-component",
+      "title": "FAQ Component with Collapsible Sections",
+      "difficulty": "Easy",
+      "category": "React Components",
+      "timeLimit": 30,
+      "description": "Create a FAQ component that displays a list of frequently asked questions with collapsible sections. Each question should expand/collapse when clicked, showing/hiding the answer.",
+      "requirements": [
+        "Display a list of FAQ items",
+        "Each item should have a question and answer",
+        "Clicking on a question should toggle the answer visibility",
+        "Use smooth animations for expand/collapse",
+        "Style it properly with Tailwind CSS"
+      ],
+      "starterCode": {
+        "/App.js": {
+          "code": "import React, { useState } from 'react';\n\nconst faqData = [\n  {\n    id: 1,\n    question: \"What is React?\",\n    answer: \"React is a JavaScript library for building user interfaces, particularly web applications.\"\n  },\n  {\n    id: 2,\n    question: \"How do React hooks work?\",\n    answer: \"React hooks are functions that let you use state and other React features in functional components.\"\n  },\n  {\n    id: 3,\n    question: \"What is the virtual DOM?\",\n    answer: \"The virtual DOM is a programming concept where a virtual representation of the UI is kept in memory and synced with the real DOM.\"\n  }\n];\n\nfunction FAQComponent() {\n  // TODO: Implement the FAQ component\n  // Hint: Use useState to track which FAQ items are open\n  \n  return (\n    <div className=\"max-w-2xl mx-auto p-6\">\n      <h2 className=\"text-2xl font-bold mb-6 text-center\">Frequently Asked Questions</h2>\n      {/* TODO: Implement the FAQ list */}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div className=\"min-h-screen bg-gray-50\">\n      <FAQComponent />\n    </div>\n  );\n}",
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "todo-app",
+      "title": "Todo List Application",
+      "difficulty": "Medium",
+      "category": "State Management",
+      "timeLimit": 45,
+      "description": "Build a complete todo list application with add, delete, and toggle functionality. Include filtering options for all, completed, and pending todos.",
+      "requirements": [
+        "Add new todos",
+        "Mark todos as complete/incomplete",
+        "Delete todos",
+        "Filter todos (All, Active, Completed)",
+        "Show todo count",
+        "Persist data in localStorage"
+      ],
+      "starterCode": {
+        "/App.js": {
+          "code": "import React, { useState, useEffect } from 'react';\n\nfunction TodoApp() {\n  const [todos, setTodos] = useState([]);\n  const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'\n  const [inputValue, setInputValue] = useState('');\n\n  // TODO: Implement todo functionality\n  // Hint: Use localStorage to persist todos\n  \n  const addTodo = (text) => {\n    // TODO: Add new todo\n  };\n\n  const toggleTodo = (id) => {\n    // TODO: Toggle todo completion\n  };\n\n  const deleteTodo = (id) => {\n    // TODO: Delete todo\n  };\n\n  const filteredTodos = todos; // TODO: Filter todos based on current filter\n\n  return (\n    <div className=\"max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg\">\n      <h1 className=\"text-2xl font-bold text-center mb-6\">Todo List</h1>\n      \n      {/* TODO: Add input form */}\n      \n      {/* TODO: Add filter buttons */}\n      \n      {/* TODO: Display todos */}\n      \n      {/* TODO: Show todo count */}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div className=\"min-h-screen bg-gray-100\">\n      <TodoApp />\n    </div>\n  );\n}",
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "counter-with-history",
+      "title": "Counter with History",
+      "difficulty": "Easy",
+      "category": "State Management",
+      "timeLimit": 20,
+      "description": "Create a counter component that tracks the history of all changes and allows undo/redo functionality.",
+      "requirements": [
+        "Increment and decrement counter",
+        "Track history of all changes",
+        "Undo and redo functionality",
+        "Display current value and history",
+        "Disable undo/redo when not available"
+      ],
+      "starterCode": {
+        "/App.js": {
+          "code": "import React, { useState } from 'react';\n\nfunction CounterWithHistory() {\n  const [count, setCount] = useState(0);\n  const [history, setHistory] = useState([0]);\n  const [currentIndex, setCurrentIndex] = useState(0);\n\n  // TODO: Implement counter with history\n  \n  const increment = () => {\n    // TODO: Increment counter and update history\n  };\n\n  const decrement = () => {\n    // TODO: Decrement counter and update history\n  };\n\n  const undo = () => {\n    // TODO: Undo last action\n  };\n\n  const redo = () => {\n    // TODO: Redo next action\n  };\n\n  return (\n    <div className=\"max-w-sm mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg text-center\">\n      <h2 className=\"text-2xl font-bold mb-4\">Counter with History</h2>\n      \n      <div className=\"text-4xl font-bold mb-6\">{count}</div>\n      \n      {/* TODO: Add increment/decrement buttons */}\n      \n      {/* TODO: Add undo/redo buttons */}\n      \n      {/* TODO: Display history */}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div className=\"min-h-screen bg-gray-100\">\n      <CounterWithHistory />\n    </div>\n  );\n}",
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "search-filter",
+      "title": "Search and Filter Component",
+      "difficulty": "Medium",
+      "category": "Data Filtering",
+      "timeLimit": 35,
+      "description": "Build a search and filter component that allows users to search through a list of items and filter by categories.",
+      "requirements": [
+        "Search functionality with real-time filtering",
+        "Category-based filtering",
+        "Combine search and category filters",
+        "Highlight search terms in results",
+        "Show 'no results' state",
+        "Performance optimization for large lists"
+      ],
+      "starterCode": {
+        "/App.js": {
+          "code": "import React, { useState, useMemo } from 'react';\n\nconst sampleData = [\n  { id: 1, name: 'iPhone 14', category: 'Electronics', price: 999 },\n  { id: 2, name: 'MacBook Pro', category: 'Electronics', price: 1299 },\n  { id: 3, name: 'Nike Air Max', category: 'Shoes', price: 120 },\n  { id: 4, name: 'Adidas Ultraboost', category: 'Shoes', price: 180 },\n  { id: 5, name: 'The Great Gatsby', category: 'Books', price: 15 },\n  { id: 6, name: 'JavaScript Guide', category: 'Books', price: 45 },\n  { id: 7, name: 'Samsung Galaxy', category: 'Electronics', price: 899 },\n  { id: 8, name: 'Running Shoes', category: 'Shoes', price: 85 }\n];\n\nconst categories = ['All', 'Electronics', 'Shoes', 'Books'];\n\nfunction SearchFilter() {\n  const [searchTerm, setSearchTerm] = useState('');\n  const [selectedCategory, setSelectedCategory] = useState('All');\n\n  // TODO: Implement filtering logic with useMemo for performance\n  const filteredItems = useMemo(() => {\n    // TODO: Filter items based on search term and category\n    return sampleData;\n  }, [searchTerm, selectedCategory]);\n\n  const highlightText = (text, highlight) => {\n    // TODO: Highlight search terms in text\n    return text;\n  };\n\n  return (\n    <div className=\"max-w-4xl mx-auto p-6\">\n      <h1 className=\"text-3xl font-bold text-center mb-8\">Product Search</h1>\n      \n      {/* TODO: Add search input */}\n      \n      {/* TODO: Add category filter buttons */}\n      \n      {/* TODO: Display filtered results */}\n      \n      {/* TODO: Show 'no results' state */}\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <div className=\"min-h-screen bg-gray-50\">\n      <SearchFilter />\n    </div>\n  );\n}",
+          "active": true
+        }
+      }
+    },
+    {
+      "id": "modal-component",
+      "title": "Reusable Modal Component",
+      "difficulty": "Hard",
+      "category": "Advanced Components",
+      "timeLimit": 50,
+      "description": "Create a reusable modal component with portal rendering, focus management, and keyboard accessibility.",
+      "requirements": [
+        "Portal rendering outside of parent DOM",
+        "Focus trap within modal",
+        "Close on ESC key and backdrop click",
+        "Prevent body scroll when modal is open",
+        "Smooth animations",
+        "ARIA accessibility attributes",
+        "Multiple modal sizes"
+      ],
+      "starterCode": {
+        "/App.js": {
+          "code": "import React, { useState, useEffect, useRef } from 'react';\nimport { createPortal } from 'react-dom';\n\n// TODO: Create Modal component with proper accessibility\nfunction Modal({ isOpen, onClose, title, children, size = 'md' }) {\n  const modalRef = useRef(null);\n  \n  useEffect(() => {\n    // TODO: Handle ESC key press\n    // TODO: Focus management\n    // TODO: Prevent body scroll\n    \n    return () => {\n      // TODO: Cleanup\n    };\n  }, [isOpen, onClose]);\n\n  if (!isOpen) return null;\n\n  // TODO: Implement modal with portal\n  return createPortal(\n    <div className=\"fixed inset-0 z-50\">\n      {/* TODO: Backdrop */}\n      {/* TODO: Modal content */}\n    </div>,\n    document.body\n  );\n}\n\nfunction App() {\n  const [isModalOpen, setIsModalOpen] = useState(false);\n  const [modalSize, setModalSize] = useState('md');\n\n  return (\n    <div className=\"min-h-screen bg-gray-100 p-8\">\n      <div className=\"max-w-2xl mx-auto\">\n        <h1 className=\"text-3xl font-bold text-center mb-8\">Modal Component Demo</h1>\n        \n        <div className=\"space-y-4 text-center\">\n          <button\n            onClick={() => setIsModalOpen(true)}\n            className=\"bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700\"\n          >\n            Open Modal\n          </button>\n          \n          <div className=\"space-x-2\">\n            <label>Size:</label>\n            {['sm', 'md', 'lg', 'xl'].map(size => (\n              <button\n                key={size}\n                onClick={() => setModalSize(size)}\n                className={`px-3 py-1 rounded ${\n                  modalSize === size ? 'bg-blue-600 text-white' : 'bg-gray-200'\n                }`}\n              >\n                {size.toUpperCase()}\n              </button>\n            ))}\n          </div>\n        </div>\n\n        <Modal\n          isOpen={isModalOpen}\n          onClose={() => setIsModalOpen(false)}\n          title=\"Example Modal\"\n          size={modalSize}\n        >\n          <p className=\"mb-4\">\n            This is a modal content. Try pressing ESC or clicking outside to close.\n          </p>\n          <button\n            onClick={() => setIsModalOpen(false)}\n            className=\"bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700\"\n          >\n            Close Modal\n          </button>\n        </Modal>\n      </div>\n    </div>\n  );\n}\n\nexport default App;",
+          "active": true
+        }
+      }
+    }
+  ]
+}

@@ -21,7 +21,7 @@ export const NAVLINKS: NavLink[] = [
   },
   {
     title: "Practice",
-    href: "#",
+    href: "/practice",
   },
   {
     title: "Playgrounds",

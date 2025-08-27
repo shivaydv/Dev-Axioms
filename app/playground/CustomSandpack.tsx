@@ -1,6 +1,5 @@
 import {
   SandpackProvider,
-  SandpackLayout,
 } from "@codesandbox/sandpack-react";
 import ResizableLayout from "@/components/sandpack/ResizableLayout";
 
@@ -18,9 +17,7 @@ export default function CustomSandpack() {
       }}
       style={{ height: "100%", width: "100%" }}
     >
-      <SandpackLayout style={{ height: "100%", width: "100%" }}>
-        <ResizableLayout showSidebar={true} />
-      </SandpackLayout>
+      <ResizableLayout />
     </SandpackProvider>
   );
 }
