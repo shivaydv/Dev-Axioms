@@ -83,6 +83,7 @@ export default function QuestionPage() {
 
                 <div className="flex-1 min-w-0">
                     <SandpackProvider
+                        // key={question.id} // Reset Sandpack state when question changes
                         template="react"
                         theme="dark"
                         files={question.starterCode}
