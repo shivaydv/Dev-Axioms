@@ -7,10 +7,12 @@ import {
 } from "@codesandbox/sandpack-react";
 import FileTabs from "./FileTabs";
 import { getLanguageFromFileName } from "@/lib/getLanguageFromFileName";
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 
-// Global singleton highlighter (shared across navigations)
-let globalShikiInitialized = false;
+// ✅ Global singletons (won’t reload across navigations)
+let globalHighlighter: any = null;
+let globalShikiToMonaco: any = null;
+let shikiInitPromise: Promise<void> | null = null;
 
 const EditorLoading = () => (
   <div className="h-full w-full bg-[#1e1e1e] flex items-center justify-center">
@@ -21,50 +23,59 @@ const EditorLoading = () => (
   </div>
 );
 
+// ✅ preload once, reused everywhere
+async function preloadShiki() {
+  if (!shikiInitPromise) {
+    shikiInitPromise = (async () => {
+      const { shikiToMonaco } = await import("@shikijs/monaco");
+      const { createHighlighter } = await import("shiki");
+
+      globalHighlighter = await createHighlighter({
+        themes: ["dark-plus"],
+        langs: ["javascript", "typescript", "html", "css", "json", "jsx", "tsx"],
+      });
+
+      globalShikiToMonaco = shikiToMonaco;
+      // console.log("✅ Shiki highlighter preloaded");
+    })();
+  }
+  return shikiInitPromise;
+}
+
 export default function CustomEditor() {
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
   const language = getLanguageFromFileName(sandpack.activeFile);
+  const [ready, setReady] = useState(false);
+
+  // ⏳ Preload Shiki before mounting Editor
+  useEffect(() => {
+    preloadShiki().then(() => setReady(true));
+  }, []);
 
   if (!sandpack.activeFile) return <EditorLoading />;
+  if (!ready) return <EditorLoading />;
 
-const handleEditorDidMount = async (editor: any, monaco: any) => {
-  // disable diagnostics but keep IntelliSense
-  monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-    noSemanticValidation: true,
-    noSyntaxValidation: true,
-    noSuggestionDiagnostics: true,
-  });
-  monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-    noSemanticValidation: true,
-    noSyntaxValidation: true,
-    noSuggestionDiagnostics: true,
-  });
+  const handleEditorDidMount = (editor: any, monaco: any) => {
+    // disable diagnostics but keep IntelliSense
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+      noSuggestionDiagnostics: true,
+    });
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+      noSuggestionDiagnostics: true,
+    });
 
-  if (typeof window !== "undefined" && !globalShikiInitialized) {
-    try {
-      const { shikiToMonaco } = await import("@shikijs/monaco");
-      const { createHighlighter } = await import("shiki");
-
-      const highlighter = await createHighlighter({
-        themes: ["dark-plus"], // ✅ only Shiki theme
-        langs: ["javascript", "typescript", "html", "css", "json", "jsx", "tsx"],
-      });
-
-      shikiToMonaco(highlighter, monaco);
-
-      // ✅ use ONLY Shiki theme
+    // ✅ apply Shiki highlighter once Monaco is ready
+    if (globalHighlighter && globalShikiToMonaco) {
+      globalShikiToMonaco(globalHighlighter, monaco);
       monaco.editor.setTheme("dark-plus");
-      globalShikiInitialized = true;
-      console.log("✅ Shiki syntax highlighting applied");
-    } catch (error) {
-      console.error("❌ Failed to initialize Shiki:", error);
     }
-  } else {
-    // Always stick to dark-plus once initialized
-    monaco.editor.setTheme("dark-plus");
-  }
-};
+  };
+
   return (
     <SandpackStack className="w-full h-full flex flex-col">
       <FileTabs />
@@ -73,7 +84,7 @@ const handleEditorDidMount = async (editor: any, monaco: any) => {
           width="100%"
           height="100%"
           language={language}
-          theme={"dark-plus"} 
+          theme="dark-plus" // fallback (safe)
           onMount={handleEditorDidMount}
           value={code}
           onChange={(value) => updateCode(value || "")}
@@ -122,7 +133,6 @@ const handleEditorDidMount = async (editor: any, monaco: any) => {
             suggestOnTriggerCharacters: true,
             wordBasedSuggestions: "matchingDocuments",
           }}
-          
         />
       </div>
     </SandpackStack>

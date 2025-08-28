@@ -83,7 +83,6 @@ export default function QuestionPage() {
 
                 <div className="flex-1 min-w-0">
                     <SandpackProvider
-                        // key={question.id} // Reset Sandpack state when question changes
                         template="react"
                         theme="dark"
                         files={question.starterCode}
@@ -94,8 +93,6 @@ export default function QuestionPage() {
                         }}
                         options={{
                             externalResources: ["https://cdn.tailwindcss.com"],
-                            autorun: true,
-                            autoReload: true,
                         }}
                         style={{ height: "100%", width: "100%" }}
                     >
