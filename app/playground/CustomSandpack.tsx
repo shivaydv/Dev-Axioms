@@ -7,7 +7,7 @@ export default function CustomSandpack() {
   return (
     <SandpackProvider
       template="react"
-      theme="dark"
+      theme="auto"
       files={files}
       customSetup={{
         dependencies: {},

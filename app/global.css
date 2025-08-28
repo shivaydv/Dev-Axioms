@@ -2,7 +2,9 @@
 @import "fumadocs-ui/css/black.css";
 @import "fumadocs-ui/css/preset.css";
 @import "tw-animate-css";
-/* ---break---  */
+
+
+  
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
@@ -16,6 +18,17 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+}
+
+/* sandpack css  */
+.sp-layout {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* monaco editor css */
+.monaco-editor {
+  background-color: red;
 }
 
 /* fumadocs css changes  */
@@ -107,11 +120,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  
-
 }
-
-/* ---break---  */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

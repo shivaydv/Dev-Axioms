@@ -1,5 +1,6 @@
-import React, { act } from "react";
+import React from "react";
 import CustomSandpack from "./CustomSandpack";
+
 
 const Page = () => {
   return (

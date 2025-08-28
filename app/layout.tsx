@@ -42,7 +42,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${geist.variable} antialiased`}
+      className={`${geist.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="flex flex-col min-h-screen ">

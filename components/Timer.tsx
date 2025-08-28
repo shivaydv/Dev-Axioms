@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useTimer } from '@/hooks/useTimer';
-import { Button } from '@/components/ui/button';
 import { Play, Square, RotateCcw } from 'lucide-react';
 
 interface TimerProps {
@@ -39,36 +38,30 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
       <span className={`text-sm font-mono ${getTimerColor()}`}>
         {formattedTime}
       </span>
-      
+
       {!isRunning ? (
-        <Button
+        <button
           onClick={startTimer}
           disabled={timeLeft === 0}
-          size="sm"
-          variant="ghost"
-          className="h-8 w-8 p-0 text-[var(--playground-text-muted)] hover:text-green-600 hover:bg-green-50"
+          className="h-8 w-8 p-0 text-muted-foreground hover:text-green-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
         >
           <Play className="w-4 h-4" />
-        </Button>
+        </button>
       ) : (
-        <Button
+        <button
           onClick={stopTimer}
-          size="sm"
-          variant="ghost"
-          className="h-8 w-8 p-0 text-[var(--playground-text-muted)] hover:text-red-600 hover:bg-red-50"
+          className="h-8 w-8 p-0 text-muted-foreground hover:text-red-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
         >
           <Square className="w-4 h-4" />
-        </Button>
+        </button>
       )}
 
-      <Button
+      <button
         onClick={resetTimer}
-        size="sm"
-        variant="ghost"
-        className="h-8 w-8 p-0 text-[var(--playground-text-muted)] hover:text-[var(--playground-text)] hover:bg-[var(--playground-accent)]"
+        className="h-8 w-8 p-0 text-muted-foreground  hover:text-red-500 hover:bg-muted transition-all rounded-md flex justify-center items-center"
       >
         <RotateCcw className="w-4 h-4" />
-      </Button>
+      </button>
     </div>
   );
 }

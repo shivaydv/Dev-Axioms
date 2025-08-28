@@ -2,7 +2,6 @@
 import Editor from "@monaco-editor/react";
 import {
   useActiveCode,
-  SandpackStack,
   useSandpack,
 } from "@codesandbox/sandpack-react";
 import FileTabs from "./FileTabs";
@@ -15,7 +14,7 @@ let globalShikiToMonaco: any = null;
 let shikiInitPromise: Promise<void> | null = null;
 
 const EditorLoading = () => (
-  <div className="h-full w-full bg-[#1e1e1e] flex items-center justify-center">
+  <div className="h-full w-full bg-background flex items-center justify-center">
     <div className="flex items-center gap-3">
       <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-600 border-t-blue-500"></div>
       <span className="text-gray-400 text-sm">Loading editor...</span>
@@ -77,9 +76,9 @@ export default function CustomEditor() {
   };
 
   return (
-    <SandpackStack className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col bg-background">
       <FileTabs />
-      <div className="flex-1 min-h-0 bg-[#1e1e1e]" style={{ paddingTop: 8 }}>
+      <div className="flex-1 min-h-0 bg-background ">
         <Editor
           width="100%"
           height="100%"
@@ -91,6 +90,7 @@ export default function CustomEditor() {
           loading={<EditorLoading />}
           options={{
             minimap: { enabled: false },
+            padding: { top: 10, bottom: 10 },
             fontSize: 14,
             lineNumbers: "on",
             scrollBeyondLastLine: false,
@@ -135,6 +135,6 @@ export default function CustomEditor() {
           }}
         />
       </div>
-    </SandpackStack>
+    </div>
   );
 }

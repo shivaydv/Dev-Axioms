@@ -9,28 +9,28 @@ const FileTabs = () => {
     const { setActiveFile, visibleFiles, activeFile } = sandpack;
 
     return (
-        <div className="flex items-center bg-[#252526] border-b  overflow-x-auto shrink-0 h-10">
-            {visibleFiles.map((file) => (
-                <div
-                    key={file}
-                    className={`relative flex items-center group  ${activeFile === file
-                        ? "bg-[#1e1e1e] text-white  "
-                        : " hover:text-white hover:bg-[#37373d]"
-                        } transition-colors`}
-                >
+        <div className="flex items-center border-b bg-background  overflow-x-auto h-10">
+            {visibleFiles.map((file) => {
+                const isActive = activeFile === file
+                return (
                     <button
+                        key={file}
                         onClick={() => setActiveFile(file)}
-                        className="px-3 py-2  text-sm font-medium flex items-center gap-2 focus:outline-none min-w-0"
+                        className={`flex items-center gap-2 px-3 h-full text-sm whitespace-nowrap border-b-2 transition-colors
+                                ${isActive
+                                ? "border-primary text-primary font-medium"
+                                : "border-transparent text-muted-foreground hover:text-foreground hover:border-muted"}`}
                     >
                         <FileIcon fileName={file} />
                         <span className="truncate">
-                            {file.startsWith('/') ? file.slice(1) : file}
+                            {file.startsWith("/") ? file.slice(1) : file}
                         </span>
                     </button>
-                </div>
-            ))}
+                )
+            })}
         </div>
     )
+
 }
 
 export default FileTabs

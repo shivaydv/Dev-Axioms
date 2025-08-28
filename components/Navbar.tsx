@@ -5,7 +5,7 @@ import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import React from "react";
-import { ModeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { FaXTwitter } from "react-icons/fa6";
 
 interface NavLink {
@@ -70,7 +70,7 @@ export function Navbar() {
               >
                 <FaXTwitter className="h-[1.1rem] w-[1.1rem]" />
               </Link>
-              <ModeToggle />
+              <ThemeToggle />
             </div>
           </div>
         </div>
