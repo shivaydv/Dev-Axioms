@@ -20,28 +20,30 @@
   }
 }
 
-/* custom scrollbar minimal  */
+/* custom scrollbar minimal - only shows on larger devices */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-neutral-400);
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-neutral-500);
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: var(--muted);
+    border-radius: 4px;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-neutral-400);
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-neutral-500);
-
-}
-
-::-webkit-scrollbar-track {
-  background-color: var(--muted);
-  border-radius: 4px;
-}
 
 
 /* sandpack css  */
@@ -49,6 +51,8 @@
   border: none !important;
   border-radius: 0 !important;
 }
+
+
 
 /* monaco editor css */
 .monaco-editor {

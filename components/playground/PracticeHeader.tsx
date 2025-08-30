@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Timer } from "@/components/Timer";
 import { PanelLeftClose, PanelLeft } from "lucide-react";
-
+import { useResponsive } from "@/hooks/useResponsive";
 import { useSidebar } from "@/store/PlaygroundSidebarContext";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -23,7 +23,7 @@ export default function PracticeHeader({
     isSidebarVisible = true,
 }: PracticeHeaderProps) {
 
-
+    
     const { toggle: toggleSidebar, isCollapsed: isSidebarCollapsed } = useSidebar();
 
 
@@ -61,16 +61,18 @@ export default function PracticeHeader({
                     )}
                     <ThemeToggle className="rounded-md" />
 
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={toggleSidebar}
-                        className="rounded-md"
-                        title={getSidebarTooltip()}
-                    >
-                        {getSidebarIcon()}
-                    </Button>
-
+                    {/* Only show sidebar toggle on desktop */}
+                    
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={toggleSidebar}
+                            className="rounded-md max-md:hidden"
+                            title={getSidebarTooltip()}
+                        >
+                            {getSidebarIcon()}
+                        </Button>
+                    
 
                     {onSubmit && (
                         <Button

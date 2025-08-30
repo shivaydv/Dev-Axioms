@@ -82,7 +82,7 @@ export function Sidebar({ question }: SidebarProps) {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={cn(
-                            "flex items-center space-x-2 px-4 py-2 text-xs font-medium border-b-2 whitespace-nowrap flex-1 justify-center transition-all duration-200",
+                            "flex items-center space-x-2 px-4 py-3 text-xs font-medium border-b-2 whitespace-nowrap flex-1 justify-center transition-all duration-200",
                             activeTab === tab.id
                                 ? "border-primary text-primary bg-background"
                                 : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/50"
