@@ -5,9 +5,9 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import ConsolePanel from "@/components/sandpack/ConsolePanel";
 import PreviewPanel from "@/components/sandpack/PreviewPanel";
 import { SandpackLayout } from "@codesandbox/sandpack-react";
-import CustomEditor from "./CustomEditor";
+import CustomEditor from "@/components/sandpack/CustomEditor";
 
-export default function ResizableLayout() {
+export default function EditorLayout() {
   const [isConsoleVisible, setIsConsoleVisible] = useState(false);
   const toggleConsole = () => {
     setIsConsoleVisible(!isConsoleVisible);
@@ -56,6 +56,6 @@ export default function ResizableLayout() {
           </ResizablePanelGroup>
         </div>
       </div>
-    </SandpackLayout>
+   </SandpackLayout>
   );
 }

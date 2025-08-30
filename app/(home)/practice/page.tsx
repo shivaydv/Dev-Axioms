@@ -5,16 +5,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Clock, Code, Play } from 'lucide-react';
 import questionsData from '@/data/practice-questions.json';
+import { Question } from '@/types/Question';
 
-interface Question {
-    id: string;
-    title: string;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
-    category: string;
-    timeLimit: number;
-    description: string;
-    requirements: string[];
-}
+
 
 const difficultyColors = {
     Easy: 'bg-green-100 text-green-800 border-green-200',

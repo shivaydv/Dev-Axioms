@@ -1,6 +1,7 @@
-import CommonLayout from "../common-layout";
+
 import { webdev } from "@/lib/source";
 import { FaHtml5, FaCss3 } from "react-icons/fa";
+import CommonLayout from "@/app/(docs)/common-layout";
 
 export default function Layout({
   children,

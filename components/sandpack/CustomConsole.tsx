@@ -1,7 +1,7 @@
 "use client";
 
 import { useSandpackConsole } from "@codesandbox/sandpack-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 type SandpackMessageConsoleMethods = "log" | "debug" | "info" | "warn" | "error" | "table" | "clear" | "time" | "timeEnd" | "count" | "assert";
 

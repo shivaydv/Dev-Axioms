@@ -3,7 +3,7 @@
 import { ResizablePanel } from "@/components/ui/resizable";
 import { SandpackPreview } from "@codesandbox/sandpack-react";
 import { Globe, Terminal } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 interface PreviewPanelProps {
   onToggleConsole: () => void;

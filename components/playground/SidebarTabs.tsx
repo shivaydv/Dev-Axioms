@@ -1,18 +1,11 @@
 "use client";
 
+
 import { Button } from "@/components/ui/button";
+import { Question } from "@/types/Question";
 import { Clock, Code, Tag, Heart, Bookmark, Share2, CheckCircle, Lightbulb, FileText, Info } from "lucide-react";
 import { ReactNode } from "react";
 
-interface Question {
-    id: string;
-    title: string;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
-    category: string;
-    timeLimit: number;
-    description: string;
-    requirements: string[];
-}
 
 interface PracticeSidebarContentProps {
     question: Question;
@@ -23,6 +16,38 @@ const difficultyColors = {
     Medium: 'text-yellow-600 bg-yellow-50 border-yellow-200 dark:text-yellow-400 dark:bg-yellow-950/30 dark:border-yellow-800',
     Hard: 'text-red-600 bg-red-50 border-red-200 dark:text-red-400 dark:bg-red-950/30 dark:border-red-800',
 };
+
+
+
+// Main export function that creates the tabs
+export function createPracticeSidebarTabs(question: Question) {
+    return [
+        {
+            id: 'description',
+            label: 'Description',
+            icon: <FileText className="w-4 h-4" />,
+            content: <DescriptionContent question={question} />
+        },
+        {
+            id: 'requirements',
+            label: 'Requirements',
+            icon: <CheckCircle className="w-4 h-4" />,
+            content: <RequirementsContent question={question} />
+        },
+        {
+            id: 'tips',
+            label: 'Tips',
+            icon: <Lightbulb className="w-4 h-4" />,
+            content: <TipsContent question={question} />
+        },
+        {
+            id: 'info',
+            label: 'Info',
+            icon: <Info className="w-4 h-4" />,
+            content: <InfoContent question={question} />
+        }
+    ];
+}
 
 // Description Tab Content
 function DescriptionContent({ question }: PracticeSidebarContentProps) {
@@ -155,39 +180,4 @@ function InfoContent({ question }: PracticeSidebarContentProps) {
             </div>
         </div>
     );
-}
-
-// Main export function that creates the tabs
-export function createPracticeSidebarTabs(question: Question) {
-    return [
-        {
-            id: 'description',
-            label: 'Description',
-            icon: <FileText className="w-4 h-4" />,
-            content: <DescriptionContent question={question} />
-        },
-        {
-            id: 'requirements',
-            label: 'Requirements',
-            icon: <CheckCircle className="w-4 h-4" />,
-            content: <RequirementsContent question={question} />
-        },
-        {
-            id: 'tips',
-            label: 'Tips',
-            icon: <Lightbulb className="w-4 h-4" />,
-            content: <TipsContent question={question} />
-        },
-        {
-            id: 'info',
-            label: 'Info',
-            icon: <Info className="w-4 h-4" />,
-            content: <InfoContent question={question} />
-        }
-    ];
-}
-
-// Legacy component for backward compatibility (if needed)
-export default function PracticeSidebar() {
-    return null; // This is now handled by the ResizableSidebar wrapper
 }

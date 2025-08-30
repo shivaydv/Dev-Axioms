@@ -20,6 +20,30 @@
   }
 }
 
+/* custom scrollbar minimal  */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-neutral-400);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-neutral-500);
+
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--muted);
+  border-radius: 4px;
+}
+
+
 /* sandpack css  */
 .sp-layout {
   border: none !important;

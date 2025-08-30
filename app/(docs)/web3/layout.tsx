@@ -1,4 +1,4 @@
-import CommonLayout from "../common-layout";
+import CommonLayout from "@/app/(docs)/common-layout";
 import { web3 } from "@/lib/source";
 
 export default function Layout({

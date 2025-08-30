@@ -2,16 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { Timer } from "@/components/Timer";
-import { Sidebar, PanelLeftClose, PanelLeft } from "lucide-react";
-import { Logo } from "../Logo";
-import { ThemeToggle } from "../ThemeToggle";
+import { PanelLeftClose, PanelLeft } from "lucide-react";
+
+import { useSidebar } from "@/store/PlaygroundSidebarContext";
+import { Logo } from "@/components/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface PracticeHeaderProps {
     timeLimit?: number;
     onTimeUp?: () => void;
     onSubmit?: () => void;
-    onToggleSidebar?: () => void;
-    isSidebarCollapsed?: boolean;
     isSidebarVisible?: boolean;
 }
 
@@ -20,10 +20,13 @@ export default function PracticeHeader({
     timeLimit,
     onTimeUp,
     onSubmit,
-    onToggleSidebar,
-    isSidebarCollapsed,
     isSidebarVisible = true,
 }: PracticeHeaderProps) {
+
+
+    const { toggle: toggleSidebar, isCollapsed: isSidebarCollapsed } = useSidebar();
+
+
     // Determine the appropriate icon and tooltip based on sidebar state
     const getSidebarIcon = () => {
         if (!isSidebarVisible) {
@@ -48,26 +51,26 @@ export default function PracticeHeader({
         <div className=" border-b  px-4 py-2 flex-shrink-0">
             <div className="flex items-center justify-between">
                 {/* Left Section - Logo and Navigation */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 text-foreground">
                     <Logo />
 
                 </div>
                 <div className="flex items-center space-x-2">
-                    {timeLimit && onTimeUp && (
+                    {timeLimit && (
                         <Timer timeLimit={timeLimit} onTimeUp={onTimeUp} />
                     )}
                     <ThemeToggle className="rounded-md" />
-                    {onToggleSidebar && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={onToggleSidebar}
-                            className="rounded-md"
-                            title={getSidebarTooltip()}
-                        >
-                            {getSidebarIcon()}
-                        </Button>
-                    )}
+
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleSidebar}
+                        className="rounded-md"
+                        title={getSidebarTooltip()}
+                    >
+                        {getSidebarIcon()}
+                    </Button>
+
 
                     {onSubmit && (
                         <Button

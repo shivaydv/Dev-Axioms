@@ -13,6 +13,7 @@ export function ThemeToggle({className}:{className?:string}){
     return (
       <Button variant="ghost" size="icon" 
       data-theme-toggle
+      title="Toggle theme"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       className={className}
       >

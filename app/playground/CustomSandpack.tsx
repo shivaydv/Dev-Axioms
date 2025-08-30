@@ -1,7 +1,8 @@
+import EditorLayout from "@/components/playground/EditorLayout";
 import {
   SandpackProvider,
 } from "@codesandbox/sandpack-react";
-import ResizableLayout from "@/components/sandpack/ResizableLayout";
+
 
 export default function CustomSandpack() {
   return (
@@ -17,7 +18,7 @@ export default function CustomSandpack() {
       }}
       style={{ height: "100%", width: "100%" }}
     >
-      <ResizableLayout />
+      <EditorLayout />
     </SandpackProvider>
   );
 }

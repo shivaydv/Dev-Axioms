@@ -43,6 +43,7 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
         <button
           onClick={startTimer}
           disabled={timeLeft === 0}
+          title='Start Timer'
           className="h-8 w-8 p-0 text-muted-foreground hover:text-green-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
         >
           <Play className="w-4 h-4" />
@@ -50,6 +51,7 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
       ) : (
         <button
           onClick={stopTimer}
+          title='Stop Timer'
           className="h-8 w-8 p-0 text-muted-foreground hover:text-red-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
         >
           <Square className="w-4 h-4" />
@@ -58,6 +60,7 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
 
       <button
         onClick={resetTimer}
+        title='Reset Timer'
         className="h-8 w-8 p-0 text-muted-foreground  hover:text-red-500 hover:bg-muted transition-all rounded-md flex justify-center items-center"
       >
         <RotateCcw className="w-4 h-4" />
