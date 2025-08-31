@@ -20,7 +20,7 @@ export default function PreviewPanel({
       className="bg-background border-l"
     >
       <div className="h-full flex flex-col">
-        <div className="flex items-center p-2 h-10 justify-between bg-background border-b  flex-shrink-0 overflow-x-auto">
+        <div className="flex items-center p-2 h-10 justify-between bg-background border-b  flex-shrink-0">
           <div className="flex items-center gap-2 text-sm select-none text-muted-foreground">
             <Globe className="h-3 w-3" />
             <span className="text-foreground">Preview</span>
