@@ -19,7 +19,7 @@ export default function EditorLayout() {
       <div className="h-full w-full bg-background text-white flex flex-col">
         <div className="flex-1 min-w-0">
           <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={70} minSize={40}>
+            <ResizablePanel defaultSize={60} minSize={40}>
               <ResizablePanelGroup direction="vertical">
                 <ResizablePanel
                   defaultSize={isConsoleVisible ? 70 : 100}

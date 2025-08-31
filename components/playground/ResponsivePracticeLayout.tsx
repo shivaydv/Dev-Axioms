@@ -17,12 +17,12 @@ interface ResponsivePracticeLayoutProps {
 }
 
 export default function ResponsivePracticeLayout({ question }: ResponsivePracticeLayoutProps) {
-  const { isMobileOrTablet } = useResponsive();
+  const { isMobileOrTablet, isMobile } = useResponsive();
   const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
   const { isCollapsed } = useSidebar();
 
   // Desktop Layout
-  if (!isMobileOrTablet) {
+  if (!isMobile) {
     return (
       <div className="flex-1 overflow-hidden flex">
         <div className={`${isCollapsed ? 'w-14' : 'w-80'} transition-all duration-300 flex-shrink-0`}>
@@ -44,44 +44,59 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
     );
   }
 
-  // Mobile/Tablet Layout
+
   return (
-    <div className="flex-1 overflow-hidden flex flex-col w-full">
-      {/* Mobile Tab Navigation */}
-      <MobileTabNavigation
-        onToggleConsole={toggleConsole}
-        isConsoleVisible={isConsoleOpen}
-      />
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-hidden w-full">
-
-        <SandpackProvider
-          template="react"
-          theme="auto"
-          files={question.starterCode}
-          customSetup={{ dependencies: { } }}
-          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <SandpackLayout style={{ height: "100%", width: "100%" }}>
-
-            {/* Always keep them mounted, just hide/show */}
-            <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
-              <MobileDescriptionLayout question={question} />
-            </div>
-
-            <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
-              <MobileEditorLayout />
-            </div>
-            <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
-              <MobilePreviewLayout />
-            </div>
-          </SandpackLayout>
-        </SandpackProvider>
-      </div>
+    <div className="flex justify-center items-center py-20">
+      <div className="bg-background text-foreground w-full p-6 rounded-2xl shadow-lg max-w-sm flex justify-center items-center flex-col">
+      <h2 className="text-lg font-semibold mb-2">⚠️ Mobile Notice</h2>
+      <p className="text-sm opacity-80 text-center">
+        We are still working on mobile support.
+        Please switch to a desktop device.
+      </p>
     </div>
-  );
+    </div>
+
+  )
+
+
+  // Mobile/Tablet Layout
+  // return (
+  //   <div className="flex-1 overflow-hidden flex flex-col w-full">
+  //     {/* Mobile Tab Navigation */}
+  //     <MobileTabNavigation
+  //       onToggleConsole={toggleConsole}
+  //       isConsoleVisible={isConsoleOpen}
+  //     />
+
+  //     {/* Content Area */}
+  //     <div className="flex-1 overflow-hidden w-full">
+
+  //       <SandpackProvider
+  //         template="react"
+  //         theme="auto"
+  //         files={question.starterCode}
+  //         customSetup={{ dependencies: { } }}
+  //         options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+  //         style={{ width: "100%", height: "100%" }}
+  //       >
+  //         <SandpackLayout style={{ height: "100%", width: "100%" }}>
+
+  //           {/* Always keep them mounted, just hide/show */}
+  //           <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
+  //             <MobileDescriptionLayout question={question} />
+  //           </div>
+
+  //           <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
+  //             <MobileEditorLayout />
+  //           </div>
+  //           <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
+  //             <MobilePreviewLayout />
+  //           </div>
+  //         </SandpackLayout>
+  //       </SandpackProvider>
+  //     </div>
+  //   </div>
+  // );
 }
 
 
