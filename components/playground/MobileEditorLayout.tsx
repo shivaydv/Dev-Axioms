@@ -10,7 +10,7 @@ export default function MobileEditorLayout() {
   const { isConsoleOpen, toggleConsole } = useMobileView();
 
   return (
-    <SandpackLayout style={{ height: "100%", width: "100%" }}>
+    
       <div className="h-full w-full">
         <ResizablePanelGroup direction="vertical">
           {/* Editor Panel */}
@@ -42,6 +42,6 @@ export default function MobileEditorLayout() {
           )}
         </ResizablePanelGroup>
       </div>
-    </SandpackLayout>
+ 
   );
 }

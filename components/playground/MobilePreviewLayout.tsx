@@ -9,7 +9,7 @@ export default function MobilePreviewLayout() {
   const { isConsoleOpen, toggleConsole } = useMobileView();
 
   return (
-    <SandpackLayout style={{ height: "100%", width: "100%" }}>
+    
       <div className="h-full w-full">
         <ResizablePanelGroup direction="vertical">
           {/* Preview Panel */}
@@ -46,6 +46,6 @@ export default function MobilePreviewLayout() {
           )}
         </ResizablePanelGroup>
       </div>
-    </SandpackLayout>
+   
   );
 }

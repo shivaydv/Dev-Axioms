@@ -10,7 +10,7 @@ import MobileEditorLayout from "@/components/playground/MobileEditorLayout";
 import MobilePreviewLayout from "@/components/playground/MobilePreviewLayout";
 import MobileDescriptionLayout from "@/components/playground/MobileDescriptionLayout";
 import { useSidebar } from "@/store/PlaygroundSidebarContext";
-import { SandpackProvider } from "@codesandbox/sandpack-react";
+import { SandpackLayout, SandpackProvider } from "@codesandbox/sandpack-react";
 
 interface ResponsivePracticeLayoutProps {
   question: Question;
@@ -33,7 +33,7 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
             template="react"
             theme="auto"
             files={question.starterCode}
-            customSetup={{ dependencies: { "lucide-react": "latest" } }}
+            customSetup={{ dependencies: {} }}
             options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
             style={{ width: "100%", height: "100%" }}
           >
@@ -48,43 +48,40 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
   return (
     <div className="flex-1 overflow-hidden flex flex-col w-full">
       {/* Mobile Tab Navigation */}
-      <MobileTabNavigation 
+      <MobileTabNavigation
         onToggleConsole={toggleConsole}
         isConsoleVisible={isConsoleOpen}
       />
 
       {/* Content Area */}
       <div className="flex-1 overflow-hidden w-full">
-        {activeView === 'description' && (
-          <MobileDescriptionLayout question={question} />
-        )}
-        
-        {activeView === 'editor' && (
-          <SandpackProvider
-            template="react"
-            theme="auto"
-            files={question.starterCode}
-            customSetup={{ dependencies: { "lucide-react": "latest" } }}
-            options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <MobileEditorLayout />
-          </SandpackProvider>
-        )}
 
-        {activeView === 'preview' && (
-          <SandpackProvider
-            template="react"
-            theme="auto"
-            files={question.starterCode}
-            customSetup={{ dependencies: { "lucide-react": "latest" } }}
-            options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <MobilePreviewLayout />
-          </SandpackProvider>
-        )}
+        <SandpackProvider
+          template="react"
+          theme="auto"
+          files={question.starterCode}
+          customSetup={{ dependencies: { } }}
+          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <SandpackLayout style={{ height: "100%", width: "100%" }}>
+
+            {/* Always keep them mounted, just hide/show */}
+            <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
+              <MobileDescriptionLayout question={question} />
+            </div>
+
+            <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
+              <MobileEditorLayout />
+            </div>
+            <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
+              <MobilePreviewLayout />
+            </div>
+          </SandpackLayout>
+        </SandpackProvider>
       </div>
     </div>
   );
 }
+
+
