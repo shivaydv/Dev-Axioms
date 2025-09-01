@@ -31,7 +31,7 @@ const page = () => {
   }
 
   return (
-    <div className='flex md:items-center max-md:pt-20 justify-center h-svh'>
+    <div className='flex items-center  justify-center h-svh'>
       <div className='flex flex-col items-center gap-4'>
         <LogoIcon className='h-12 w-12' />
         <h1 className='text-2xl font-bold mb-2'>Login to your account</h1>
