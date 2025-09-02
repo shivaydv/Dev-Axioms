@@ -1,16 +1,18 @@
 "use client";
 
+import EditorLayout from "@/components/playground/EditorLayout";
 import { Question } from "@/types/Question";
+import { Sidebar } from "@/components/playground/Sidebar";
+import { useSidebar } from "@/store/PlaygroundSidebarStore";
+import { SandpackProvider } from "@codesandbox/sandpack-react";
+// mobile related imports
 import { useResponsive } from "@/hooks/useResponsive";
 import { useMobileView } from "@/store/MobileViewStore";
-import { Sidebar } from "@/components/playground/Sidebar";
-import EditorLayout from "@/components/playground/EditorLayout";
 import { MobileTabNavigation } from "@/components/playground/MobileTabNavigation";
 import MobileEditorLayout from "@/components/playground/MobileEditorLayout";
 import MobilePreviewLayout from "@/components/playground/MobilePreviewLayout";
 import MobileDescriptionLayout from "@/components/playground/MobileDescriptionLayout";
-import { useSidebar } from "@/store/PlaygroundSidebarStore";
-import { SandpackLayout, SandpackProvider } from "@codesandbox/sandpack-react";
+import { SandpackLayout } from "@codesandbox/sandpack-react";
 
 interface ResponsivePracticeLayoutProps {
   question: Question;
@@ -19,48 +21,48 @@ interface ResponsivePracticeLayoutProps {
 export default function ResponsivePracticeLayout({
   question,
 }: ResponsivePracticeLayoutProps) {
-  const { isMobileOrTablet, isMobile } = useResponsive();
-  const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
+  // const { isMobileOrTablet, isMobile } = useResponsive();
+  // const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
   const { isCollapsed } = useSidebar();
 
   // Desktop Layout
-  if (!isMobile) {
-    return (
-      <div className="flex flex-1 overflow-hidden">
-        <div
-          className={`${isCollapsed ? "w-14" : "w-80"} flex-shrink-0 transition-all duration-300`}
-        >
-          <Sidebar question={question} />
-        </div>
-        <div className="flex-1">
-          <SandpackProvider
-            template="react"
-            theme="auto"
-            files={question.starterCode}
-            customSetup={{ dependencies: {} }}
-            options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-            style={{ width: "100%", height: "100%" }}
-          >
-            <EditorLayout />
-          </SandpackProvider>
-        </div>
-      </div>
-    );
-  }
-
+  // if (!isMobile) {
   return (
-    <div className="flex items-center justify-center py-20">
-      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
-        <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
-        <p className="text-center text-sm opacity-80">
-          We are still working on mobile support. Please switch to a desktop
-          device.
-        </p>
+    <div className="flex flex-1 overflow-hidden">
+      <div
+        className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
+      >
+        <Sidebar question={question} />
+      </div>
+      <div className="flex-1">
+        <SandpackProvider
+          template="react"
+          theme="auto"
+          files={question.starterCode}
+          customSetup={{ dependencies: {} }}
+          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <EditorLayout />
+        </SandpackProvider>
       </div>
     </div>
   );
+  // }
 
-  // Mobile/Tablet Layout
+  // return (
+  //   <div className="flex items-center justify-center py-20">
+  //     <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
+  //       <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
+  //       <p className="text-center text-sm opacity-80">
+  //         We are still working on mobile support. Please switch to a desktop
+  //         device.
+  //       </p>
+  //     </div>
+  //   </div>
+  // );
+
+  // Mobile/Tablet Layout 
   // return (
   //   <div className="flex-1 overflow-hidden flex flex-col w-full">
   //     {/* Mobile Tab Navigation */}

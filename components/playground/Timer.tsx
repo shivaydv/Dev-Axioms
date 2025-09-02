@@ -29,6 +29,7 @@ export function Timer({ timeLimit, onTimeUp, className = "" }: TimerProps) {
 
   const getTimerColor = () => {
     if (isFinished) return "text-red-500";
+    if (isRunning) return "text-green-500";
     if (timeLeft <= 300) return "text-orange-500";
     return "text-[var(--playground-text-muted)]";
   };

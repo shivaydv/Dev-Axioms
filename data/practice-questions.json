@@ -6,6 +6,7 @@
       "difficulty": "Easy",
       "category": "React Components",
       "timeLimit": 30,
+      "tags": ["React", "Tailwind CSS", "UI/UX"],
       "description": "Create a FAQ component that displays a list of frequently asked questions with collapsible sections. Each question should expand/collapse when clicked, showing/hiding the answer.",
       "requirements": [
         "Display a list of FAQ items",
@@ -27,6 +28,7 @@
       "difficulty": "Medium",
       "category": "State Management",
       "timeLimit": 45,
+      "tags": ["React", "Tailwind CSS", "UI/UX"],
       "description": "Build a complete todo list application with add, delete, and toggle functionality. Include filtering options for all, completed, and pending todos.",
       "requirements": [
         "Add new todos",
@@ -49,6 +51,7 @@
       "difficulty": "Easy",
       "category": "State Management",
       "timeLimit": 20,
+      "tags": ["React", "Tailwind CSS", "UI/UX"],
       "description": "Create a counter component that tracks the history of all changes and allows undo/redo functionality.",
       "requirements": [
         "Increment and decrement counter",
@@ -70,6 +73,7 @@
       "difficulty": "Medium",
       "category": "Data Filtering",
       "timeLimit": 35,
+      "tags": ["React", "Tailwind CSS", "UI/UX"],
       "description": "Build a search and filter component that allows users to search through a list of items and filter by categories.",
       "requirements": [
         "Search functionality with real-time filtering",
@@ -92,6 +96,7 @@
       "difficulty": "Hard",
       "category": "Advanced Components",
       "timeLimit": 50,
+      "tags": ["React", "Tailwind CSS", "UI/UX"],
       "description": "Create a reusable modal component with portal rendering, focus management, and keyboard accessibility.",
       "requirements": [
         "Portal rendering outside of parent DOM",
