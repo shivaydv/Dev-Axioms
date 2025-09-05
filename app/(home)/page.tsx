@@ -1,9 +1,8 @@
 import React from "react";
-import Hero from "@/components/Hero";
-import Highlights from "@/components/Highlights";
+import Hero from "@/components/landingPage/Hero";
+import Highlights from "@/components/landingPage/Highlights";
 
 const Page = async() => {
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate loading delay
   return (
     <div className="h-full ">
       <div

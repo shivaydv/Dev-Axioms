@@ -1,7 +1,7 @@
 import { DocsLayout, DocsLayoutProps } from "fumadocs-ui/layouts/notebook";
 import type { ReactNode } from "react";
 
-import { LogoIcon } from "@/components/Logo";
+import { LogoIcon } from "@/components/global/Logo";
 import type { PageTree } from "fumadocs-core/server";
 import { FaXTwitter } from "react-icons/fa6";
 

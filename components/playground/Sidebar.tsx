@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPracticeSidebarTabs } from "@/components/playground/SidebarTabs";
 
-import { useSidebar } from "@/store/PlaygroundSidebarContext";
+import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { Question } from "@/types/Question";
 
 interface SidebarProps {

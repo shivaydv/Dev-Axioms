@@ -1,4 +1,4 @@
-import { LogoIcon } from "@/components/Logo";
+import { LogoIcon } from "@/components/global/Logo";
 import { ImageResponse } from "next/og";
 
 export const alt = "Open Graph Image for Dev Axioms Web Dev";

@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Timer } from "@/components/Timer";
+import { Timer } from "@/components/playground/Timer";
 import { PanelLeftClose, PanelLeft } from "lucide-react";
 import { useResponsive } from "@/hooks/useResponsive";
-import { useSidebar } from "@/store/PlaygroundSidebarContext";
-import { Logo } from "@/components/Logo";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { useSidebar } from "@/store/PlaygroundSidebarStore";
+import { Logo } from "@/components/global/Logo";
+import { ThemeToggle } from "@/components/global/ThemeToggle";
 
 interface PracticeHeaderProps {
     timeLimit?: number;

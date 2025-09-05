@@ -2,14 +2,14 @@
 
 import { Question } from "@/types/Question";
 import { useResponsive } from "@/hooks/useResponsive";
-import { useMobileView } from "@/store/MobileViewContext";
+import { useMobileView } from "@/store/MobileViewStore";
 import { Sidebar } from "@/components/playground/Sidebar";
 import EditorLayout from "@/components/playground/EditorLayout";
 import { MobileTabNavigation } from "@/components/playground/MobileTabNavigation";
 import MobileEditorLayout from "@/components/playground/MobileEditorLayout";
 import MobilePreviewLayout from "@/components/playground/MobilePreviewLayout";
 import MobileDescriptionLayout from "@/components/playground/MobileDescriptionLayout";
-import { useSidebar } from "@/store/PlaygroundSidebarContext";
+import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { SandpackLayout, SandpackProvider } from "@codesandbox/sandpack-react";
 
 interface ResponsivePracticeLayoutProps {

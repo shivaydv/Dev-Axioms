@@ -3,7 +3,7 @@
 import { SandpackPreview, SandpackLayout } from "@codesandbox/sandpack-react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import ConsolePanel from "@/components/sandpack/ConsolePanel";
-import { useMobileView } from "@/store/MobileViewContext";
+import { useMobileView } from "@/store/MobileViewStore";
 
 export default function MobilePreviewLayout() {
   const { isConsoleOpen, toggleConsole } = useMobileView();

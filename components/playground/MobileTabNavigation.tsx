@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { FileText, Code, Eye, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useMobileView, MobileViewType } from "@/store/MobileViewContext";
+import { useMobileView, MobileViewType } from "@/store/MobileViewStore";
 
 const tabs = [
   { id: 'description' as MobileViewType, label: 'Question', icon: FileText },

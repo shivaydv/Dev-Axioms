@@ -5,7 +5,7 @@ import questionsData from '@/data/practice-questions.json';
 import PracticeHeader from '@/components/playground/PracticeHeader';
 import { Question } from '@/types/Question';
 import ResponsivePracticeLayout from '@/components/playground/ResponsivePracticeLayout';
-import { MobileViewProvider } from '@/store/MobileViewContext';
+import { MobileViewProvider } from '@/store/MobileViewStore';
 
 
 

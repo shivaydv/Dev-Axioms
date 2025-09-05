@@ -1,13 +1,15 @@
 "use client";
 
 import { ChevronDown, GithubIcon, Menu, X } from "lucide-react";
-import { Logo } from "@/components/Logo";
+import { Logo } from "@/components/global/Logo";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/global/ThemeToggle";
 import { FaXTwitter } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
+import ProfileDropdown from "./ProfileDropdown";
 
 interface NavLink {
   title: string;
@@ -73,6 +75,10 @@ export function Navbar() {
             <FaXTwitter className="h-[1.2rem] w-[1.2rem]" />
           </Link>
           <ThemeToggle />
+          <div className="hidden lg:flex">
+
+            <AuthBtns />
+          </div>
 
           {/* Mobile menu button */}
           <Button variant={"ghost"} size={"icon"} onClick={toggleMenu} className="lg:hidden " aria-label="Toggle menu">
@@ -164,6 +170,10 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
         >
           <FaXTwitter className="h-[1.2rem] w-[1.2rem]" />
         </Link>
+        <div className="flex-1" />
+
+        <AuthBtns size="default" />
+
       </div>
 
       <style jsx>{`
@@ -174,6 +184,35 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
           }
         }
       `}</style>
+    </div>
+  );
+}
+
+const AuthBtns = ({ size = "sm" }: { size?: "default" | "sm" | "lg" }) => {
+
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return <div className="hidden lg:flex items-center gap-2">
+      <div className="h-8 w-16 bg-muted rounded-md animate-pulse"></div>
+    </div>
+  }
+
+  const user = {
+    name: session?.user?.name || "",
+    email: session?.user?.email || "",
+    avatar: session?.user?.image || ""
+  }
+
+  return (
+    <div className=" items-center gap-2">
+      {session ? (
+        <ProfileDropdown user={user} />
+      ) : (
+        <Link href="/login" className={buttonVariants({ variant: "default", size: size })}>
+          Sign In
+        </Link>
+      )}
     </div>
   );
 }

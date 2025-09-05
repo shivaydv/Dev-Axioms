@@ -1,8 +1,8 @@
 import { webdev, web3, blog } from "@/lib/source"; // Import both sources
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
-import { truncateText } from "@/lib/truncate";
-import { LogoIcon } from "@/components/Logo";
+import { truncateText } from "@/utils/helpers";
+import { LogoIcon } from "@/components/global/Logo";
 
 const size = {
   width: 1200,

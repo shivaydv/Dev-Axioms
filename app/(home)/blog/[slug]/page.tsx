@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 import { blog } from "@/lib/source";
-import { createMetadata } from "@/lib/metadata";
+import { createMetadata } from "@/utils/metadata";
 import { buttonVariants } from "@/components/ui/button-varients.server";
 // import { Control } from '@/app/(home)/blog/[slug]/page.client';
 import { getMDXComponents } from "@/mdx-components";

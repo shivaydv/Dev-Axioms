@@ -5,7 +5,7 @@ import {
   useSandpack,
 } from "@codesandbox/sandpack-react";
 import FileTabs from "./FileTabs";
-import { getLanguageFromFileName } from "@/lib/getLanguageFromFileName";
+import { getLanguageFromFileName } from "@/utils/helpers";
 import { useEffect, useState } from "react";
 
 // ✅ Global singletons (won’t reload across navigations)

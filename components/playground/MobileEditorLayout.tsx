@@ -3,7 +3,7 @@
 import { SandpackLayout } from "@codesandbox/sandpack-react";
 import CustomEditor from "@/components/sandpack/CustomEditor";
 import ConsolePanel from "@/components/sandpack/ConsolePanel";
-import { useMobileView } from "@/store/MobileViewContext";
+import { useMobileView } from "@/store/MobileViewStore";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 export default function MobileEditorLayout() {
