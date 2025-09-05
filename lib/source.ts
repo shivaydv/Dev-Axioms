@@ -8,7 +8,6 @@ import { createMDXSource } from "fumadocs-mdx";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 
-
 export const webdev = loader({
   baseUrl: "/web-dev",
   source: webdevPost.toFumadocsSource(),

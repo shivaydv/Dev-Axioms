@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useTimer } from '@/hooks/useTimer';
-import { Play, Square, RotateCcw } from 'lucide-react';
+import React from "react";
+import { useTimer } from "@/hooks/useTimer";
+import { Play, Square, RotateCcw } from "lucide-react";
 
 interface TimerProps {
   timeLimit: number; // in minutes
@@ -10,7 +10,7 @@ interface TimerProps {
   className?: string;
 }
 
-export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
+export function Timer({ timeLimit, onTimeUp, className = "" }: TimerProps) {
   const {
     timeLeft,
     isRunning,
@@ -28,14 +28,14 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
   }, [isFinished, onTimeUp]);
 
   const getTimerColor = () => {
-    if (isFinished) return 'text-red-500';
-    if (timeLeft <= 300) return 'text-orange-500';
-    return 'text-[var(--playground-text-muted)]';
+    if (isFinished) return "text-red-500";
+    if (timeLeft <= 300) return "text-orange-500";
+    return "text-[var(--playground-text-muted)]";
   };
 
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
-      <span className={`text-sm font-mono ${getTimerColor()}`}>
+      <span className={`font-mono text-sm ${getTimerColor()}`}>
         {formattedTime}
       </span>
 
@@ -43,27 +43,27 @@ export function Timer({ timeLimit, onTimeUp, className = '' }: TimerProps) {
         <button
           onClick={startTimer}
           disabled={timeLeft === 0}
-          title='Start Timer'
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-green-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
+          title="Start Timer"
+          className="text-muted-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md p-0 transition-all hover:text-green-600"
         >
-          <Play className="w-4 h-4" />
+          <Play className="h-4 w-4" />
         </button>
       ) : (
         <button
           onClick={stopTimer}
-          title='Stop Timer'
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-red-600 hover:bg-muted transition-all rounded-md flex justify-center items-center"
+          title="Stop Timer"
+          className="text-muted-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md p-0 transition-all hover:text-red-600"
         >
-          <Square className="w-4 h-4" />
+          <Square className="h-4 w-4" />
         </button>
       )}
 
       <button
         onClick={resetTimer}
-        title='Reset Timer'
-        className="h-8 w-8 p-0 text-muted-foreground  hover:text-red-500 hover:bg-muted transition-all rounded-md flex justify-center items-center"
+        title="Reset Timer"
+        className="text-muted-foreground hover:bg-muted flex h-8 w-8 items-center justify-center rounded-md p-0 transition-all hover:text-red-500"
       >
-        <RotateCcw className="w-4 h-4" />
+        <RotateCcw className="h-4 w-4" />
       </button>
     </div>
   );

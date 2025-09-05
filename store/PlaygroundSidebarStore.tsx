@@ -17,12 +17,14 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   const toggle = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <SidebarContext.Provider value={{ 
-      isCollapsed, 
-      toggle, 
-      activeTab, 
-      setActiveTab
-    }}>
+    <SidebarContext.Provider
+      value={{
+        isCollapsed,
+        toggle,
+        activeTab,
+        setActiveTab,
+      }}
+    >
       {children}
     </SidebarContext.Provider>
   );

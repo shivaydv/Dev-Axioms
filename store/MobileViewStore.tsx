@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 
-export type MobileViewType = 'description' | 'editor' | 'preview';
+export type MobileViewType = "description" | "editor" | "preview";
 
 type MobileViewContextType = {
   activeView: MobileViewType;
@@ -10,14 +10,16 @@ type MobileViewContextType = {
   toggleConsole: () => void;
 };
 
-const MobileViewContext = createContext<MobileViewContextType | undefined>(undefined);
+const MobileViewContext = createContext<MobileViewContextType | undefined>(
+  undefined,
+);
 
 export function MobileViewProvider({ children }: { children: ReactNode }) {
-  const [activeView, setActiveView] = useState<MobileViewType>('description');
+  const [activeView, setActiveView] = useState<MobileViewType>("description");
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
 
   const toggleConsole = () => {
-    setIsConsoleOpen(prev => !prev);
+    setIsConsoleOpen((prev) => !prev);
   };
 
   // Auto-open console when switching to editor view if it was previously open
@@ -27,12 +29,14 @@ export function MobileViewProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <MobileViewContext.Provider value={{ 
-      activeView, 
-      setActiveView: setActiveViewWithConsole,
-      isConsoleOpen,
-      toggleConsole
-    }}>
+    <MobileViewContext.Provider
+      value={{
+        activeView,
+        setActiveView: setActiveViewWithConsole,
+        isConsoleOpen,
+        toggleConsole,
+      }}
+    >
       {children}
     </MobileViewContext.Provider>
   );
@@ -40,6 +44,7 @@ export function MobileViewProvider({ children }: { children: ReactNode }) {
 
 export function useMobileView() {
   const ctx = useContext(MobileViewContext);
-  if (!ctx) throw new Error("useMobileView must be used inside MobileViewProvider");
+  if (!ctx)
+    throw new Error("useMobileView must be used inside MobileViewProvider");
   return ctx;
 }

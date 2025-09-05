@@ -3,8 +3,6 @@
 @import "fumadocs-ui/css/preset.css";
 @import "tw-animate-css";
 
-
-  
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
@@ -43,16 +41,11 @@
   }
 }
 
-
-
-
 /* sandpack css  */
 .sp-layout {
   border: none !important;
   border-radius: 0 !important;
 }
-
-
 
 /* monaco editor css */
 .monaco-editor {
@@ -61,7 +54,7 @@
 
 /* fumadocs css changes  */
 #nd-sidebar {
-  @apply border-r border border-y-0;
+  @apply border border-y-0 border-r;
 }
 
 :root {

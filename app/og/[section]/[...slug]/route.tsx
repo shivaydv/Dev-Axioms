@@ -11,7 +11,7 @@ const size = {
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ section: string; slug: string[] }> }
+  { params }: { params: Promise<{ section: string; slug: string[] }> },
 ) {
   const { section, slug } = await params;
 
@@ -235,7 +235,7 @@ export async function GET(
           </div>
         </div>
       ),
-      { ...size }
+      { ...size },
     );
   } catch (error) {
     console.error("Error generating Open Graph image:", error);

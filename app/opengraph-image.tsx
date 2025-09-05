@@ -14,13 +14,13 @@ export default async function Image() {
 
   return new ImageResponse(
     (
-      <div 
-      style={{
-        backgroundColor: "white",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-      }}
+      <div
+        style={{
+          backgroundColor: "white",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+        }}
       >
         <div
           style={{
@@ -169,6 +169,6 @@ export default async function Image() {
     ),
     {
       ...size,
-    }
+    },
   );
 }

@@ -4,7 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 import Analytics from "@/components/analytics/analytics";
 
 const geist = Geist({
@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       className={`${geist.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex flex-col min-h-screen ">
+      <body className="flex min-h-screen flex-col">
         <RootProvider>{children}</RootProvider>
         <Analytics />
         <Toaster />

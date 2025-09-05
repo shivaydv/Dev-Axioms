@@ -5,7 +5,7 @@ export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
       <LogoIcon />
-      <h2 className="text-md font-bold ">Dev Axioms</h2>
+      <h2 className="text-md font-bold">Dev Axioms</h2>
     </Link>
   );
 }
@@ -16,12 +16,12 @@ interface LogoProps {
   className?: string;
 }
 
-export const LogoIcon = ({ className  , width ,height}: LogoProps) => {
+export const LogoIcon = ({ className, width, height }: LogoProps) => {
   return (
     <svg
-      className={cn("w-6 h-6 dark:fill-white", className)}
+      className={cn("h-6 w-6 dark:fill-white", className)}
       width={width || 70}
-      height={height || 70} 
+      height={height || 70}
       viewBox="0 0 70 69.96970834763681"
     >
       <g transform="translate(-22.207152258424557, -22.23577583940203) scale(0.2861746762684532)">

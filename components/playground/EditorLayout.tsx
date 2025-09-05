@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 import ConsolePanel from "@/components/sandpack/ConsolePanel";
 import PreviewPanel from "@/components/sandpack/PreviewPanel";
 import { SandpackLayout } from "@codesandbox/sandpack-react";
@@ -13,11 +17,10 @@ export default function EditorLayout() {
     setIsConsoleVisible(!isConsoleVisible);
   };
 
-
   return (
     <SandpackLayout style={{ height: "100%", width: "100%" }}>
-      <div className="h-full w-full bg-background text-white flex flex-col">
-        <div className="flex-1 min-w-0">
+      <div className="bg-background flex h-full w-full flex-col text-white">
+        <div className="min-w-0 flex-1">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={60} minSize={40}>
               <ResizablePanelGroup direction="vertical">
@@ -30,14 +33,11 @@ export default function EditorLayout() {
 
                 {isConsoleVisible && (
                   <>
-                    <ResizableHandle withHandle
-                      className="w-1 bg-border hover:bg-primary/30 transition-colors duration-150"
+                    <ResizableHandle
+                      withHandle
+                      className="bg-border hover:bg-primary/30 w-1 transition-colors duration-150"
                     />
-                    <ResizablePanel
-                      defaultSize={30}
-                      minSize={20}
-                      maxSize={70}
-                    >
+                    <ResizablePanel defaultSize={30} minSize={20} maxSize={70}>
                       <ConsolePanel
                         isVisible={isConsoleVisible}
                         onClose={toggleConsole}
@@ -49,13 +49,14 @@ export default function EditorLayout() {
             </ResizablePanel>
 
             {/* Preview Panel */}
-            <ResizableHandle withHandle
-              className="w-0.5 bg-border hover:bg-primary/30 transition-colors duration-150"
+            <ResizableHandle
+              withHandle
+              className="bg-border hover:bg-primary/30 w-0.5 transition-colors duration-150"
             />
             <PreviewPanel onToggleConsole={toggleConsole} />
           </ResizablePanelGroup>
         </div>
       </div>
-   </SandpackLayout>
+    </SandpackLayout>
   );
 }

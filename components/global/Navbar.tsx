@@ -21,7 +21,10 @@ export const NAVLINKS: NavLink[] = [
   { title: "Practice", href: "/practice" },
   { title: "Playgrounds", href: "/playground" },
   { title: "Blogs", href: "/blog" },
-  { title: "Community", href: "https://github.com/shivaydv/Dev-Axioms/discussions" },
+  {
+    title: "Community",
+    href: "https://github.com/shivaydv/Dev-Axioms/discussions",
+  },
 ];
 
 export function Navbar() {
@@ -41,8 +44,8 @@ export function Navbar() {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const toggleMenu = () => {
@@ -50,12 +53,14 @@ export function Navbar() {
   };
 
   return (
-    <nav className={`sticky top-0 z-50 w-full border-b  backdrop-blur-md ${isOpen ? 'bg-background/80' : 'bg-background'}`}>
-      <div className="mx-auto max-w-[1250px] px-4 md:px-6 h-16 flex items-center justify-between relative">
+    <nav
+      className={`sticky top-0 z-50 w-full border-b backdrop-blur-md ${isOpen ? "bg-background/80" : "bg-background"}`}
+    >
+      <div className="relative mx-auto flex h-16 max-w-[1250px] items-center justify-between px-4 md:px-6">
         {/* Left side - Logo + Desktop Links */}
         <div className="flex items-center gap-6">
           <Logo />
-          <div className="hidden lg:flex items-center gap-5">
+          <div className="hidden items-center gap-5 lg:flex">
             <NavMenu />
           </div>
         </div>
@@ -76,28 +81,36 @@ export function Navbar() {
           </Link>
           <ThemeToggle />
           <div className="hidden lg:flex">
-
             <AuthBtns />
           </div>
 
           {/* Mobile menu button */}
-          <Button variant={"ghost"} size={"icon"} onClick={toggleMenu} className="lg:hidden " aria-label="Toggle menu">
-            <ChevronDown className={` w-[1.2rem] h-[1.2rem] ${isOpen ? 'rotate-180' : 'rotate-0'} transition-transform duration-200`} />
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={toggleMenu}
+            className="lg:hidden"
+            aria-label="Toggle menu"
+          >
+            <ChevronDown
+              className={`h-[1.2rem] w-[1.2rem] ${isOpen ? "rotate-180" : "rotate-0"} transition-transform duration-200`}
+            />
           </Button>
         </div>
 
         {/* Mobile menu dropdown - absolutely positioned */}
         <div
-          className={`lg:hidden absolute top-full left-0 right-0 bg-background shadow-md backdrop-blur-md border-border rounded-b-2xl border-b transition-all duration-300 ease-in-out ${isOpen
-            ? 'opacity-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 -translate-y-2 pointer-events-none'
-            }`}
+          className={`bg-background border-border absolute top-full right-0 left-0 rounded-b-2xl border-b shadow-md backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${
+            isOpen
+              ? "pointer-events-auto translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-2 opacity-0"
+          }`}
           style={{
             // maxHeight: isOpen ? '500px' : '0',
-            overflow: 'hidden'
+            overflow: "hidden",
           }}
         >
-          <div className="mx-auto max-w-[1250px] px-4 md:px-6 py-4 ">
+          <div className="mx-auto max-w-[1250px] px-4 py-4 md:px-6">
             <MobileNavMenu onItemClick={() => setIsOpen(false)} />
           </div>
         </div>
@@ -118,8 +131,11 @@ export function NavMenu() {
           <Link
             key={item.title}
             href={item.href || "#"}
-            className={`transition-colors hover:text-foreground ${isActive ? "text-foreground font-semibold" : "text-muted-foreground"
-              }`}
+            className={`hover:text-foreground transition-colors ${
+              isActive
+                ? "text-foreground font-semibold"
+                : "text-muted-foreground"
+            }`}
           >
             {item.title}
           </Link>
@@ -142,15 +158,16 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
             key={item.title}
             href={item.href || "#"}
             onClick={onItemClick}
-            className={`block px-3 py-3 rounded-md text-base font-medium transition-all duration-200 hover:bg-accent hover:text-accent-foreground ${isActive
-              ? "text-foreground font-semibold bg-accent/50"
-              : "text-muted-foreground"
-              }`}
+            className={`hover:bg-accent hover:text-accent-foreground block rounded-md px-3 py-3 text-base font-medium transition-all duration-200 ${
+              isActive
+                ? "text-foreground bg-accent/50 font-semibold"
+                : "text-muted-foreground"
+            }`}
             style={{
               animationDelay: `${index * 50}ms`,
               opacity: 0,
-              transform: 'translateY(10px)',
-              animation: `slideInUp 0.3s ease-out ${index * 50}ms forwards`
+              transform: "translateY(10px)",
+              animation: `slideInUp 0.3s ease-out ${index * 50}ms forwards`,
             }}
           >
             {item.title}
@@ -173,7 +190,6 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
         <div className="flex-1" />
 
         <AuthBtns size="default" />
-
       </div>
 
       <style jsx>{`
@@ -189,30 +205,34 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
 }
 
 const AuthBtns = ({ size = "sm" }: { size?: "default" | "sm" | "lg" }) => {
-
   const { data: session, isPending } = useSession();
 
   if (isPending) {
-    return <div className="hidden lg:flex items-center gap-2">
-      <div className="h-8 w-16 bg-muted rounded-md animate-pulse"></div>
-    </div>
+    return (
+      <div className="hidden items-center gap-2 lg:flex">
+        <div className="bg-muted h-8 w-16 animate-pulse rounded-md"></div>
+      </div>
+    );
   }
 
   const user = {
     name: session?.user?.name || "",
     email: session?.user?.email || "",
-    avatar: session?.user?.image || ""
-  }
+    avatar: session?.user?.image || "",
+  };
 
   return (
-    <div className=" items-center gap-2">
+    <div className="items-center gap-2">
       {session ? (
         <ProfileDropdown user={user} />
       ) : (
-        <Link href="/login" className={buttonVariants({ variant: "default", size: size })}>
+        <Link
+          href="/login"
+          className={buttonVariants({ variant: "default", size: size })}
+        >
           Sign In
         </Link>
       )}
     </div>
   );
-}
+};

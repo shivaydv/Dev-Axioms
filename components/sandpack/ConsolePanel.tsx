@@ -7,24 +7,26 @@ import CustomConsole from "@/components/sandpack/CustomConsole";
 interface ConsolePanelProps {
   isVisible: boolean;
   onClose: () => void;
-
 }
 
-export default function ConsolePanel({ isVisible, onClose }: ConsolePanelProps) {
+export default function ConsolePanel({
+  isVisible,
+  onClose,
+}: ConsolePanelProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="h-full bg-background border-t text-foreground ">
-      <div className="flex items-center justify-between p-2  border-b ">
+    <div className="bg-background text-foreground h-full border-t">
+      <div className="flex items-center justify-between border-b p-2">
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 " />
+          <Terminal className="h-4 w-4" />
           <span className="text-sm font-medium">Console</span>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClose}
-          className="rounded-md h-6 w-6 p-0"
+          className="h-6 w-6 rounded-md p-0"
         >
           <X className="h-3 w-3" />
         </Button>

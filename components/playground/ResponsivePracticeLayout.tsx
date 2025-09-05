@@ -16,7 +16,9 @@ interface ResponsivePracticeLayoutProps {
   question: Question;
 }
 
-export default function ResponsivePracticeLayout({ question }: ResponsivePracticeLayoutProps) {
+export default function ResponsivePracticeLayout({
+  question,
+}: ResponsivePracticeLayoutProps) {
   const { isMobileOrTablet, isMobile } = useResponsive();
   const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
   const { isCollapsed } = useSidebar();
@@ -24,8 +26,10 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
   // Desktop Layout
   if (!isMobile) {
     return (
-      <div className="flex-1 overflow-hidden flex">
-        <div className={`${isCollapsed ? 'w-14' : 'w-80'} transition-all duration-300 flex-shrink-0`}>
+      <div className="flex flex-1 overflow-hidden">
+        <div
+          className={`${isCollapsed ? "w-14" : "w-80"} flex-shrink-0 transition-all duration-300`}
+        >
           <Sidebar question={question} />
         </div>
         <div className="flex-1">
@@ -44,20 +48,17 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
     );
   }
 
-
   return (
-    <div className="flex justify-center items-center py-20">
-      <div className="bg-background text-foreground w-full p-6 rounded-2xl shadow-lg max-w-sm flex justify-center items-center flex-col">
-      <h2 className="text-lg font-semibold mb-2">⚠️ Mobile Notice</h2>
-      <p className="text-sm opacity-80 text-center">
-        We are still working on mobile support.
-        Please switch to a desktop device.
-      </p>
+    <div className="flex items-center justify-center py-20">
+      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
+        <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
+        <p className="text-center text-sm opacity-80">
+          We are still working on mobile support. Please switch to a desktop
+          device.
+        </p>
+      </div>
     </div>
-    </div>
-
-  )
-
+  );
 
   // Mobile/Tablet Layout
   // return (
@@ -98,5 +99,3 @@ export default function ResponsivePracticeLayout({ question }: ResponsivePractic
   //   </div>
   // );
 }
-
-
