@@ -38,7 +38,7 @@ export default function ResponsivePracticeLayout({
         <SandpackProvider
           template="react"
           theme="auto"
-          files={question.starterCode}
+          files={question.starterCode || undefined}
           customSetup={{ dependencies: {} }}
           options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
           style={{ width: "100%", height: "100%" }}

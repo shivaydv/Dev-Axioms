@@ -60,4 +60,4 @@ export const verification = pgTable("verification", {
     .notNull(),
 });
 
-export const schema = { user, account, session, verification };
+export const AuthSchema = { user, session, account, verification };
