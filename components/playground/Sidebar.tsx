@@ -2,7 +2,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, SidebarClose, SidebarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPracticeSidebarTabs } from "@/components/playground/SidebarTabs";
 
@@ -65,16 +65,16 @@ export function Sidebar({ question }: SidebarProps) {
 
   return (
     <div className="bg-background flex h-full flex-col border-r transition-all duration-200">
-      <div className="flex h-10 items-center justify-between border-b p-3">
+      <div className="hidden h-10 items-center justify-between border-b p-3">
         <div className="flex min-w-0 flex-1 items-center space-x-2">
           <Button
             variant="ghost"
-            size="sm"
+            size="sm" 
             onClick={toggleSidebar}
             className="hover:bg-accent h-6 w-6 flex-shrink-0 p-0"
             title="Collapse Sidebar"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <SidebarIcon className="h-4 w-4" />
           </Button>
           <span className="truncate text-sm font-medium">
             {activeTabData?.label}

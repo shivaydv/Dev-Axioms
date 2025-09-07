@@ -4,6 +4,7 @@ import { useActiveCode, useSandpack } from "@codesandbox/sandpack-react";
 import FileTabs from "./FileTabs";
 import { getLanguageFromFileName } from "@/utils/helpers";
 import { useEffect, useState } from "react";
+import { useEditorSettings } from "@/store/EditorSettingsStore";
 
 // ✅ Global singletons (won’t reload across navigations)
 let globalHighlighter: any = null;
@@ -47,6 +48,7 @@ async function preloadShiki() {
 }
 
 export default function CustomEditor() {
+  const { settings } = useEditorSettings();
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
   const language = getLanguageFromFileName(sandpack.activeFile);
@@ -56,6 +58,9 @@ export default function CustomEditor() {
   useEffect(() => {
     preloadShiki().then(() => setReady(true));
   }, []);
+  useEffect(() => {
+    console.log("Files changed:", sandpack.files);
+  }, [sandpack.files]);
 
   if (!sandpack.activeFile) return <EditorLoading />;
   if (!ready) return <EditorLoading />;
@@ -94,13 +99,13 @@ export default function CustomEditor() {
           onChange={(value) => updateCode(value || "")}
           loading={<EditorLoading />}
           options={{
-            minimap: { enabled: false },
+            minimap: { enabled: settings.minimap },
             padding: { top: 10, bottom: 10 },
-            fontSize: 14,
-            lineNumbers: "on",
+            fontSize: settings.fontSize,
+            lineNumbers: settings.lineNumbers ? "on" : "off",
             scrollBeyondLastLine: false,
             automaticLayout: true,
-            wordWrap: "on",
+            wordWrap: settings.wordWrap ? "on" : "off",
             bracketPairColorization: { enabled: true },
             tabSize: 2,
             insertSpaces: true,

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -10,12 +9,13 @@ import ConsolePanel from "@/components/sandpack/ConsolePanel";
 import PreviewPanel from "@/components/sandpack/PreviewPanel";
 import { SandpackLayout } from "@codesandbox/sandpack-react";
 import CustomEditor from "@/components/sandpack/CustomEditor";
+import {
+  EditorSettingsProvider,
+  useEditorSettings,
+} from "@/store/EditorSettingsStore";
 
-export default function EditorLayout() {
-  const [isConsoleVisible, setIsConsoleVisible] = useState(false);
-  const toggleConsole = () => {
-    setIsConsoleVisible(!isConsoleVisible);
-  };
+function EditorLayoutContent() {
+  const { settings, toggleConsole } = useEditorSettings();
 
   return (
     <SandpackLayout style={{ height: "100%", width: "100%" }}>
@@ -25,13 +25,13 @@ export default function EditorLayout() {
             <ResizablePanel defaultSize={60} minSize={40}>
               <ResizablePanelGroup direction="vertical">
                 <ResizablePanel
-                  defaultSize={isConsoleVisible ? 70 : 100}
+                  defaultSize={settings.isConsoleVisible ? 70 : 100}
                   minSize={30}
                 >
                   <CustomEditor />
                 </ResizablePanel>
 
-                {isConsoleVisible && (
+                {settings.isConsoleVisible && (
                   <>
                     <ResizableHandle
                       withHandle
@@ -39,7 +39,7 @@ export default function EditorLayout() {
                     />
                     <ResizablePanel defaultSize={30} minSize={20} maxSize={70}>
                       <ConsolePanel
-                        isVisible={isConsoleVisible}
+                        isVisible={settings.isConsoleVisible}
                         onClose={toggleConsole}
                       />
                     </ResizablePanel>
@@ -53,10 +53,18 @@ export default function EditorLayout() {
               withHandle
               className="bg-border hover:bg-primary/30 w-0.5 transition-colors duration-150"
             />
-            <PreviewPanel onToggleConsole={toggleConsole} />
+            <PreviewPanel />
           </ResizablePanelGroup>
         </div>
       </div>
     </SandpackLayout>
+  );
+}
+
+export default function EditorLayout() {
+  return (
+    <EditorSettingsProvider>
+      <EditorLayoutContent />
+    </EditorSettingsProvider>
   );
 }

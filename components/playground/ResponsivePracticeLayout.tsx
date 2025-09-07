@@ -4,7 +4,7 @@ import EditorLayout from "@/components/playground/EditorLayout";
 import { Question } from "@/types/Question";
 import { Sidebar } from "@/components/playground/Sidebar";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
-import { SandpackProvider } from "@codesandbox/sandpack-react";
+import { SandpackFiles, SandpackProvider } from "@codesandbox/sandpack-react";
 // mobile related imports
 import { useResponsive } from "@/hooks/useResponsive";
 import { useMobileView } from "@/store/MobileViewStore";
@@ -13,6 +13,25 @@ import MobileEditorLayout from "@/components/playground/MobileEditorLayout";
 import MobilePreviewLayout from "@/components/playground/MobilePreviewLayout";
 import MobileDescriptionLayout from "@/components/playground/MobileDescriptionLayout";
 import { SandpackLayout } from "@codesandbox/sandpack-react";
+import SandpackWatcher from "../sandpack/SandpackWatcher";
+import { useEffect, useMemo } from "react";
+
+
+function getSavedFiles(questionId: string, starterCode: SandpackFiles | undefined) {
+  try {
+    const raw = localStorage.getItem("users-code");
+    if (!raw) return starterCode;
+
+    const parsed = JSON.parse(raw);
+    if (parsed.questionId === questionId && parsed.files) {
+      return parsed.files as SandpackFiles;
+    }
+  } catch (err) {
+    console.warn("Failed to restore saved files:", err);
+  }
+  return starterCode;
+}
+
 
 interface ResponsivePracticeLayoutProps {
   question: Question;
@@ -21,9 +40,15 @@ interface ResponsivePracticeLayoutProps {
 export default function ResponsivePracticeLayout({
   question,
 }: ResponsivePracticeLayoutProps) {
+  const { isCollapsed } = useSidebar();
   // const { isMobileOrTablet, isMobile } = useResponsive();
   // const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
-  const { isCollapsed } = useSidebar();
+
+let initialFiles = useMemo(() => {
+    return getSavedFiles(question.id, question.starterCode || undefined);
+  }, [question.id, question.starterCode]);
+
+  
 
   // Desktop Layout
   // if (!isMobile) {
@@ -38,12 +63,13 @@ export default function ResponsivePracticeLayout({
         <SandpackProvider
           template="react"
           theme="auto"
-          files={question.starterCode || undefined}
+          files={initialFiles}
           customSetup={{ dependencies: {} }}
           options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
           style={{ width: "100%", height: "100%" }}
         >
           <EditorLayout />
+          <SandpackWatcher questionId={question.id} />
         </SandpackProvider>
       </div>
     </div>

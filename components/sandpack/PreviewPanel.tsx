@@ -2,14 +2,9 @@
 
 import { ResizablePanel } from "@/components/ui/resizable";
 import { SandpackPreview } from "@codesandbox/sandpack-react";
-import { Globe, Terminal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Globe } from "lucide-react";
 
-interface PreviewPanelProps {
-  onToggleConsole: () => void;
-}
-
-export default function PreviewPanel({ onToggleConsole }: PreviewPanelProps) {
+export default function PreviewPanel() {
   return (
     <ResizablePanel
       defaultSize={40}
@@ -18,21 +13,12 @@ export default function PreviewPanel({ onToggleConsole }: PreviewPanelProps) {
       className="bg-background border-l"
     >
       <div className="flex h-full flex-col">
-        <div className="bg-background flex h-10 flex-shrink-0 items-center justify-between border-b p-2">
+        {/* <div className="bg-background flex h-10 flex-shrink-0 items-center justify-between border-b p-2">
           <div className="text-muted-foreground flex items-center gap-2 text-sm select-none">
             <Globe className="h-3 w-3" />
             <span className="text-foreground">Preview</span>
           </div>
-          <Button
-            onClick={onToggleConsole}
-            variant={"ghost"}
-            size={"sm"}
-            className="rounded-md"
-          >
-            <Terminal className="h-4 w-4" />
-            Console
-          </Button>
-        </div>
+        </div> */}
         <div className="min-h-0 flex-1">
           <SandpackPreview
             showNavigator={false}
