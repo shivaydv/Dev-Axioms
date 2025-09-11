@@ -2,6 +2,7 @@ import { SandpackFile } from "@codesandbox/sandpack-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Settings } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface PropertiesPanelProps {
   activeFile: string;
@@ -74,23 +75,25 @@ export const PropertiesPanel = ({
             Font Size
           </Label>
           <div className="flex items-center gap-2">
-            <button
+            <Button
+              type="button"
               onClick={() => onFontSizeChange(Math.max(8, fontSize - 1))}
-              className="text-muted-foreground hover:text-foreground flex h-6 w-6 items-center justify-center rounded border text-xs"
+              variant={"outline"}
+              size={"sm"}
               disabled={fontSize <= 8}
             >
               -
-            </button>
-            <span className="w-8 text-center font-mono text-xs">
-              {fontSize}
-            </span>
-            <button
+            </Button>
+            {fontSize}  
+            <Button
+              type="button"
               onClick={() => onFontSizeChange(Math.min(24, fontSize + 1))}
-              className="text-muted-foreground hover:text-foreground flex h-6 w-6 items-center justify-center rounded border text-xs"
+              variant={"outline"}
+              size={"sm"}
               disabled={fontSize >= 24}
             >
               +
-            </button>
+            </Button>
           </div>
         </div>
 

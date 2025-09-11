@@ -126,6 +126,7 @@ const AdvancedFileManager = forwardRef<
     return (
       <>
         <div
+          
           className={cn(
             "bg-card flex flex-col overflow-hidden rounded-lg border shadow-sm",
             className,

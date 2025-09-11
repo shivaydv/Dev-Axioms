@@ -54,6 +54,7 @@ export const FileTabs = ({
                 <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100 sm:gap-1">
                   {(allowDeleteLastFile || files.length > 1) && (
                     <Button
+                      type="button"
                       variant="ghost"
                       size="icon"
                       className="hover:text-destructive h-4 w-4 sm:h-5 sm:w-5"
@@ -75,6 +76,7 @@ export const FileTabs = ({
 
       <div className="flex flex-shrink-0 items-center border-l px-1.5 sm:px-2">
         <Button
+          type="button"
           size="sm"
           variant="ghost"
           onClick={onAddFile}

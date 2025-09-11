@@ -86,6 +86,7 @@ export const EditorContainer = ({
           <FileText className="mx-auto mb-4 h-12 w-12 opacity-50" />
           <p>No file selected</p>
           <Button
+          type="button"
             size="sm"
             variant="outline"
             className="mt-2"
