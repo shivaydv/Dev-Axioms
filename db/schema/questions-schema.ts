@@ -1,10 +1,10 @@
-import { pgTable, text, timestamp, boolean, pgEnum, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, pgEnum, jsonb, uuid } from "drizzle-orm/pg-core";
 import type { SandpackFiles } from "@codesandbox/sandpack-react";
 
 export const difficultyEnum = pgEnum("difficulty", ["Easy", "Medium", "Hard"]);
 
 export const question = pgTable("question", {
-  id: text("id").primaryKey(),
+  id: uuid("id").defaultRandom().primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   difficulty: difficultyEnum("difficulty").notNull().default("Easy"),

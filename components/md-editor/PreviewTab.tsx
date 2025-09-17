@@ -24,7 +24,7 @@ export const PreviewTab: FC<PreviewTabProps> = ({ markdown }) => {
             ),
           }}
         >
-          {markdown}
+          {markdown || "Nothing to preview"}
         </ReactMarkdown>
       </CardContent>
     </TabsContent>

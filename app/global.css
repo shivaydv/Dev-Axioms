@@ -3,7 +3,6 @@
 @import "fumadocs-ui/css/preset.css";
 @import "tw-animate-css";
 
-
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
@@ -49,9 +48,7 @@
 }
 
 /* monaco editor css */
-.monaco-editor {
-  background-color: red;
-}
+
 
 /* fumadocs css changes  */
 #nd-sidebar {

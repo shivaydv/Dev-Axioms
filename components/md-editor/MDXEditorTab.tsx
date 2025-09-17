@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   MDXEditor,
   MDXEditorMethods,
@@ -23,9 +23,6 @@ import { EditorToolbar } from "./EditorToolbar";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { EDITOR_CONFIG, EDITOR_STYLES } from "./MarkdownEditor";
 
-
-
-
 interface MDXEditorTabProps {
   markdown: string;
   onChange: (markdown: string) => void;
@@ -37,13 +34,29 @@ const MDXEditorTab: FC<MDXEditorTabProps> = ({
   onChange,
   editorRef,
 }) => {
+  // Auto-focus the editor when the component mounts or becomes active
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (editorRef?.current) {
+        editorRef.current.focus();
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [editorRef]);
+
   return (
-    <TabsContent value="edit" className="flex h-0 flex-1 flex-col pt-0!">
+    <TabsContent
+      value="edit"
+      className="flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-red-300 pt-0!"
+    >
       <MDXEditor
         ref={editorRef}
+        placeholder="Start writing your markdown..."
         markdown={markdown}
         onChange={onChange}
         contentEditableClassName={EDITOR_STYLES.contentClassName}
+        autoFocus
         plugins={[
           // Core plugins
           headingsPlugin(),
@@ -59,7 +72,6 @@ const MDXEditorTab: FC<MDXEditorTabProps> = ({
           // Image plugin
           imagePlugin({
             // imageUploadHandler,
-            
           }),
 
           // Table plugin
@@ -72,7 +84,7 @@ const MDXEditorTab: FC<MDXEditorTabProps> = ({
           codeMirrorPlugin({
             codeBlockLanguages: EDITOR_CONFIG.codeBlockLanguages,
             autoLoadLanguageSupport: true,
-            codeMirrorExtensions: [oneDark]
+            codeMirrorExtensions: [oneDark],
           }),
 
           // Toolbar plugin
@@ -81,7 +93,7 @@ const MDXEditorTab: FC<MDXEditorTabProps> = ({
             toolbarClassName: EDITOR_STYLES.toolbarClassName,
           }),
         ]}
-        className="h-full max-w-none flex-1 overflow-auto"
+        className={`flex h-full max-w-none flex-1 flex-col overflow-auto [&>.mdxeditor-root-contenteditable]:h-full [&>.mdxeditor-root-contenteditable]:min-h-0 [&>.mdxeditor-root-contenteditable]:overflow-auto [&>.mdxeditor-root-contenteditable>div]:h-full`}
       />
     </TabsContent>
   );

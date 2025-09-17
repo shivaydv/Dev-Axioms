@@ -20,7 +20,7 @@ const MDXEditorTab = dynamic(() => import("./MDXEditorTab"), {
 
 export const EDITOR_CONFIG = {
   height: 600,
-  defaultTab: "raw" as const,
+  defaultTab: "edit" as const,
   codeBlockLanguages: {
     js: "JavaScript",
     css: "CSS",
@@ -43,7 +43,7 @@ export const EDITOR_CONFIG = {
 
 export const EDITOR_STYLES = {
   contentClassName: `
-    prose max-w-none flex-1
+    prose max-w-none h-full overflow-auto!
     bg-background text-foreground
     prose-headings:text-foreground
     prose-p:text-muted-foreground
@@ -51,16 +51,17 @@ export const EDITOR_STYLES = {
     prose-em:text-muted-foreground
     prose-a:text-primary 
     hover:prose-a:text-primary/80
+    rounded-none!
     prose-code:bg-muted! prose-code:px-1!
     [&_code>span]:bg-transparent!
     prose-li:text-foreground
     focus:outline-none 
-    p-4 rounded-lg
-    
+    p-4 rounded-lg 
     [&_.cm-editor]:py-2!
+
   `,
   toolbarClassName: `
-    bg-background! border text-foreground! 
+    bg-background! border text-foreground!  shrink-0!
     [&_button]:hover:bg-muted! [&_button[data-state=on]]:bg-muted! 
     [&_button[disabled]]:[&_svg]:text-muted! [&_svg]:text-foreground! 
     [&_[role=combobox]]:bg-background! [&_[role=combobox]]:text-foreground! 
@@ -90,7 +91,7 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
   return (
     <Card
       className={cn(
-        "bg-background flex w-full flex-col overflow-hidden rounded-xl border py-0! shadow-sm",
+        "bg-muted/40 flex w-full flex-col overflow-hidden rounded-xl border py-0! shadow-sm",
         className,
       )}
       style={{ height: `${EDITOR_CONFIG.height}px` }}
@@ -100,7 +101,6 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
         className="flex h-full w-full flex-1 flex-col gap-0!"
       >
         <EditorTabs />
-
         <MDXEditorTab
           markdown={markdown}
           onChange={handleMarkdownChange}

@@ -41,8 +41,8 @@ export default function ResponsivePracticeLayout({
   question,
 }: ResponsivePracticeLayoutProps) {
   const { isCollapsed } = useSidebar();
-  // const { isMobileOrTablet, isMobile } = useResponsive();
-  // const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
+  const { isMobileOrTablet, isMobile } = useResponsive();
+  const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
 
 let initialFiles = useMemo(() => {
     return getSavedFiles(question.id, question.starterCode || undefined);
@@ -52,28 +52,28 @@ let initialFiles = useMemo(() => {
 
   // Desktop Layout
   // if (!isMobile) {
-  return (
-    <div className="flex flex-1 overflow-hidden">
-      <div
-        className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
-      >
-        <Sidebar question={question} />
-      </div>
-      <div className="flex-1">
-        <SandpackProvider
-          template="react"
-          theme="auto"
-          files={initialFiles}
-          customSetup={{ dependencies: {} }}
-          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-          style={{ width: "100%", height: "100%" }}
-        >
-          <EditorLayout />
-          <SandpackWatcher questionId={question.id} />
-        </SandpackProvider>
-      </div>
-    </div>
-  );
+  // return (
+  //   <div className="flex flex-1 overflow-hidden">
+  //     <div
+  //       className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
+  //     >
+  //       <Sidebar question={question} />
+  //     </div>
+  //     <div className="flex-1">
+  //       <SandpackProvider
+  //         template="react"
+  //         theme="auto"
+  //         files={initialFiles}
+  //         customSetup={{ dependencies: {} }}
+  //         options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+  //         style={{ width: "100%", height: "100%" }}
+  //       >
+  //         <EditorLayout />
+  //         <SandpackWatcher questionId={question.id} />
+  //       </SandpackProvider>
+  //     </div>
+  //   </div>
+  // );
   // }
 
   // return (
@@ -89,41 +89,41 @@ let initialFiles = useMemo(() => {
   // );
 
   // Mobile/Tablet Layout 
-  // return (
-  //   <div className="flex-1 overflow-hidden flex flex-col w-full">
-  //     {/* Mobile Tab Navigation */}
-  //     <MobileTabNavigation
-  //       onToggleConsole={toggleConsole}
-  //       isConsoleVisible={isConsoleOpen}
-  //     />
+  return (
+    <div className="flex-1 overflow-hidden flex flex-col w-full">
+      {/* Mobile Tab Navigation */}
+      <MobileTabNavigation
+        onToggleConsole={toggleConsole}
+        isConsoleVisible={isConsoleOpen}
+      />
 
-  //     {/* Content Area */}
-  //     <div className="flex-1 overflow-hidden w-full">
+      {/* Content Area */}
+      <div className="flex-1 overflow-hidden w-full">
 
-  //       <SandpackProvider
-  //         template="react"
-  //         theme="auto"
-  //         files={question.starterCode}
-  //         customSetup={{ dependencies: { } }}
-  //         options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-  //         style={{ width: "100%", height: "100%" }}
-  //       >
-  //         <SandpackLayout style={{ height: "100%", width: "100%" }}>
+        <SandpackProvider
+          template="react"
+          theme="auto"
+          files={question.starterCode}
+          customSetup={{ dependencies: { } }}
+          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <SandpackLayout style={{ height: "100%", width: "100%" }}>
 
-  //           {/* Always keep them mounted, just hide/show */}
-  //           <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
-  //             <MobileDescriptionLayout question={question} />
-  //           </div>
+            {/* Always keep them mounted, just hide/show */}
+            <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
+              <MobileDescriptionLayout question={question} />
+            </div>
 
-  //           <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
-  //             <MobileEditorLayout />
-  //           </div>
-  //           <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
-  //             <MobilePreviewLayout />
-  //           </div>
-  //         </SandpackLayout>
-  //       </SandpackProvider>
-  //     </div>
-  //   </div>
-  // );
+            <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
+              <MobileEditorLayout />
+            </div>
+            <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
+              <MobilePreviewLayout />
+            </div>
+          </SandpackLayout>
+        </SandpackProvider>
+      </div>
+    </div>
+  );
 }

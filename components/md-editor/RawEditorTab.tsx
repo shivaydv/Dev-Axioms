@@ -17,11 +17,9 @@ export const RawEditorTab: FC<RawEditorTabProps> = ({ markdown, onChange }) => {
         height="100%"
         className="flex-1"
         defaultLanguage="markdown"
+        theme="vs-dark"
         defaultValue={markdown}
         onChange={(value) => onChange(value || "")}
-        onMount={(_, monaco) => {
-          monaco.editor.setTheme("vs-dark");
-        }}
         options={EDITOR_CONFIG.monacoOptions}
       />
     </TabsContent>
