@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db/drizzle";
-import { AuthSchema } from "@/db";
+import { AuthSchema, userRoleEnum } from "@/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -24,10 +24,21 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: userRoleEnum.enumValues,
+        defaultValue: "USER",
+        input: false,
+      },
+    },
+  },
   session: {
     cookieCache: {
       enabled: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60, // 1 hour
     },
   },
 });
+
+export type Session = typeof auth.$Infer.Session;
