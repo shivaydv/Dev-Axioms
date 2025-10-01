@@ -35,7 +35,10 @@ export interface FileManagerActions {
 export function useFileManager(options: UseFileManagerOptions = {}) {
   const {
     initialFiles = {
-      "/index.js": { code: "// Start coding here", active: true },
+      "/App.js": { code: `export default function App() {
+  return <div className="flex items-center justify-center flex-col h-screen">Hello world</div>
+}
+`, active: true },
     },
     onFilesChange,
     validateFileName,

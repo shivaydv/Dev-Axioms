@@ -2,7 +2,18 @@ import { Code, Palette, Globe, FileCode } from "lucide-react";
 
 // Built-in default templates for advanced file manager
 export const DEFAULT_TEMPLATES = {
-  "React Component": {
+  "React Component jsx": {
+    icon: Code,
+    content: `
+export default function Component() {
+  return (
+    <div>
+      <h1>New Component</h1>
+    </div>
+  );
+}`,
+  },
+  "React Component tsx": {
     icon: Code,
     content: `import React from 'react';
 
