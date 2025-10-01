@@ -16,18 +16,20 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { useEditorSettings } from "@/store/EditorSettingsStore";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const FileTabs = () => {
   const { settings, updateSetting, toggleConsole } = useEditorSettings();
   const { sandpack } = useSandpack();
   const { setActiveFile, visibleFiles, activeFile } = sandpack;
+  const [isOpen, setIsOpen] = useState(false);
 
   const increaseFontSize = () => {
     if (settings.fontSize < 24) {
@@ -82,7 +84,7 @@ const FileTabs = () => {
         </Button>
 
         {/* Settings Dropdown */}
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -179,7 +181,9 @@ const FileTabs = () => {
                 // Reset the code to the initial state
                 localStorage.removeItem("users-code");
                 sandpack.resetAllFiles();
-              
+                setIsOpen(false);
+
+                toast.success("Code reset successfully");
               }}>
                 Reset Code
               </Button>

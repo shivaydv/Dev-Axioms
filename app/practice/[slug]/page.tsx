@@ -1,37 +1,70 @@
-"use client";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import questionsData from "@/data/practice-questions.json";
+import { notFound } from "next/navigation";
+import React from "react";
 import PracticeHeader from "@/components/playground/PracticeHeader";
-import { Question } from "@/types/Question";
 import ResponsivePracticeLayout from "@/components/playground/ResponsivePracticeLayout";
-import { MobileViewProvider } from "@/store/MobileViewStore";
+import { getQuestionBySlug } from "@/server/functions/questions";
+import { Metadata } from "next";
 
-export default function Page() {
-  const params = useParams();
-  const router = useRouter();
-  const [question, setQuestion] = useState<Question | null>(null);
+interface PracticePageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
 
-  useEffect(() => {
-    const questionId = params?.slug as string;
-    const foundQuestion = questionsData.questions.find(
-      (q) => q.id === questionId,
-    ) as Question;
-    if (foundQuestion) setQuestion(foundQuestion);
-    else router.push("/practice");
-  }, [params, router]);
+export default async function PracticePage({ params }: PracticePageProps) {
+  const { slug } = await params;
+  const question = await getQuestionBySlug(slug);
 
-  if (!question) return null;
+  if (!question) {
+    notFound();
+  }
 
   return (
-    <MobileViewProvider>
-      <div className="bg-background flex h-screen w-full flex-col">
-        <PracticeHeader
-          timeLimit={question.timeLimit}
-          isSidebarVisible={true}
-        />
-        <ResponsivePracticeLayout question={question} />
-      </div>
-    </MobileViewProvider>
+    <div className="bg-background flex h-screen w-full flex-col">
+      <PracticeHeader
+        timeLimit={question.timeLimit || 30}
+        isSidebarVisible={true}
+      />
+      <ResponsivePracticeLayout question={question} />
+    </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: PracticePageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const question = await getQuestionBySlug(slug);
+
+  if (!question) {
+    return {
+      title: "Question Not Found",
+      description: "The requested practice question could not be found.",
+    };
+  }
+
+  const title = `${question.title} - ${question.difficulty} Practice Challenge`;
+  const description = question.content
+    ? question.content.replace(/[#*`]/g, "").substring(0, 160) + "..."
+    : `Practice ${question.difficulty} level coding challenge: ${question.title}`;
+
+  const image = `/og/practice/${slug}/image.png`;
+
+  return {
+    title,
+    description,
+
+    openGraph: {
+      title,
+      description,
+      images: [image],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
 }

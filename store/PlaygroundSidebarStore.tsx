@@ -12,7 +12,7 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState("description");
+  const [activeTab, setActiveTab] = useState("question");
 
   const toggle = () => setIsCollapsed((prev) => !prev);
 

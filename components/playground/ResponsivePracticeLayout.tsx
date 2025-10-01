@@ -1,24 +1,24 @@
 "use client";
 
+import { useMemo, memo } from "react";
 import EditorLayout from "@/components/playground/EditorLayout";
 import { Question } from "@/types/Question";
 import { Sidebar } from "@/components/playground/Sidebar";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { SandpackFiles, SandpackProvider } from "@codesandbox/sandpack-react";
+import SandpackWatcher from "../sandpack/SandpackWatcher";
+
 // mobile related imports
 import { useResponsive } from "@/hooks/useResponsive";
-import { useMobileView } from "@/store/MobileViewStore";
-import { MobileTabNavigation } from "@/components/playground/MobileTabNavigation";
-import MobileEditorLayout from "@/components/playground/MobileEditorLayout";
-import MobilePreviewLayout from "@/components/playground/MobilePreviewLayout";
-import MobileDescriptionLayout from "@/components/playground/MobileDescriptionLayout";
-import { SandpackLayout } from "@codesandbox/sandpack-react";
-import SandpackWatcher from "../sandpack/SandpackWatcher";
-import { useEffect, useMemo } from "react";
 
-
-function getSavedFiles(questionId: string, starterCode: SandpackFiles | undefined) {
+function getSavedFiles(
+  questionId: string,
+  starterCode: SandpackFiles | undefined,
+) {
   try {
+    // Check if we're running in the browser
+    if (typeof window === "undefined") return starterCode;
+
     const raw = localStorage.getItem("users-code");
     if (!raw) return starterCode;
 
@@ -32,6 +32,30 @@ function getSavedFiles(questionId: string, starterCode: SandpackFiles | undefine
   return starterCode;
 }
 
+// Memoized component to prevent re-renders when sidebar state changes
+const MemoizedSandpackProvider = memo(function MemoizedSandpackProvider({
+  question,
+}: {
+  question: Question;
+}) {
+  const initialFiles = useMemo(() => {
+    return getSavedFiles(question.id, question.starterCode || undefined);
+  }, [question.id, question.starterCode]);
+
+  return (
+    <SandpackProvider
+      template="react"
+      theme="auto"
+      files={initialFiles}
+      customSetup={{ dependencies: {} }}
+      options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
+      style={{ height: "100%", width: "100%" }}
+    >
+      <EditorLayout />
+      <SandpackWatcher questionId={question.id} />
+    </SandpackProvider>
+  );
+});
 
 interface ResponsivePracticeLayoutProps {
   question: Question;
@@ -41,88 +65,31 @@ export default function ResponsivePracticeLayout({
   question,
 }: ResponsivePracticeLayoutProps) {
   const { isCollapsed } = useSidebar();
-  const { isMobileOrTablet, isMobile } = useResponsive();
-  const { activeView, isConsoleOpen, toggleConsole } = useMobileView();
+  const { isMobile } = useResponsive();
 
-let initialFiles = useMemo(() => {
-    return getSavedFiles(question.id, question.starterCode || undefined);
-  }, [question.id, question.starterCode]);
-
-  
-
-  // Desktop Layout
-  // if (!isMobile) {
-  // return (
-  //   <div className="flex flex-1 overflow-hidden">
-  //     <div
-  //       className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
-  //     >
-  //       <Sidebar question={question} />
-  //     </div>
-  //     <div className="flex-1">
-  //       <SandpackProvider
-  //         template="react"
-  //         theme="auto"
-  //         files={initialFiles}
-  //         customSetup={{ dependencies: {} }}
-  //         options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-  //         style={{ width: "100%", height: "100%" }}
-  //       >
-  //         <EditorLayout />
-  //         <SandpackWatcher questionId={question.id} />
-  //       </SandpackProvider>
-  //     </div>
-  //   </div>
-  // );
-  // }
-
-  // return (
-  //   <div className="flex items-center justify-center py-20">
-  //     <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
-  //       <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
-  //       <p className="text-center text-sm opacity-80">
-  //         We are still working on mobile support. Please switch to a desktop
-  //         device.
-  //       </p>
-  //     </div>
-  //   </div>
-  // );
-
-  // Mobile/Tablet Layout 
-  return (
-    <div className="flex-1 overflow-hidden flex flex-col w-full">
-      {/* Mobile Tab Navigation */}
-      <MobileTabNavigation
-        onToggleConsole={toggleConsole}
-        isConsoleVisible={isConsoleOpen}
-      />
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-hidden w-full">
-
-        <SandpackProvider
-          template="react"
-          theme="auto"
-          files={question.starterCode}
-          customSetup={{ dependencies: { } }}
-          options={{ externalResources: ["https://cdn.tailwindcss.com"] }}
-          style={{ width: "100%", height: "100%" }}
+  if (!isMobile) {
+    return (
+      <div className="flex flex-1 overflow-hidden">
+        <div
+          className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
         >
-          <SandpackLayout style={{ height: "100%", width: "100%" }}>
+          <Sidebar question={question} />
+        </div>
+        <div className="flex-1">
+          <MemoizedSandpackProvider question={question} />
+        </div>
+      </div>
+    );
+  }
 
-            {/* Always keep them mounted, just hide/show */}
-            <div className={activeView === "description" ? "block h-full w-full" : "hidden"}>
-              <MobileDescriptionLayout question={question} />
-            </div>
-
-            <div className={activeView === "editor" ? "block h-full w-full" : "hidden"}>
-              <MobileEditorLayout />
-            </div>
-            <div className={activeView === "preview" ? "block h-full w-full" : "hidden"}>
-              <MobilePreviewLayout />
-            </div>
-          </SandpackLayout>
-        </SandpackProvider>
+  return (
+    <div className="flex items-center justify-center py-20">
+      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
+        <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
+        <p className="text-center text-sm opacity-80">
+          We are still working on mobile support. Please switch to a desktop
+          device.
+        </p>
       </div>
     </div>
   );
