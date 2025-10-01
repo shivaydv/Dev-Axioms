@@ -2,11 +2,11 @@ import React from "react";
 import Hero from "@/components/landingPage/Hero";
 import Highlights from "@/components/landingPage/Highlights";
 
-const Page = async() => {
+const Page = async () => {
   return (
-    <div className="h-full ">
+    <div className="h-full">
       <div
-        className="absolute inset-x-0 top-[180px] h-[250px] z-[1] border-b"
+        className="absolute inset-x-0 top-[180px] z-[1] h-[250px] border-b"
         style={{
           background: `
       repeating-linear-gradient(to right, color-mix(in srgb, var(--color-foreground) 10%, transparent) 0, color-mix(in srgb, var(--color-foreground) 10%, transparent) 1px, transparent 1px, transparent 50px),
@@ -15,7 +15,7 @@ const Page = async() => {
         }}
       />
 
-      <main className=" relative mx-auto w-full px-4 md:px-2 py-4 lg:py-8">
+      <main className="relative mx-auto w-full px-4 py-4 md:px-2 lg:py-8">
         <div
           style={{
             background:
