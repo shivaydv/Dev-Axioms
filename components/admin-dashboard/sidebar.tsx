@@ -1,5 +1,5 @@
 "use client";
-import { Home, Package } from "lucide-react";
+import { Home, List, Package } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -29,16 +29,25 @@ const NavItems: NavItem[] = [
     url: "/admin",
     icon: Home,
   },
-
   {
-    title: "Add Question",
-    url: "/admin/add-question",
-    icon: Package,
+    title: "Questions",
+    url: "/admin/questions",
+    icon: List,
   },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
+
+  function isActiveRoute(currentPath: string, itemUrl: string) {
+    // Exact match
+    if (currentPath === itemUrl) return true;
+
+    // if its nested routes, check if current path starts with itemUrl
+
+    if (currentPath.startsWith(itemUrl) && itemUrl !== "/admin") return true;
+    return false;
+  }
 
   return (
     <Sidebar className="border-r">
@@ -54,7 +63,7 @@ export function AppSidebar() {
                 asChild
                 className={cn(
                   "w-full justify-start gap-3 rounded-lg px-3 py-2 text-sm font-medium",
-                  pathname === item.url && "bg-primary/10",
+                  isActiveRoute(pathname, item.url) && "bg-primary/10",
                 )}
               >
                 <Link href={item.url}>
@@ -62,7 +71,7 @@ export function AppSidebar() {
                   <span>{item.title}</span>
                   {item?.badge && (
                     <Badge variant="default" className="ml-auto h-5 text-xs">
-                      {item?.badge}
+                      {item.badge}
                     </Badge>
                   )}
                 </Link>
@@ -71,23 +80,6 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      {/* <SidebarFooter className="border-t p-4">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8">
-            <AvatarImage
-              src={user?.image || "/placeholders/avatar.svg"}
-              alt={user?.name}
-            />
-            <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-medium">{user?.name}</span>
-            <span className="text-muted-foreground truncate text-sm">
-              {user?.email}
-            </span>
-          </div>
-        </div>
-      </SidebarFooter> */}
     </Sidebar>
   );
 }
