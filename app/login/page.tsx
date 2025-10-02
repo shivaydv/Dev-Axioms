@@ -2,7 +2,7 @@
 import { LogoIcon } from "@/components/global/Logo";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
-import { Loader } from "lucide-react";
+import { Loader, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, Suspense } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa6";
@@ -76,7 +76,7 @@ const page = () => {
     <Suspense
       fallback={
         <div className="flex h-svh items-center justify-center">
-          <Loader className="h-8 w-8 animate-spin" />
+          <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       }
     >

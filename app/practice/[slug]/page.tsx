@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 import PracticeHeader from "@/components/playground/PracticeHeader";
 import ResponsivePracticeLayout from "@/components/playground/ResponsivePracticeLayout";
@@ -43,13 +43,9 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${question.title} - ${question.difficulty} Practice Challenge`;
-  const description = question.content
-    ? question.content.replace(/[#*`]/g, "").substring(0, 160) + "..."
-    : `Practice ${question.difficulty} level coding challenge: ${question.title}`;
-
+  const title = `${question.title} - Dev Axioms`;
+  const description = `Practice coding problems on Dev Axioms. Solve and improve your skills.`;
   const image = `/og/practice/${slug}/image.png`;
-
   return {
     title,
     description,
