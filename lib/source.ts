@@ -8,33 +8,45 @@ import { createMDXSource } from "fumadocs-mdx";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 
-export const webdev = loader({
-  baseUrl: "/web-dev",
-  source: webdevPost.toFumadocsSource(),
-  icon(icon) {
-    if (!icon) {
-      // You may set a default icon
-      return;
-    }
+export const WEBDEV_BASE_URL = "/web-dev";
+export const webdev = Object.assign(
+  loader({
+    baseUrl: WEBDEV_BASE_URL,
+    source: webdevPost.toFumadocsSource(),
+    icon(icon) {
+      if (!icon) {
+        // You may set a default icon
+        return;
+      }
 
-    if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
-  },
-});
+      if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+    },
+  }),
+  { baseUrl: WEBDEV_BASE_URL }
+);
 
-export const web3 = loader({
-  baseUrl: "/web3",
-  source: web3Post.toFumadocsSource(),
-  icon(icon) {
-    if (!icon) {
-      // You may set a default icon
-      return;
-    }
+export const WEB3_BASE_URL = "/web3";
+export const web3 = Object.assign(
+  loader({
+    baseUrl: WEB3_BASE_URL,
+    source: web3Post.toFumadocsSource(),
+    icon(icon) {
+      if (!icon) {
+        // You may set a default icon
+        return;
+      }
 
-    if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
-  },
-});
+      if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+    },
+  }),
+  { baseUrl: WEB3_BASE_URL }
+);
 
-export const blog = loader({
-  baseUrl: "/blog",
-  source: createMDXSource(blogPosts),
-});
+export const BLOG_BASE_URL = "/blog";
+export const blog = Object.assign(
+  loader({
+    baseUrl: BLOG_BASE_URL,
+    source: createMDXSource(blogPosts),
+  }),
+  { baseUrl: BLOG_BASE_URL }
+);
