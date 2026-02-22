@@ -17,9 +17,9 @@ interface NavLink {
 }
 
 export const NAVLINKS: NavLink[] = [
-  { title: "Docs", href: "/web-dev/html" },
+  { title: "Docs", href: "/web-dev" },
   { title: "Practice", href: "/practice" },
-  { title: "Playgrounds", href: "/playground" },
+  { title: "Playgrounds", href: "/comming-soon" },
   { title: "Blogs", href: "/blog" },
   {
     title: "Community",
@@ -100,11 +100,10 @@ export function Navbar() {
 
         {/* Mobile menu dropdown - absolutely positioned */}
         <div
-          className={`bg-background border-border absolute top-full right-0 left-0 rounded-b-2xl border-b shadow-md backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${
-            isOpen
+          className={`bg-background border-border absolute top-full right-0 left-0 rounded-b-2xl border-b shadow-md backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${isOpen
               ? "pointer-events-auto translate-y-0 opacity-100"
               : "pointer-events-none -translate-y-2 opacity-0"
-          }`}
+            }`}
           style={{
             // maxHeight: isOpen ? '500px' : '0',
             overflow: "hidden",
@@ -131,11 +130,10 @@ export function NavMenu() {
           <Link
             key={item.title}
             href={item.href || "#"}
-            className={`hover:text-foreground transition-colors ${
-              isActive
+            className={`hover:text-foreground transition-colors ${isActive
                 ? "text-foreground font-semibold"
                 : "text-muted-foreground"
-            }`}
+              }`}
           >
             {item.title}
           </Link>
@@ -158,11 +156,10 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
             key={item.title}
             href={item.href || "#"}
             onClick={onItemClick}
-            className={`hover:bg-accent hover:text-accent-foreground block rounded-md px-3 py-3 text-base font-medium transition-all duration-200 ${
-              isActive
+            className={`hover:bg-accent hover:text-accent-foreground block rounded-md px-3 py-3 text-base font-medium transition-all duration-200 ${isActive
                 ? "text-foreground bg-accent/50 font-semibold"
                 : "text-muted-foreground"
-            }`}
+              }`}
             style={{
               animationDelay: `${index * 50}ms`,
               opacity: 0,
