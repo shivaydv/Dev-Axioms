@@ -2,6 +2,7 @@
 import { webdev } from "@/lib/source";
 import { FaHtml5, FaCss3 } from "react-icons/fa";
 import CommonLayout from "@/app/(docs)/common-layout";
+import { FaReact } from "react-icons/fa6";
 
 export default function Layout({
   children,
@@ -15,14 +16,24 @@ export default function Layout({
         sidebar: {
           tabs: [
             {
-              title: "HTML",
-              url: "/web-dev/html",
+              title: "HTML & CSS",
+              url: "/web-dev/html-css",
               icon: <FaHtml5 className="w-full h-full p-1" />,
             },
             {
-              title: "CSS",
-              url: "/web-dev/css",
+              title: "JavaScript",
+              url: "/web-dev/javascript",
               icon: <FaCss3 className="w-full h-full p-1" />,
+            },
+            {
+              title: "React",
+              url: "/web-dev/react",
+              icon: <FaReact className="w-full h-full p-1" />,
+            },
+            {
+              title: "Next.js",
+              url: "/web-dev/nextjs",
+              icon: <FaReact className="w-full h-full p-1" />,
             },
           ],
         },
