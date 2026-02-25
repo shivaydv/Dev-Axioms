@@ -32,31 +32,31 @@ export default function PracticeHeader({
   };
 
   return (
-    <div className="sticky top-0 z-50 flex-shrink-0 border-b bg-background/60 px-6 py-3 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1800px] items-center justify-between">
+    <div className="sticky top-0 z-50 flex-shrink-0 border-b bg-background/60 px-3 sm:px-6 py-2 sm:py-3 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-2">
         {/* Left Section - Logo and Navigation */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center min-w-0 flex-shrink">
           <Logo />
         </div>
 
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
           {timeLimit && (
-            <div className="bg-muted/30 flex items-center gap-2 rounded-lg border px-3 py-1.5">
+            <div className="bg-muted/30 flex items-center gap-1.5 rounded-lg border px-2 py-1 sm:px-3 sm:py-1.5 scale-90 sm:scale-100 origin-right">
               <Timer timeLimit={timeLimit} onTimeUp={onTimeUp} />
             </div>
           )}
 
-          <div className="flex items-center gap-1 rounded-xl border bg-muted/20 p-1 backdrop-blur-sm">
-            <ThemeToggle className="h-8 w-8 rounded-lg hover:bg-background/80" />
+          <div className="flex items-center gap-1 rounded-xl border bg-muted/20 p-0.5 sm:p-1 backdrop-blur-sm">
+            <ThemeToggle className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg hover:bg-background/80" />
 
-            <div className="mx-1 h-3 w-[1px] bg-border/50" />
+            <div className="mx-0.5 h-3 w-[1px] bg-border/50 hidden md:block" />
 
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleSidebar}
-              className="h-8 w-8 rounded-lg transition-all hover:bg-background/80 max-md:hidden"
+              className="h-8 w-8 rounded-lg transition-all hover:bg-background/80 hidden md:flex"
               title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
             >
               {getSidebarIcon()}
@@ -68,7 +68,7 @@ export default function PracticeHeader({
               onClick={onSubmit}
               variant="default"
               size="sm"
-              className="relative h-9 rounded-xl bg-green-600 px-6 font-bold text-white shadow-lg shadow-green-600/20 hover:bg-green-700 hover:shadow-green-600/30 active:scale-95 transition-all"
+              className="relative h-8 sm:h-9 rounded-xl bg-green-600 px-3 sm:px-6 text-xs sm:text-sm font-bold text-white shadow-lg shadow-green-600/20 hover:bg-green-700 hover:shadow-green-600/30 active:scale-95 transition-all"
             >
               Submit
             </Button>

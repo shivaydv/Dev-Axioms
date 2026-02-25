@@ -73,7 +73,16 @@ export default function ResponsivePracticeLayout({
   interactionDataPromise,
 }: ResponsivePracticeLayoutProps) {
   const { isCollapsed } = useSidebar();
-  const { isMobile } = useResponsive();
+  const { isMobile, isMounted } = useResponsive();
+
+  // Prevent any heavy rendering or API calls until we know the device
+  if (!isMounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   if (!isMobile) {
     return (
@@ -96,14 +105,19 @@ export default function ResponsivePracticeLayout({
     );
   }
 
+  // Mobile View - Lightweight notice with no API/Sandpack overhead
   return (
-    <div className="flex items-center justify-center py-20">
-      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg border">
-        <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
-        <p className="text-center text-sm opacity-80">
-          We are still working on mobile support. Please switch to a desktop
-          device.
-        </p>
+    <div className="flex flex-col flex-1 items-center justify-center p-6 bg-muted/5">
+      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-3xl p-10 shadow-xl border space-y-4">
+        <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
+        </div>
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-bold tracking-tight">Desktop Only</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            The playground is currently optimized for desktop. Please switch devices to start practicing.
+          </p>
+        </div>
       </div>
     </div>
   );
