@@ -21,7 +21,7 @@ export default function Page(): React.ReactElement {
 </svg>`;
 
   return (
-    <main className="max-sm:px-0 md:py-12">
+    <main className="max-sm:px-0 container md:px-8 md:py-12">
       <div
         className="h-[300px] p-8 md:h-[300px] md:p-12 flex justify-center items-center rounded-lg"
         style={{
