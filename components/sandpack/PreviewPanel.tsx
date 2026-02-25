@@ -13,13 +13,13 @@ export default function PreviewPanel() {
       className="bg-background border-l"
     >
       <div className="flex h-full flex-col">
-        {/* <div className="bg-background flex h-10 flex-shrink-0 items-center justify-between border-b p-2">
-          <div className="text-muted-foreground flex items-center gap-2 text-sm select-none">
-            <Globe className="h-3 w-3" />
-            <span className="text-foreground">Preview</span>
+        <div className="flex h-10 items-center border-b px-4 bg-background/80 backdrop-blur-md">
+          <div className="flex items-center gap-2">
+            <Globe className="h-3.5 w-3.5 text-muted-foreground/70" />
+            <span className="text-[12px] font-medium text-muted-foreground/90">Preview</span>
           </div>
-        </div> */}
-        <div className="min-h-0 flex-1">
+        </div>
+        <div className="flex-1">
           <SandpackPreview
             showNavigator={false}
             showRestartButton={false}
@@ -31,3 +31,5 @@ export default function PreviewPanel() {
     </ResizablePanel>
   );
 }
+
+

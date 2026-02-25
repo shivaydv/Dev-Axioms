@@ -7,6 +7,8 @@ import { Sidebar } from "@/components/playground/Sidebar";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { SandpackFiles, SandpackProvider } from "@codesandbox/sandpack-react";
 import SandpackWatcher from "../sandpack/SandpackWatcher";
+import { cn } from "@/lib/utils";
+
 
 // mobile related imports
 import { useResponsive } from "@/hooks/useResponsive";
@@ -59,10 +61,16 @@ const MemoizedSandpackProvider = memo(function MemoizedSandpackProvider({
 
 interface ResponsivePracticeLayoutProps {
   question: Question;
+  interactionDataPromise: Promise<{
+    likesCount: number;
+    isLiked: boolean;
+    isBookmarked: boolean;
+  }>;
 }
 
 export default function ResponsivePracticeLayout({
   question,
+  interactionDataPromise,
 }: ResponsivePracticeLayoutProps) {
   const { isCollapsed } = useSidebar();
   const { isMobile } = useResponsive();
@@ -71,9 +79,15 @@ export default function ResponsivePracticeLayout({
     return (
       <div className="flex flex-1 overflow-hidden">
         <div
-          className={`${isCollapsed ? "w-14" : "w-96"} flex-shrink-0 transition-all duration-300`}
+          className={cn(
+            "flex-shrink-0 transition-all duration-300",
+            isCollapsed ? "w-14" : "w-96",
+          )}
         >
-          <Sidebar question={question} />
+          <Sidebar
+            question={question}
+            interactionDataPromise={interactionDataPromise}
+          />
         </div>
         <div className="flex-1">
           <MemoizedSandpackProvider question={question} />
@@ -84,7 +98,7 @@ export default function ResponsivePracticeLayout({
 
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg">
+      <div className="bg-background text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-6 shadow-lg border">
         <h2 className="mb-2 text-lg font-semibold">⚠️ Mobile Notice</h2>
         <p className="text-center text-sm opacity-80">
           We are still working on mobile support. Please switch to a desktop
@@ -94,3 +108,5 @@ export default function ResponsivePracticeLayout({
     </div>
   );
 }
+
+

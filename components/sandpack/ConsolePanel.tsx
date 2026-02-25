@@ -16,11 +16,11 @@ export default function ConsolePanel({
   if (!isVisible) return null;
 
   return (
-    <div className="bg-background text-foreground h-full border-t">
-      <div className="flex items-center justify-between border-b p-2">
+    <div className="bg-background flex flex-col h-full border-t">
+      <div className="flex items-center justify-between border-b p-2 px-4 bg-muted/20">
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4" />
-          <span className="text-sm font-medium">Console</span>
+          <Terminal className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-semibold text-muted-foreground">Console</span>
         </div>
         <Button
           variant="ghost"
@@ -31,7 +31,7 @@ export default function ConsolePanel({
           <X className="h-3 w-3" />
         </Button>
       </div>
-      <div className="h-[calc(100%-40px)]">
+      <div className="flex-1 overflow-hidden">
         <CustomConsole />
       </div>
     </div>

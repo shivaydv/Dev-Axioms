@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   toggleLike,
   toggleBookmark,
@@ -35,21 +35,7 @@ export function useUserInteractions({
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch initial data on mount
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const data = await getUserInteractionData(questionId);
-        setLikesCount(data.likesCount);
-        setIsLiked(data.isLiked);
-        setIsBookmarked(data.isBookmarked);
-      } catch (error) {
-        console.error("Error fetching initial interaction data:", error);
-      }
-    };
-
-    fetchInitialData();
-  }, [questionId]);
+  // State is initialized from props. Resetting on questionId change is handled by the caller using 'key' prop.
 
   const handleLike = async () => {
     // Optimistic update

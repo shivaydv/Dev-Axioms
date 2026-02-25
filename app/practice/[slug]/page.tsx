@@ -3,6 +3,7 @@ import React from "react";
 import PracticeHeader from "@/components/playground/PracticeHeader";
 import ResponsivePracticeLayout from "@/components/playground/ResponsivePracticeLayout";
 import { getQuestionBySlug } from "@/server/functions/questions";
+import { getUserInteractionData } from "@/server/actions/user-interactions-actions";
 import { Metadata } from "next";
 
 interface PracticePageProps {
@@ -19,13 +20,19 @@ export default async function PracticePage({ params }: PracticePageProps) {
     notFound();
   }
 
+  // Fetch interaction data promise (don't await it here to enable streaming)
+  const interactionDataPromise = getUserInteractionData(question.id);
+
   return (
     <div className="bg-background flex h-screen w-full flex-col">
       <PracticeHeader
         timeLimit={question.timeLimit || 30}
         isSidebarVisible={true}
       />
-      <ResponsivePracticeLayout question={question} />
+      <ResponsivePracticeLayout
+        question={question}
+        interactionDataPromise={interactionDataPromise}
+      />
     </div>
   );
 }

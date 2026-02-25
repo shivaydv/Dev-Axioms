@@ -9,9 +9,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -177,4 +179,104 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Scrollbar Hide Utility */
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Syntax Highlighting Clearup */
+.hljs {
+  @apply bg-transparent p-0 font-mono;
+  display: block;
+  overflow-x: auto;
+  white-space: pre !important;
+  word-spacing: normal;
+  word-break: normal;
+  tab-size: 4;
+}
+
+/* Disable Prose Code Backticks and default backgrounds */
+.prose :where(pre):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  @apply bg-transparent border-none p-0 my-0 shadow-none overflow-visible;
+}
+
+.prose :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  @apply bg-transparent font-medium;
+  border: none !important;
+}
+
+/* Premium Inline Highlight - only for single backticks */
+.prose :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)):not(.hljs) {
+  @apply bg-muted/40 text-foreground px-1.5 py-0.5 rounded-md border border-border/50 text-[0.85em] font-semibold;
+}
+
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-muted-foreground/60 italic;
+}
+
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  @apply text-red-500 dark:text-red-400;
+}
+
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  @apply text-orange-500 dark:text-orange-400;
+}
+
+.hljs-attribute {
+  @apply text-yellow-600 dark:text-yellow-300;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.hljs-title,
+.hljs-section {
+  @apply text-blue-600 dark:text-blue-400 font-semibold;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
+.hljs {
+  @apply text-foreground;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
 }

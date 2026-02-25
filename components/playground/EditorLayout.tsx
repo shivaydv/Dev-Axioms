@@ -19,7 +19,7 @@ function EditorLayoutContent() {
 
   return (
     <SandpackLayout style={{ height: "100%", width: "100%" }}>
-      <div className="bg-background flex h-full w-full flex-col text-white">
+      <div className="bg-background flex h-full w-full flex-col overflow-hidden">
         <div className="min-w-0 flex-1">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={60} minSize={40}>
@@ -35,7 +35,7 @@ function EditorLayoutContent() {
                   <>
                     <ResizableHandle
                       withHandle
-                      className="bg-border hover:bg-primary/30 w-1 transition-colors duration-150"
+                      className="bg-border/40 hover:bg-primary/50 relative z-20 h-1.5 w-full transition-all duration-300"
                     />
                     <ResizablePanel defaultSize={30} minSize={20} maxSize={70}>
                       <ConsolePanel
@@ -48,10 +48,9 @@ function EditorLayoutContent() {
               </ResizablePanelGroup>
             </ResizablePanel>
 
-            {/* Preview Panel */}
             <ResizableHandle
               withHandle
-              className="bg-border hover:bg-primary/30 w-0.5 transition-colors duration-150"
+              className="bg-border/40 hover:bg-primary/50 relative z-20 w-1.5 transition-all duration-300"
             />
             <PreviewPanel />
           </ResizablePanelGroup>
@@ -60,6 +59,7 @@ function EditorLayoutContent() {
     </SandpackLayout>
   );
 }
+
 
 export default function EditorLayout() {
   return (

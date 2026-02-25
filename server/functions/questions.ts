@@ -1,8 +1,9 @@
 import { question } from "@/db";
 import { db } from "@/db/drizzle";
 import { desc, eq } from "drizzle-orm";
+import { cache } from "react";
 
-export async function getQuestionById(questionId: string) {
+export const getQuestionById = cache(async (questionId: string) => {
   try {
     const questionData = await db
       .select()
@@ -19,9 +20,9 @@ export async function getQuestionById(questionId: string) {
     console.error("Error fetching question:", error);
     throw new Error("Failed to fetch question");
   }
-}
+});
 
-export async function getQuestionBySlug(slug: string) {
+export const getQuestionBySlug = cache(async (slug: string) => {
   try {
     const questionData = await db
       .select()
@@ -38,7 +39,7 @@ export async function getQuestionBySlug(slug: string) {
     console.error("Error fetching question by slug:", error);
     throw new Error("Failed to fetch question");
   }
-}
+});
 
 export async function getAllQuestions() {
   try {

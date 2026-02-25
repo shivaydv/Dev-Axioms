@@ -28,8 +28,10 @@ export function createPracticeSidebarTabs(question: Question) {
 // Question Tab Content
 function QuestionContent({ question }: PracticeSidebarContentProps) {
   return (
-    <div className="h-full space-y-6 overflow-y-auto p-6">
-      <MDXPreview content={question.content} />
+    <div className="h-full space-y-6 overflow-y-auto p-6 scrollbar-hide">
+      <div className="prose prose-sm dark:prose-invert max-w-none">
+        <MDXPreview content={question.content} />
+      </div>
 
       {question.tags && question.tags.length > 0 && (
         <div className="mt-4 border-t pt-4">
@@ -57,34 +59,32 @@ function SolutionContent({ question }: PracticeSidebarContentProps) {
   const hasSolution = question.solution && question.solution.trim() !== "";
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto scrollbar-hide">
       {hasSolution ? (
-        <div className="space-y-6 p-6">
-          <div className="from-background to-muted/20 rounded-xl border bg-gradient-to-b p-6 shadow-sm">
-            <MDXPreview
-              content={question.solution!}
-              className="prose prose-sm max-w-none"
-            />
-          </div>
+        <div className="space-y-6 p-6 pb-20">
+          <MDXPreview
+            content={question.solution!}
+            className="prose prose-sm max-w-none"
+          />
         </div>
       ) : (
-        <div className="flex h-full flex-col items-center justify-center space-y-6 p-8 text-center">
-          <div className="from-muted/50 to-muted flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br">
-            <Lightbulb className="text-muted-foreground h-8 w-8" />
+        <div className="flex h-full flex-col items-center justify-center space-y-6 p-8 text-center min-h-[300px]">
+          <div className="from-muted/50 to-muted flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br shadow-inner">
+            <Lightbulb className="text-muted-foreground h-6 w-6" />
           </div>
-          <div className="space-y-3">
-            <h3 className="text-foreground text-lg font-semibold">
-              Solution Not found
+          <div className="space-y-2">
+            <h3 className="text-foreground text-base font-semibold">
+              Solution Not Found
             </h3>
-            <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
-              Solution is not available for this question yet.
+            <p className="text-muted-foreground max-w-[200px] text-xs leading-relaxed">
+              We're still working on a detailed solution for this problem.
             </p>
-          </div>
-          <div className="bg-primary/5 text-primary rounded-lg px-4 py-2 text-xs font-medium">
-            💡 Tip: Try solving it yourself first
           </div>
         </div>
       )}
     </div>
   );
 }
+
+
+
