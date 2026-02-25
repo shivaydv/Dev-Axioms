@@ -2,25 +2,29 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  SidebarClose,
-  SidebarIcon,
-  Share2,
-  Bookmark,
-  Heart,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPracticeSidebarTabs } from "@/components/playground/SidebarTabs";
 import { Badge } from "@/components/ui/badge";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { Question } from "@/types/Question";
 import { ShareModal } from "@/components/playground/ShareModal";
-import { useState } from "react";
+import { SidebarInteractionsLoader } from "@/components/playground/SidebarInteractionsLoader";
+import { useState, Suspense } from "react";
 
 interface SidebarProps {
   question: Question;
+}
+
+// Skeleton component for loading state
+function SidebarInteractionsSkeleton() {
+  return (
+    <div className="flex justify-end gap-2">
+      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
+      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
+      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
+    </div>
+  );
 }
 
 const difficultyColors = {
@@ -128,32 +132,12 @@ export function Sidebar({ question }: SidebarProps) {
               </Badge>
             </div>
             {/* Action Buttons */}
-            <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                disabled
-                className="hover:bg-accent/60 h-9 w-9 rounded-lg transition-all"
-              >
-                <Heart className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                disabled
-                className="hover:bg-accent/60 h-9 w-9 rounded-lg transition-all"
-              >
-                <Bookmark className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setShareModalOpen(true)}
-                className="hover:bg-accent/60 h-9 w-9 rounded-lg transition-all"
-              >
-                <Share2 className="h-4 w-4" />
-              </Button>
-            </div>
+            <Suspense fallback={<SidebarInteractionsSkeleton />}>
+              <SidebarInteractionsLoader
+                questionId={question.id}
+                onShare={() => setShareModalOpen(true)}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

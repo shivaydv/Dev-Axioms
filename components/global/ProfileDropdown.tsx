@@ -66,26 +66,16 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        <SparklesIcon />
-                        Upgrade to Pro
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator /> */}
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link
-              href="/comming-soon"
-              className="flex w-full items-center gap-2"
-            >
+            <Link href="/profile" className="flex w-full items-center gap-2">
               <BadgeCheckIcon />
-              Account
+              Profile
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href="/comming-soon"
+              href="/profile/liked"
               className="flex w-full items-center gap-2"
             >
               <Heart />
@@ -94,7 +84,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href="/comming-soon"
+              href="/profile/bookmarks"
               className="flex w-full items-center gap-2"
             >
               <Bookmark />

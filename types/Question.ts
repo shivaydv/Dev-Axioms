@@ -12,6 +12,13 @@ export interface Question {
   updatedAt: Date;
 }
 
+// Extended question with interaction data
+export interface QuestionWithInteractions extends Question {
+  likesCount?: number;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
+}
+
 export type QuestionFormData = {
   title: string;
   difficulty: "Easy" | "Medium" | "Hard";

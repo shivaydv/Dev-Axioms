@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import React from "react";
 import PracticeHeader from "@/components/playground/PracticeHeader";
 import ResponsivePracticeLayout from "@/components/playground/ResponsivePracticeLayout";
