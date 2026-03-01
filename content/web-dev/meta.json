@@ -1,5 +1,10 @@
 {
-    "title":"Web Dev",
-    "root":true,
-    "pages":["html","css"]
+  "title": "Web Dev",
+  "root": true,
+  "pages": [
+    "html-css",
+    "javascript",
+    "react",
+    "nextjs"
+  ]
 }
