@@ -1,0 +1,41 @@
+---
+title: React Guess the Output
+description: Advanced React behavior questions
+---
+
+Test your deep understanding of the React rendering engine.
+
+## Q1: State Batched Updates
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    setCount(count + 1);
+    setCount(count + 1);
+    setCount(count + 1);
+  };
+
+  return <button onClick={handleClick}>{count}</button>;
+}
+```
+-   **Answer**: After one click, the count will be `1`. (React batches these updates, and `count` only refers to the value from the *current* render).
+
+## Q2: Multiple State Effects
+```jsx
+useEffect(() => {
+  console.log("A");
+}, [count]);
+
+useEffect(() => {
+  console.log("B");
+}, []);
+```
+-   **Answer**: On mount, both `A` and `B` fire. On update of `count`, only `A` fires.
+
+## Q3: Ref vs State
+Changing a `useRef`'s `.current` value **does not** trigger a re-render. Changing state **always** does.
+
+---
+
+**Next Step**: Prepare for [Interview Q's](/web-dev/react/interview-questions).

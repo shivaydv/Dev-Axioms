@@ -1,0 +1,40 @@
+---
+title: Advanced React Patterns
+description: Mastering professional React development
+---
+
+Take your React skills to the next level by mastering these professional design patterns.
+
+## 1. Compound Components
+Allows components to share state implicitly while remaining flexible in their UI structure. Think of `<Select>` and `<Option>`.
+
+```jsx
+<Menu>
+  <Menu.Button>Actions</Menu.Button>
+  <Menu.List>
+    <Menu.Item>Edit</Menu.Item>
+    <Menu.Item>Delete</Menu.Item>
+  </Menu.List>
+</Menu>
+```
+
+## 2. Higher-Order Components (HOC)
+A function that takes a component and returns a new component with enhanced functionality. 
+-   **Axiom**: Mostly replaced by Hooks today, but still useful for cross-cutting concerns like Auth wrappers.
+
+## 3. Render Props
+A pattern where a component's content is determined by a function passed as a prop.
+
+```jsx
+<MouseTracker render={mouse => (
+  <p>The mouse position is {mouse.x}, {mouse.y}</p>
+)}/>
+```
+
+## 4. Controlled vs Uncontrolled Components
+-   **Controlled**: State is handled by React (`value` + `onChange`).
+-   **Uncontrolled**: State is handled by the DOM (`useRef` + `defaultValue`).
+
+---
+
+**Next Step**: Challenges in [Machine Coding](/web-dev/react/machine-coding).

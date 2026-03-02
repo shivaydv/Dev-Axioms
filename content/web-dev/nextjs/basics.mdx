@@ -1,0 +1,56 @@
+---
+title: Next.js Basics
+description: Getting started with the fullstack React framework
+---
+
+Next.js is a React framework that gives you building blocks to create fast web applications. It handles things like routing, data fetching, and rendering for you.
+
+## The App Router (Modern Standard)
+
+The App Router is where modern Next.js development happens. It's built on React's Server Components.
+
+### Directory Structure:
+-   `app/page.tsx`: The UI for the homepage (`/`).
+-   `app/layout.tsx`: Shared UI for all pages in a directory (like navbars).
+-   `app/about/page.tsx`: Route for `/about`.
+
+## Server Components vs Client Components
+
+One of the most important concepts in modern Next.js development.
+
+### Server Components (**Default**)
+-   Rendered only on the server.
+-   Reduce the amount of JavaScript sent to the client.
+-   Access to back-end resources (databases, APIs) directly.
+-   **No** `useState`, `useEffect`, or `onClick`.
+
+### Client Components (Opt-In with `'use client'`)
+-   Sent to the browser for interactivity.
+-   Use React hooks (`useState`, `useEffect`).
+-   Can handle browser events (clicks, scrolls).
+
+## Data Fetching Axiom:
+Always try to **fetch data in a Server Component** first. This allows for faster initial page loads and better SEO.
+
+```tsx
+// This is a Server Component
+async function Page() {
+  const data = await fetch('https://api.example.com/data');
+  const items = await data.json();
+  
+  return (
+    <ul>
+      {items.map(item => <li key={item.id}>{item.name}</li>)}
+    </ul>
+  );
+}
+```
+
+## Static vs Dynamic Rendering
+
+-   **Static Rendering**: Next.js builds the page at **build time**. Fast CDN delivery!
+-   **Dynamic Rendering**: Next.js builds the page at **request time**. Best for user-specific data.
+
+---
+
+**Next Step**: Learn [Routing in Next.js](/web-dev/nextjs/routing).

@@ -1,0 +1,50 @@
+---
+title: JavaScript Interview Questions
+description: Ace your JavaScript technical interviews
+---
+
+Deep dive into the core mechanics of JavaScript that interviewers love to test.
+
+## 1. What is a "Closure"?
+A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment). In simpler terms, a closure gives you access to an outer function's scope from an inner function.
+
+```javascript
+function makeCounter() {
+  let count = 0;
+  return function() {
+    return ++count;
+  };
+}
+const counter = makeCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+```
+
+## 2. What is "Hoisting"?
+Hoisting is a JavaScript mechanism where variables and function declarations are moved to the top of their scope during the compilation phase.
+-   **Variables (`var`)**: Hoisted and initialized as `undefined`.
+-   **Variables (`let`, `const`)**: Hoisted but **not initialized**, leading to the "Temporal Dead Zone."
+-   **Function Declarations**: Completely hoisted.
+
+## 3. Difference between `==` and `===`?
+-   **`==` (Abstract Equality)**: Performs type conversion (coercion) before comparing.
+-   **`===` (Strict Equality)**: Does **not** perform type conversion. It only returns true if both the value and the type are identical. **Always use `===`.**
+
+## 4. What is the Event Loop?
+The Event Loop is the mechanism that allows JavaScript to perform non-blocking I/O operations despite being single-threaded. It constantly checks if the Call Stack is empty and moves tasks from the Callback Queue/Microtask Queue to the stack.
+
+## 5. What are Promises?
+A Promise is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. It has three states:
+1.  **Pending**: Initial state.
+2.  **Fulfilled**: Operation completed successfully.
+3.  **Rejected**: Operation failed.
+
+## 6. What is `this` keyword in JavaScript?
+The value of `this` depends on how the function is called:
+-   **Globally**: Points to the window/global object.
+-   **Inside a method**: Points to the object that owns the method.
+-   **In an arrow function**: Points to the `this` value of the enclosing lexical scope.
+
+---
+
+**Next Step**: Check out [Complex Syntax](/web-dev/javascript/complex-syntax).

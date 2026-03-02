@@ -1,0 +1,87 @@
+---
+title: Basic CSS
+description: Fundamentals of CSS
+---
+
+Cascading Style Sheets (CSS) is what brings the web to life. It controls the visual presentation of HTML elements, from color and layout to animations and responsiveness.
+
+## The Box Model
+
+In CSS, everything is a box. Understanding how these boxes are sized is critical.
+
+-   **Content**: The actual text or images.
+-   **Padding**: The space between the content and the border.
+-   **Border**: The edge of the element.
+-   **Margin**: The space between this element and other elements.
+
+### The `box-sizing` Axiom:
+Always use `box-sizing: border-box;` in your global reset. This ensures the `width` and `height` you set include padding and borders, preventing layout headaches.
+
+```css
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+```
+
+## Selectors & Specificity
+
+Selectors are how you target elements for styling.
+
+-   **Universal Selector (`*`)**: Targets everything.
+-   **Element Selector (`p`)**: Targets all `<p>` tags.
+-   **Class Selector (`.btn`)**: Targets elements with `class="btn"`.
+-   **ID Selector (`#header`)**: Targets elements with `id="header"` (unique).
+-   **Pseudo-classes (`:hover`, `:active`)**: Targets elements in a specific state.
+
+### Specificity Hierarchy:
+1.  **Inline styles** (e.g., `<div style="...">`) - *Highest*
+2.  **IDs**
+3.  **Classes, pseudo-classes, and attributes**
+4.  **Elements and pseudo-elements** - *Lowest*
+
+## Layout Systems
+
+Modern CSS provides powerful tools for creating complex layouts.
+
+### 1. Flexbox (One-Dimensional)
+Best for aligning items in a row or a column.
+
+```css
+.container {
+    display: flex;
+    justify-content: center; /* Align along the main axis */
+    align-items: center;    /* Align along the cross-axis */
+    gap: 1rem;              /* Gap between flex items */
+}
+```
+
+### 2. Grid (Two-Dimensional)
+Best for complex, grid-like layouts with rows and columns.
+
+```css
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+}
+```
+
+## Units
+
+-   **Fixed**: `px` (Pixels). Avoid for responsive layouts.
+-   **Relative**: `em` (relative to parent font size), `rem` (relative to root font size).
+-   **Viewport**: `vw` (1% of viewport width), `vh` (1% of viewport height).
+-   **Percentage**: `%` (relative to parent element).
+
+## Modern CSS Features
+
+-   **Custom Properties (Variables)**: `--color-primary: #3498db;`
+-   **Media Queries**: Essential for responsive design. `@media (max-width: 600px)`
+-   **Container Queries**: (New!) Allows styling based on the size of a parent *container* rather than the whole viewport.
+
+---
+
+**Next Step**: Prepare for your next technical interview with [Interview HTML](/web-dev/html-css/interview-html).

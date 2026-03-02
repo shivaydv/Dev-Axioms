@@ -1,0 +1,38 @@
+---
+title: Guess the Output
+description: Test your JS knowledge with tricky questions
+---
+
+Think like the JS engine. Can you predict what will be logged to the console?
+
+## Q1: Hoisting
+```javascript
+console.log(a);
+var a = 5;
+```
+-   **Answer**: `undefined`. (`var` is hoisted but not its assignment).
+
+## Q2: Closures
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 1000);
+}
+```
+-   **Answer**: `3`, `3`, `3`. (Because `var` is function-scoped. Use `let` to fix it).
+
+## Q3: Equality
+```javascript
+console.log([] == []);
+console.log([] === []);
+```
+-   **Answer**: `false`, `false`. (Arrays are compared by reference, and these are two different objects).
+
+## Q4: Coercion
+```javascript
+console.log(1 + "2" + 3);
+```
+-   **Answer**: `"123"`. (Num 1 + Str "2" = Str "12". Str "12" + Num 3 = Str "123").
+
+---
+
+**Next Step**: Prepare for [Machine Coding](/web-dev/javascript/machine-coding). in interviews to guess the output.

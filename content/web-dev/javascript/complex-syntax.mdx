@@ -1,0 +1,38 @@
+---
+title: Complex JS Syntax
+description: Mastering the tricky parts of JavaScript
+---
+
+Beyond the basics, JavaScript has powerful (and sometimes confusing) syntax that differentiates seniors from juniors.
+
+## 1. Destructuring
+A concise way to extract values from data stored in objects and arrays.
+
+```javascript
+const user = { name: 'Alex', age: 25 };
+const { name, age } = user;
+
+const colors = ['red', 'green'];
+const [primary] = colors;
+```
+
+## 2. Rest & Spread Operators (`...`)
+-   **Spread**: Expands an iterable (like an array) into its elements. `[...arr]`
+-   **Rest**: Collects multiple elements and condenses them into a single array. `(...args)`
+
+## 3. Arrow Functions
+A shorthand for writing functions with one major difference: They **do not have their own `this` binding**.
+
+## 4. Optional Chaining (`?.`)
+Provides a way to simplify accessing values through connected objects when it's possible that a reference or function may be `undefined` or `null`.
+
+```javascript
+const city = user?.address?.city;
+```
+
+## 5. Nullish Coalescing (`??`)
+Returns the right-hand side operand when the left-hand side is `null` or `undefined` (unlike `||`, which also triggers on `0` or `""`).
+
+---
+
+**Next Step**: How [Functions](/web-dev/javascript/functions) behave in JS.

@@ -1,0 +1,56 @@
+---
+title: Data Fetching in Next.js
+description: How to retrieve data efficiently in your Next.js application
+---
+
+In the Next.js App Router, data fetching is more powerful and simplified. The primary way to fetch data is directly within your **React Server Components**.
+
+## 1. Fetching on the Server
+
+When you fetch data in a Server Component, Next.js executes the fetch on the server, which means:
+- No waterfall requests in the browser.
+- Direct access to databases and backend resources.
+- Improved security (API keys stay on the server).
+
+```tsx
+async function Page() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+
+  return (
+    <main>
+      <h1>Data: {data.title}</h1>
+    </main>
+  );
+}
+```
+
+## 2. Caching and Revalidation
+
+Next.js extends the standard `fetch` API to provide caching and revalidation controls.
+
+### Force-cache (Static)
+By default, Next.js caches fetch results for high performance.
+```javascript
+fetch('https://...', { cache: 'force-cache' });
+```
+
+### Time-based Revalidation (ISR)
+Revalidate the cache every hour:
+```javascript
+fetch('https://...', { next: { revalidate: 3600 } });
+```
+
+### No-store (Dynamic)
+Always fetch fresh data for every request:
+```javascript
+fetch('https://...', { cache: 'no-store' });
+```
+
+## 3. The `use` Hook (Client-side)
+
+If you need to fetch data in a Client Component, use the React `use` hook to handle promises gracefully.
+
+---
+
+**Next Step**: Learn about [Rendering Strategies](/web-dev/nextjs/rendering).caching, and revalidation.

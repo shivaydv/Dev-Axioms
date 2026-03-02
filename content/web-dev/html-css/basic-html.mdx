@@ -1,0 +1,88 @@
+---
+title: Basic HTML
+description: Fundamentals of HTML
+---
+
+Learn the foundation of the web. HTML (HyperText Markup Language) is the backbone of every website, defining the structure and meaning of web content.
+
+## The Document Structure
+
+Every HTML5 document should follow this standard structure:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Title</title>
+</head>
+<body>
+    <!-- Content goes here -->
+</body>
+</html>
+```
+
+### Key Axioms:
+1.  **Always use `<!DOCTYPE html>`**: This ensures the browser uses "standards mode" instead of "quirks mode."
+2.  **Define Language**: Use the `lang` attribute on `<html>` for accessibility and SEO.
+3.  **Responsive Meta Tag**: Always include the `viewport` meta tag for mobile responsiveness.
+
+## Semantic HTML
+
+Semantic HTML means using tags that describe their purpose (`<article>`, `<nav>`, `<header>`, etc.) rather than just their appearance (`<div>`, `<span>`).
+
+### Why Seamanic HTML?
+-   **Accessibility**: Screen readers can navigate the page better.
+-   **SEO**: Search engines understand your content better.
+-   **Maintainability**: Cleaner, more readable code.
+
+### Common Semantic Elements:
+-   `<header>`: Foundational introductory content or navigation links.
+-   `<nav>`: Defines a block of navigation links.
+-   `<main>`: The dominant content of the `<body>`. Only one per document.
+-   `<article>`: Independent, self-contained content (like a blog post).
+-   `<section>`: Represents a standalone section of a document.
+-   `<aside>`: Content indirectly related to the main content (like sidebars).
+-   `<footer>`: Footer for its nearest sectioning or root element.
+
+## Text Elements
+
+-   `<h1>`-`<h6>`: Headings (use only one `<h1>` per page).
+-   `<p>`: Paragraphs.
+-   `<a>`: Hyperlinks (essential: include `href`).
+-   `<ul>`/`<ol>`: Unordered and ordered lists.
+-   `<li>`: List items.
+-   `<strong>`: Bold with semantic importance.
+-   `<em>`: Italic with emphasis.
+
+## Forms and Inputs
+
+Forms are the primary way users interact with your application.
+
+```html
+<form action="/submit" method="POST">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <button type="submit">Register</button>
+</form>
+```
+
+### Best Practices:
+-   **Always use `<label>`**: Associate labels with inputs using the `for` and `id` attributes.
+-   **Input Types**: Use the correct types (`email`, `tel`, `number`) to enable mobile-optimized keyboards.
+-   **Validation**: Use attributes like `required`, `min`, `max`, and `pattern`.
+
+## Multimedia
+
+-   `<img>`: Requires `src` and an `alt` attribute for accessibility.
+-   `<video>`: For embedding video content.
+-   `<audio>`: For embedding sound.
+
+---
+
+**Next Step**: Learn how to style your structure with [Basic CSS](/web-dev/html-css/basic-css).

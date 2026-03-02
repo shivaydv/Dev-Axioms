@@ -1,0 +1,37 @@
+---
+title: React Interview Questions
+description: Prep your React knowledge for technical interviews
+---
+
+Master the core concepts of React that are frequently tested in technical rounds.
+
+## 1. What is the Virtual DOM?
+The Virtual DOM is a lightweight, in-memory representation of the real DOM. React uses it to improve performance by:
+1.  Creating a Virtual DOM tree when a component renders.
+2.  Comparing it with the previous version (**Diffing**).
+3.  Updating only the changed parts in the real DOM (**Reconciliation**).
+
+## 2. What is the difference between UseState and UseRef?
+-   **`useState`**: When the state value changes, it triggers a **re-render** of the component.
+-   **`useRef`**: When the ref value changes (using `.current`), it **does not** trigger a re-render. useful for DOM access or storing values that don't affect the UI.
+
+## 3. What are "Hooks" in React?
+Hooks are functions that let you "hook into" React state and lifecycle features from function components. They were introduced in React 16.8 to avoid the complexity of class components.
+-   **Core Hooks**: `useState`, `useEffect`, `useContext`, `useMemo`, `useCallback`.
+
+## 4. What is the purpose of the `key` prop in lists?
+The `key` prop helps React identify which items have changed, been added, or been removed. It is essential for efficient reconciliation. **Avoid using indices as keys** if the list can be reordered or filtered.
+
+## 5. What is "Prop Drilling" and how to avoid it?
+Prop drilling is the process of passing data through multiple layers of components that don't actually need it, just to reach a deep child.
+-   **Solutions**: React Context API, State management libraries (Redux, Zustand), or Component Composition.
+
+## 6. What is `useEffect`?
+The `useEffect` hook allows you to perform side effects in function components (e.g., data fetching, subscriptions, manual DOM changes).
+-   **No Dependency Array**: Runs after every render.
+-   **Empty Dependency Array `[]`**: Runs once after the initial render.
+-   **With Dependencies `[dep]`**: Runs whenever a dependency changes.
+
+---
+
+**Next Step**: Prepare for [Machine Coding](/web-dev/react/machine-coding).

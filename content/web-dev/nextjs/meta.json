@@ -1,0 +1,12 @@
+{
+  "title": "Next.js",
+  "root":true,
+  "pages": [
+    "basics",
+    "routing",
+    "data-fetching",
+    "rendering",
+    "interview-questions",
+    "machine-coding"
+  ]
+}

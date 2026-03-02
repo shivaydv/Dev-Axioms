@@ -1,0 +1,50 @@
+---
+title: How JavaScript Works
+description: Under the hood mechanics of JS execution
+---
+
+To be a senior developer, you must understand how your code is executed by the browser or Node.js.
+
+## The Execution Context
+
+Every piece of JS code runs inside an **Execution Context**.
+
+-   **Global Execution Context**: Created for the top-level code.
+-   **Function Execution Context**: Created whenever a function is called.
+
+### Two Phases of Creation:
+1.  **Memory Creation Phase**: Memory is allocated for variables and functions (Hoisting occurs here).
+2.  **Code Execution Phase**: Code is executed line by line.
+
+## The Call Stack
+
+The Call Stack is where the execution contexts are managed. It follows **LIFO** (Last In, First Out). If the stack overflows (e.g., through infinite recursion), you'll get a "Stack Overflow" error.
+
+## The Event Loop & Concurrency
+
+JavaScript is single-threaded, but it doesn't block. This is possible because of the **Event Loop**.
+
+### The Flow:
+1.  Synchronous code runs in the **Call Stack**.
+2.  Asynchronous tasks (like `setTimeout` or `fetch`) are handed off to the **Web APIs** (provided by the browser).
+3.  When the task finishes, its callback enters the **Task Queue** (or Callback Queue).
+4.  The **Event Loop** watches the Call Stack. If the stack is empty, it pushes the first task from the queue to the stack.
+
+### Microtasks vs Macrotasks:
+-   **Microtasks** (Promises, `queueMicrotask`): Executed immediately after the current sync task and *before* the next macrotask.
+-   **Macrotasks** (`setTimeout`, `setInterval`, DOM events): Executed after the microtask queue is empty.
+
+## Memory Management
+
+### Garbage Collection:
+JavaScript uses an automatic garbage collector. It primarily uses the **Mark-and-Sweep algorithm** to find and remove objects that are no longer "reachable" from the root.
+
+### Memory Leaks:
+Avoid memory leaks by:
+-   Removing unused event listeners.
+-   Ending unnecessary closures.
+-   Clearing `setInterval` when done.
+
+---
+
+**Next Step**: Mastering [Functions in JS](/web-dev/javascript/functions).

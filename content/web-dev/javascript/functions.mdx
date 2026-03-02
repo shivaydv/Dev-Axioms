@@ -1,0 +1,42 @@
+---
+title: Functions in JavaScript
+description: The power of JS functions
+---
+
+Functions are the "first-class citizens" of JavaScript. They can be stored in variables, passed into other functions, and returned from functions.
+
+## 1. Function Declaration
+Traditional functions that are hoisted.
+
+```javascript
+function greet(name) {
+  return `Hello, ${name}`;
+}
+```
+
+## 2. Function Expression
+Assigning a function to a variable. These are not hoisted.
+
+```javascript
+const greet = function(name) {
+  return `Hello, ${name}`;
+};
+```
+
+## 3. Arrow Functions
+Modern shorthand that has a lexical `this` binding.
+
+```javascript
+const greet = (name) => `Hello, ${name}`;
+```
+
+## 4. Higher-Order Functions
+Functions that operate on other functions (either taking them as arguments or returning them).
+-   **Examples**: `.map()`, `.filter()`, `.reduce()`.
+
+## 5. Callback Functions
+A function passed into another function as an argument, to be executed later.
+
+---
+
+**Next Step**: Prepare for [Interview Questions](/web-dev/javascript/interview-questions).

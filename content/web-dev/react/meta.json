@@ -1,0 +1,13 @@
+{
+  "title": "React JS",
+  "root":true,
+  "pages": [
+    "basics",
+    "hooks",
+    "advanced-patterns",
+    "guess-output",
+    "interview-questions",
+    "projects",
+    "machine-coding"
+  ]
+}

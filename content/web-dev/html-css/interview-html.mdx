@@ -1,0 +1,44 @@
+---
+title: HTML Interview Questions
+description: Prep your HTML knowledge for interviews
+---
+
+Commonly asked HTML questions in front-end interviews, from fundamental structures to modern accessibility.
+
+## 1. What is the difference between `<div>` and `<span>`?
+-   **`<div>`**: A block-level element. It always starts on a new line and takes up the full width available.
+-   **`<span>`**: An inline-level element. It only takes up as much width as necessary and does not start on a new line.
+
+## 2. Why is Semantic HTML important?
+It provides meaning to both the developer and the browser/screen readers.
+-   **Accessibility**: Screen readers can distinguish between a `<nav>`, a `<main>`, and a `<footer>`.
+-   **SEO**: Search engine crawlers can prioritize content inside `<article>` tags.
+-   **Structure**: It's much easier to read and maintain than just "div-soup."
+
+## 3. What is the purpose of the `alt` attribute on `<img>`?
+It provides text that is displayed if the image fails to load or is read by screen readers. It is **mandatory** for accessibility.
+
+## 4. What is a "void element" in HTML?
+A void element is an element that cannot have any child nodes (no nested elements or text). They don't have a closing tag. 
+-   **Examples**: `<img>`, `<br>`, `<input>`, `<meta>`, `<link>`.
+
+## 5. What are Data Attributes?
+Data attributes (`data-*`) allow you to store extra information on standard HTML elements without using custom non-standard attributes. You can access these in JavaScript using the `dataset` property.
+
+```html
+<div id="user" data-id="123" data-role="admin">Alex</div>
+```
+
+```javascript
+const user = document.getElementById('user');
+console.log(user.dataset.id); // "123"
+```
+
+## 6. What is the difference between `<script>`, `<script async>`, and `<script defer>`?
+-   **`<script>`**: Fetches and executes immediately, blocking the HTML parser.
+-   **`<script async>`**: Fetches the script while parsing HTML but executes **immediately** once fetched, blocking the parser at that point.
+-   **`<script defer>`**: Fetches the script while parsing HTML and **waits** until the HTML parsing is completely finished before executing. **Preferred for most use cases.**
+
+---
+
+**Next Step**: Ace your CSS interviews with [Interview CSS](/web-dev/html-css/interview-css).

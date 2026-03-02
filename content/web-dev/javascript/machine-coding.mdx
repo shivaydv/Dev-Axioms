@@ -1,0 +1,32 @@
+---
+title: JavaScript Machine Coding
+description: Practical Vanilla JS challenges
+---
+
+Master Vanilla JavaScript by building real components and functions from scratch.
+
+## 1. Debounce Function
+Write a function that delays execution until after a specified wait time.
+
+```javascript
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+```
+
+## 2. Deep Clone
+A function that creates a completely new copy of an object, including all nested objects.
+
+## 3. Flat Array
+Convert a multi-level nested array into a single-level array.
+
+## 4. Star Rating Component
+Build a UI component in Vanilla JS that allows a user to select a rating from 1 to 5.
+
+---
+
+**Next Step**: Learn [Advanced React](/web-dev/react/basics).

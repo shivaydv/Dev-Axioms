@@ -1,0 +1,77 @@
+---
+title: React Basics
+description: Getting started with the world's most popular UI library
+---
+
+React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It lets you compose complex UIs from small and isolated pieces of code called "components."
+
+## Components
+
+Components are the building blocks of any React application. They are functions that return JSX (JavaScript XML).
+
+```jsx
+function Profile() {
+  return (
+    <img
+      src="https://i.imgur.com/MK3eW3Am.jpg"
+      alt="Profile Picture"
+    />
+  );
+}
+```
+
+### Component Rules:
+-   Names **must start with a capital letter** (`Profile`, not `profile`).
+-   They must return a single top-level element (or use a Fragment `<>...</>`).
+
+## JSX (JavaScript XML)
+
+JSX is a syntax extension for JavaScript that looks like HTML but is actually JavaScript in disguise.
+
+-   Use **curly braces `{}`** to embed JavaScript logic.
+-   Attributes use **camelCase** (e.g., `className` instead of `class`).
+-   Components can be self-closing: `<MyComponent />`.
+
+## Props: Communication
+
+Props (short for properties) are used to pass data from a parent component to a child component.
+
+```jsx
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+// In the parent component
+<Welcome name="Sara" />
+```
+
+**Important**: Props are **read-only**; components should never modify their own props.
+
+## State: Data that Changes over Time
+
+State is a component's memory. When state changes, React **re-renders** the component to reflect the new data.
+
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Clicked {count} times
+    </button>
+  );
+}
+```
+
+## The React Virtual DOM
+
+React creates a "Virtual DOM"—a lightweight copy of the real DOM. When data changes:
+1.  React calculates the new UI (Virtual DOM).
+2.  It compares the new Virtual DOM with the previous one (**Diffing**).
+3.  It updates only the specific parts of the real DOM that changed (**Reconciliation**).
+
+---
+
+**Next Step**: Mastering [React Hooks](/web-dev/react/hooks).

@@ -1,0 +1,37 @@
+---
+title: JavaScript Data Types
+description: Understanding how JS stores information
+---
+
+JavaScript is a dynamically typed language, but it still has a robust set of data types that you must master.
+
+## 1. Primitives (Stored by Value)
+
+-   **`String`**: "Hello World"
+-   **`Number`**: `42`, `3.14` (There is no separate `integer` vs `double`).
+-   **`Boolean`**: `true` or `false`.
+-   **`Undefined`**: A variable that has been declared but not assigned a value.
+-   **`Null`**: An empty value. (Note: `typeof null === 'object'` - a famous JS bug).
+-   **`Symbol`**: Unique and immutable values (ES6).
+-   **`BigInt`**: For integers larger than $2^{53} - 1$.
+
+## 2. Objects (Stored by Reference)
+
+-   **`Object`**: A collection of properties (`{ key: value }`).
+-   **`Array`**: An ordered list of values (`[1, 2, 3]`).
+-   **`Function`**: A callable object.
+-   **`Date`**: For handling dates and times.
+
+### Reference Axiom:
+When you copy a primitive, you create a new value. When you copy an object, you create a new reference to the **same** object in memory.
+
+```javascript
+const obj1 = { name: 'A' };
+const obj2 = obj1;
+obj2.name = 'B';
+console.log(obj1.name); // 'B' (Changes affect both)
+```
+
+---
+
+**Next Step**: Mastering [Complex Syntax](/web-dev/javascript/complex-syntax).types, type coercion, and memory allocation.

@@ -1,0 +1,42 @@
+---
+title: Tips for Interview
+description: General tips for HTML and CSS interviews
+---
+
+Best practices to ace your HTML and CSS design rounds.
+
+## 1. Accessibility (a11y) is your superpower.
+Interviewers love it when you mention accessibility:
+-   **Always** include `alt` attributes on images.
+-   **Never** use `<div>` for buttons; use `<button>`.
+-   **Ensure contrast** ratios between text and background.
+
+## 2. Naming Conventions: BEM.
+Using a naming convention like **BEM (Block, Element, Modifier)** shows you're ready for enterprise-level CSS.
+
+```css
+/* Block */
+.card {}
+
+/* Element */
+.card__title {}
+
+/* Modifier */
+.card__title--large {}
+```
+
+## 3. Avoid inline styles.
+Separation of concerns is key. Keep your styles in your CSS files, not your HTML.
+
+## 4. Reset your styles.
+Mentioning a browser reset or `normalize.css` shows you understand browser differences.
+
+## 5. Viewport and Responsiveness.
+Always mention the `viewport` meta tag and how you use `@media` queries to ensure your design works on all devices.
+
+## 6. CSS Specificity: Don't use `!important`.
+Explain how you avoid using `!important` by using better selectors and understanding the Cascade.
+
+---
+
+**Next Step**: Ready for [Interview Q's](/web-dev/html-css/interview-html).

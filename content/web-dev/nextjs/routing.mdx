@@ -1,0 +1,60 @@
+---
+title: Next.js Routing
+description: Mastering the file-system based router in Next.js
+---
+
+The Next.js App Router sets a new standard for building complex applications with ease, using a file-system based routing mechanism.
+
+## Core File System Labels
+
+Each folder in your `app` directory represents a **route segment**.
+-   `page.tsx`: The primary interface for a specific route.
+-   `layout.tsx`: Persistent UI shared among multiple pages.
+-   `loading.tsx`: An optional UI that appears during navigations.
+-   `error.tsx`: An error boundary for that specific segment.
+
+## Dynamic Routes
+
+When you don't know the exact segment names (like blog post IDs), you use square brackets.
+
+```text
+app/blog/[slug]/page.tsx
+```
+
+### Accessing Parameters:
+```tsx
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  return <h1>Reading: {params.slug}</h1>;
+}
+```
+
+## Nested Routes
+
+Nesting is as simple as creating subfolders.
+-   `app/dashboard/settings/page.tsx` → `/dashboard/settings`
+
+## Grouping Routes
+
+You can group routes without affecting the URL using parentheses.
+
+```text
+app/(auth)/login/page.tsx  →  /login
+app/(auth)/signup/page.tsx →  /signup
+```
+
+Useful for applying a common layout only to the auth routes.
+
+## Parallel Routes (Advanced)
+
+Allows you to simultaneously or conditionally render multiple pages in the same layout.
+
+```text
+app/dashboard/@team/page.tsx
+app/dashboard/@analytics/page.tsx
+```
+
+Accessible in `dashboard/layout.tsx` as `props.team` and `props.analytics`.
+
+---
+
+**Next Step**: Learn [Data Fetching in Next.js](/web-dev/nextjs/data-fetching).

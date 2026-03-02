@@ -1,0 +1,48 @@
+---
+title: CSS Interview Questions
+description: Prep your CSS knowledge for interviews
+---
+
+A collection of the most frequent CSS interview questions that test your understanding of layout, selectors, and units.
+
+## 1. What is the difference between Flexbox and CSS Grid?
+-   **Flexbox**: One-dimensional (row OR column). Best for aligning items in a line.
+-   **Grid**: Two-dimensional (row AND column). Best for full-page layouts or complex alignments.
+
+## 2. Explain "Specificity" in CSS.
+Specificity determines which CSS rule is applied by the browser if multiple rules match the same element.
+-   **Inline styles**: 1000 points.
+-   **ID Selectors (`#id`)**: 100 points.
+-   **Class Selectors (`.class`, `[attr]`, `:pseudo`)**: 10 points.
+-   **Element Selectors (`div`, `h1`)**: 1 point.
+-   **Universal Selector (`*`)**: 0 points.
+
+## 3. What's the difference between `em` and `rem`?
+-   **`em`**: Relative to the font-size of its **parent element**.
+-   **`rem`**: Relative to the font-size of the **root element** (`<html>`). `rem` is generally preferred for predictable scaling.
+
+## 4. What is the CSS Box Model?
+The Box Model represents how the size of an element is calculated.
+-   **Content**: The actual content.
+-   **Padding**: Inner space around the content.
+-   **Border**: The line around the padding and content.
+-   **Margin**: Outer space around the element.
+
+## 5. How do you center a `<div>`?
+In modern CSS, **Flexbox** is the easiest way:
+```css
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+```
+
+## 6. What are Pseudo-classes vs Pseudo-elements?
+-   **Pseudo-classes (`:hover`, `:first-child`)**: Targets an existing element in a specific state.
+-   **Pseudo-elements (`::before`, `::after`)**: Creates a "fake" element that wasn't previously in the HTML.
+
+---
+
+**Next Step**: Check out [UI Tips](/web-dev/html-css/tips).

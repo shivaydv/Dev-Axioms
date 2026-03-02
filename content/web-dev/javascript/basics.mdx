@@ -1,0 +1,75 @@
+---
+title: Basics of JavaScript
+description: Fundamental syntax and concepts
+---
+
+Start your journey with the fundamental syntax of JavaScript. Every great developer builds on a rock-solid foundation.
+
+## Variables
+
+Variables are the "containers" for storing data in your application.
+
+-   **`const`**: For values that won't change. This is the **preferred default**.
+-   **`let`**: For values that may change over time.
+-   **`var`**: The old way. **Avoid using it** due to its tricky scoping rules (hoisting).
+
+```javascript
+const birthYear = 1990;
+let age = 34;
+age = 35; // Fine with 'let'
+```
+
+## Data Types
+
+JavaScript has two main categories of data types:
+
+### 1. Primitives (Atomic)
+-   `String`: "Hello"
+-   `Number`: 42, 3.14
+-   `Boolean`: true / false
+-   `Undefined`: A variable declared but not assigned.
+-   `Null`: Explicitly "nothing."
+-   `Symbol`: Unique identifiers.
+-   `BigInt`: For massive numbers.
+
+### 2. Objects (Complex)
+Objects are collections of key-value pairs. Arrays are also technically objects in JS.
+
+```javascript
+const user = {
+    name: "Alex",
+    age: 25,
+    isDev: true
+};
+```
+
+## Operators
+
+-   **Arithmetic**: `+`, `-`, `*`, `/`, `%`
+-   **Assignment**: `=`, `+=`, `-=`
+-   **Comparison**: `===` (Strict equality - **Always use this**!), `!==`, `>`, `<`
+-   **Logical**: `&&` (AND), `||` (OR), `!` (NOT)
+
+## Control Flow
+
+Control flow allows your program to make decisions.
+
+### 1. Conditional Logic (`if/else`)
+```javascript
+if (age >= 18) {
+    console.log("Welcome!");
+} else {
+    console.log("Wait till you're older.");
+}
+```
+
+### 2. Loops (`for`, `while`)
+```javascript
+for (let i = 0; i < 5; i++) {
+    console.log(`Iteration: ${i}`);
+}
+```
+
+---
+
+**Next Step**: High-level understanding of [How it Works](/web-dev/javascript/how-it-works).

@@ -1,0 +1,34 @@
+---
+title: Rendering in Next.js
+description: Evolution of rendering methods in Next.js
+---
+
+Next.js offers multiple strategies to render your application. Choosing the right one is key to performance and user experience.
+
+## 1. Static Rendering (SSG & ISR)
+
+Static rendering happens at **build time**. The page remains the same across all user requests.
+-   **SSG**: Fixed at build time.
+-   **ISR**: Re-rendered "in the background" periodically.
+
+## 2. Dynamic Rendering (SSR)
+
+Dynamic rendering happens at **request time**. Every visit triggers a fresh render.
+- Use for user-specific content (dashboards, feed).
+- Triggered by: `cookies()`, `headers()`, `searchParams`, or `fetch` with `cache: 'no-store'`.
+
+## 3. Streaming (New!)
+
+Next.js allows you to stream your UI from the server piece-by-piece using **React Suspense**.
+-   The user sees a "loading skeleton" immediately.
+-   Individual components appear as they finish rendering on the server.
+
+```tsx
+<Suspense fallback={<Skeleton />}>
+  <SlowComponent />
+</Suspense>
+```
+
+---
+
+**Next Step**: Challenges in [Machine Coding](/web-dev/nextjs/machine-coding).

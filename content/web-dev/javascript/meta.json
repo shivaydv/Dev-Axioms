@@ -1,0 +1,18 @@
+{
+  "title": "JavaScript",
+  "root":true,
+  "pages": [
+    "what-is-javascript",
+    "setup",
+    "how-it-works",
+    "history",
+    "basics",
+    "complex-syntax",
+    "datatypes",
+    "functions",
+    "guess-output",
+    "interview-questions",
+    "projects",
+    "machine-coding"
+  ]
+}

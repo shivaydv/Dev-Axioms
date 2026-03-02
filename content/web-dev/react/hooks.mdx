@@ -1,0 +1,78 @@
+---
+title: React Hooks
+description: Mastering the power of hooks in React
+---
+
+Hooks allow you to use state and other React features without writing a class. They are the standard way to build React components today.
+
+## 1. `useState`
+The most common hook. It adds local state to your component.
+
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+-   **Axiom**: Only call hooks at the **top level** of your function. Never call them inside loops, conditions, or nested functions.
+
+## 2. `useEffect`
+Used for side effects like fetching data, manual DOM updates, or setting up subscriptions.
+
+```jsx
+useEffect(() => {
+  // Your effect logic
+  
+  return () => {
+    // Cleanup logic (optional)
+  };
+}, [dependencies]);
+```
+
+-   **Empty Array `[]`**: Runs once after mount.
+-   **Specific Deps `[a, b]`**: Runs when `a` or `b` change.
+-   **No Array**: Runs after every render.
+
+## 3. `useContext`
+Allows you to subscribe to React context without any nesting.
+
+```jsx
+const theme = useContext(ThemeContext);
+```
+
+## 4. `useMemo` & `useCallback`
+Used for performance optimization (memoization).
+-   **`useMemo`**: Returns a memoized **value**.
+-   **`useCallback`**: Returns a memoized **function**.
+
+## 5. `useRef`
+Returns a mutable ref object whose `.current` property is persistent. Useful for accessing DOM elements directly.
+
+```jsx
+const inputRef = useRef(null);
+
+const focusInput = () => {
+  inputRef.current.focus();
+};
+
+return <input ref={inputRef} />;
+```
+
+## Custom Hooks
+You can create your own hooks to reuse stateful logic between components. Custom hooks must start with the word `use`.
+
+```jsx
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return width;
+}
+```
+
+---
+
+**Next Step**: Learn [Advanced React Patterns](/web-dev/react/advanced-patterns).

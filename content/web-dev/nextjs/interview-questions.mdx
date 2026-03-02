@@ -1,0 +1,40 @@
+---
+title: Next.js Interview Questions
+description: Prep your Next.js knowledge for technical interviews
+---
+
+The most common questions about the modern Next.js stack, covering the App Router, rendering strategies, and optimizations.
+
+## 1. What is the difference between CSR, SSR, SSG, and ISR?
+-   **CSR (Client-Side Rendering)**: Standard React. The browser builds the UI.
+-   **SSR (Server-Side Rendering)**: The server builds the HTML for **every request**. Best for real-time data.
+-   **SSG (Static Site Generation)**: The server builds the HTML at **build time**. Fastest performance.
+-   **ISR (Incremental Static Regeneration)**: Allows you to update static pages **after** you've built your site, without needing to rebuild the entire site.
+
+## 2. What are React Server Components (RSC)?
+RSCs allow you to write components that run exclusively on the server. They help reduce bundle size because the code for the component stays on the server and only the rendered result is sent to the client.
+
+## 3. When should you use `'use client'`?
+You should use the `'use client'` directive when you need:
+-   Interactivity (using `onClick`, `onChange`, etc.).
+-   State or Lifecycle hooks (`useState`, `useEffect`).
+-   Browser-only APIs (like `window` or `document`).
+-   Custom hooks that depend on state or effects.
+
+## 4. How does Routing work in the App Router?
+Next.js uses a file-system based router where folders define routes. 
+-   `page.js`: Makes a segment publicly accessible.
+-   `layout.js`: Shared UI for a segment and its children.
+-   `loading.js`: UI shown during a navigation.
+-   `error.js`: UI shown when a segment fails to load.
+
+## 5. What is the benefit of `next/image` over a standard `<img>`?
+The `next/image` component provides automatic image optimization:
+-   **Size Optimization**: Serves correctly sized images for each device.
+-   **Visual Stability**: Prevents Cumulative Layout Shift (CLS) automatically.
+-   **Faster Page Loads**: Images are only loaded when they enter the viewport (lazy loading).
+-   **Asset Flexibility**: On-demand image resizing.
+
+---
+
+**Next Step**: Explore [Data Fetching in Next.js](/web-dev/nextjs/data-fetching).
