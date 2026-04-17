@@ -1,0 +1,64 @@
+---
+title: "Signed vs. Unsigned URLs: Stop Making Your S3 Buckets Public"
+description: "Understand the critical difference between signed and unsigned URLs. A beginner-friendly look at cloud storage security, architecture flows, and protecting private user data."
+author: Shiva Yadav
+date: 2026-04-17
+---
+
+## Signed vs. Unsigned URLs: Stop Making Your S3 Buckets Public
+
+Every developer eventually hits this wall: You are building an app that lets users upload private files, like profile pictures or PDF documents. You set up an AWS S3 bucket, wire up your backend, and successfully upload the file. 
+
+But then you face a problem: **How do you show that image on the frontend?**
+
+The beginner's instinct is to go into the AWS console, uncheck "Block all public access," and make the entire bucket public. Congratulations, your frontend can now display the image! But unfortunately, you also just made every private user document on your server publicly accessible to the entire internet.
+
+To fix this, we need to understand the architecture behind **Unsigned URLs** and **Signed URLs** in an easy, code-free way.
+
+---
+
+## 1. Unsigned URLs: The Public Billboard
+
+An **Unsigned URL** is just a standard, permanent web address. If you have the link, you can see the file. Period. There is no security, no expiration date, and no authentication check.
+
+**Example:** `https://my-app-bucket.s3.amazonaws.com/assets/logo.png`
+
+### When to use Unsigned URLs:
+Think of unsigned URLs as public billboards. You should absolutely use them for assets that are meant to be seen by the entire world:
+* Your website's main logo.
+* CSS stylesheets.
+* Open-graph images (the thumbnail that shows up when you share a link on social media).
+
+If the data is completely public, keeping the bucket public is the correct and easiest architecture.
+
+---
+
+## 2. Signed URLs: The VIP Guest Pass
+
+Now, imagine a user uploads a photo of their driver's license for verification. That S3 bucket must be strictly **Private**.
+
+So, if the bucket is private, how does the user view their own file on the frontend? We use a **Signed URL** (often called a Presigned URL).
+
+A Signed URL is a temporary, cryptographically generated link. It acts like a VIP guest pass that grants access to a specific private file, but only for a limited amount of time. Once the time is up, the pass self-destructs.
+
+---
+
+## 3. The Architecture Flow: How it Works
+
+Let's look at the step-by-step flow of how a Signed URL is generated and used, without getting bogged down in code:
+
+1. **The Request:** The user logs into your frontend (React/Next.js) and navigates to their dashboard. The frontend asks your backend: *"Give me the URL to display User 123's private document."*
+2. **The Authentication:** Your backend checks the user's session token. It verifies: *"Yes, this request is actually coming from User 123. They are allowed to see this file."*
+3. **The Secret Handshake:** Your backend uses its secret AWS credentials to securely talk to S3. It says: *"Hey AWS, generate a temporary URL for this specific file, and make it expire in exactly 60 seconds."*
+4. **The Handoff:** AWS generates the Signed URL and hands it to your backend. Your backend sends this URL down to the frontend.
+5. **The Viewing:** The frontend takes that Signed URL and drops it into an `<img src="...">` tag. The image loads perfectly for the user.
+6. **The Expiry (The Magic):** 61 seconds later, that URL becomes entirely useless. If a hacker somehow intercepts the link and tries to open it in their browser, AWS will reject the request with an `AccessDenied` error.
+
+---
+
+## Summary
+
+* **Unsigned URLs** are permanent and public. Use them for things everyone should see.
+* **Signed URLs** are temporary and secure. Use them to safely display private user data without making your entire storage bucket vulnerable. 
+
+Understanding this simple architectural difference is a massive step in thinking like a senior system designer!
