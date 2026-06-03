@@ -4,8 +4,8 @@ import { blog } from "@/lib/source";
 export default function Page(): React.ReactElement {
   const posts = [...blog.getPages()].sort(
     (a, b) =>
-      new Date(b.data.date ?? b.file.name).getTime() -
-      new Date(a.data.date ?? a.file.name).getTime()
+      new Date((b.data.date as string) ?? b.slugs[0]).getTime() -
+      new Date((a.data.date as string) ?? a.slugs[0]).getTime()
   );
 
   const svg = `<svg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'>
@@ -56,7 +56,7 @@ export default function Page(): React.ReactElement {
             </p>
 
             <p className="mt-auto pt-4 text-xs text-fd-muted-foreground">
-              {new Date(post.data.date ?? post.file.name).toDateString()}
+              {new Date((post.data.date as string) ?? post.slugs[0]).toDateString()}
             </p>
           </Link>
         ))}

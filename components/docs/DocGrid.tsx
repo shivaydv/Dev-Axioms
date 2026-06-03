@@ -1,6 +1,6 @@
 import { webdev, web3 } from "@/lib/source";
 import { DynamicCards } from "./DynamicCards";
-import type { PageTree } from "fumadocs-core/server";
+import type { Node } from "fumadocs-core/page-tree";
 
 interface DocGridProps {
     path?: string;
@@ -10,7 +10,7 @@ interface DocGridProps {
 /**
  * Robustly find the directory of nodes in the Fumadocs PageTree.
  */
-function findNodesInTree(nodes: PageTree.Node[], targetUrl: string): PageTree.Node[] {
+function findNodesInTree(nodes: Node[], targetUrl: string): Node[] {
     const normalizedTarget = targetUrl.toLowerCase().replace(/\/$/, "");
 
     for (const node of nodes) {
@@ -42,11 +42,11 @@ function findNodesInTree(nodes: PageTree.Node[], targetUrl: string): PageTree.No
 /**
  * Fallback: find all nodes which are children of the target path by URL prefix
  */
-function findNodesByPrefix(nodes: PageTree.Node[], prefix: string): PageTree.Node[] {
-    const result: PageTree.Node[] = [];
+function findNodesByPrefix(nodes: Node[], prefix: string): Node[] {
+    const result: Node[] = [];
     const normalizedPrefix = prefix.toLowerCase().replace(/\/$/, "") + "/";
 
-    function traverse(items: PageTree.Node[]) {
+    function traverse(items: Node[]) {
         for (const item of items) {
             if (item.type === 'page') {
                 const anyPage = item as any;
@@ -102,7 +102,7 @@ export function DocGrid({ path, sourceType = 'webdev' }: DocGridProps) {
     }
 
     return (
-        <div className="my-10 not-prose">
+        <div className="my-10 not-prose !max-w-none">
             <DynamicCards items={items} />
         </div>
     );

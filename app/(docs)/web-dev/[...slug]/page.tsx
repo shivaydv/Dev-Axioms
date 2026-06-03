@@ -19,11 +19,11 @@ export default async function Page(props: {
   if (slug.length === 0) return redirect("/");
   if (!page) notFound();
 
-  const MDXContent = page.data.body;
+  const { body: MDXContent, toc } = await page.data.load();
 
   return (
     <DocsPage
-      toc={page.data.toc}
+      toc={toc}
       full={page.data.full}
       tableOfContent={{ style: "clerk" }}
     >
@@ -32,7 +32,7 @@ export default async function Page(props: {
       <DocsBody>
         <MDXContent
           components={getMDXComponents({
-            a: createRelativeLink(source, page),
+            a: createRelativeLink(source as any, page),
           })}
         />
       </DocsBody>

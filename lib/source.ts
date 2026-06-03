@@ -1,10 +1,10 @@
+import { loader } from "fumadocs-core/source";
 import {
   webdev as webdevPost,
   web3 as web3Post,
   blog as blogPosts,
-} from "@/.source";
-import { loader } from "fumadocs-core/source";
-import { createMDXSource } from "fumadocs-mdx";
+} from "collections/server";
+import { toFumadocsSource } from "fumadocs-mdx/runtime/server";
 import { icons } from "lucide-react";
 import { createElement } from "react";
 
@@ -19,10 +19,11 @@ export const webdev = Object.assign(
         return;
       }
 
-      if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+      if (icon in icons)
+        return createElement(icons[icon as keyof typeof icons]);
     },
   }),
-  { baseUrl: WEBDEV_BASE_URL }
+  { baseUrl: WEBDEV_BASE_URL },
 );
 
 export const WEB3_BASE_URL = "/web3";
@@ -36,17 +37,18 @@ export const web3 = Object.assign(
         return;
       }
 
-      if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+      if (icon in icons)
+        return createElement(icons[icon as keyof typeof icons]);
     },
   }),
-  { baseUrl: WEB3_BASE_URL }
+  { baseUrl: WEB3_BASE_URL },
 );
 
 export const BLOG_BASE_URL = "/blog";
 export const blog = Object.assign(
   loader({
     baseUrl: BLOG_BASE_URL,
-    source: createMDXSource(blogPosts),
+    source: toFumadocsSource(blogPosts, []),
   }),
-  { baseUrl: BLOG_BASE_URL }
+  { baseUrl: BLOG_BASE_URL },
 );

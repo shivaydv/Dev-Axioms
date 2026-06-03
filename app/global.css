@@ -58,6 +58,7 @@
 }
 
 :root {
+  --fd-layout-width: 100vw;
   --radius: 0.625rem;
   --card-radius: 1rem;
 

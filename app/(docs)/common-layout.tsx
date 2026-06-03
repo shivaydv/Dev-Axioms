@@ -2,7 +2,7 @@ import { DocsLayout, DocsLayoutProps } from "fumadocs-ui/layouts/notebook";
 import type { ReactNode } from "react";
 
 import { LogoIcon } from "@/components/global/Logo";
-import type { PageTree } from "fumadocs-core/server";
+import type { Root } from "fumadocs-core/page-tree";
 import { FaXTwitter } from "react-icons/fa6";
 
 export default function CommonLayout({
@@ -11,7 +11,7 @@ export default function CommonLayout({
   options,
 }: {
   children: ReactNode;
-  pageTree: PageTree.Root;
+  pageTree: Root;
   options?: Partial<DocsLayoutProps>;
 }) {
   return (

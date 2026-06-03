@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MoveRight, ChevronRight, BookOpen, FolderIcon, ExternalLink } from "lucide-react";
-import type { PageTree } from "fumadocs-core/server";
+import type { Node } from "fumadocs-core/page-tree";
 
-export function DynamicCards({ items }: { items: PageTree.Node[] }) {
+export function DynamicCards({ items }: { items: Node[] }) {
     // Filter for valid pages, folders, and links that point to a destination
     const validItems = items.filter(item => {
         const anyItem = item as any;

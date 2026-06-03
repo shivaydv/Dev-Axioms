@@ -53,13 +53,13 @@ export default async function Page(props: {
         <div className="flex flex-col gap-4 border-l p-4 text-sm lg:w-[250px]">
           <div>
             <p className="mb-1 text-fd-muted-foreground">Written by</p>
-            <p className="font-medium">{page.data.author}</p>
+            <p className="font-medium">{page.data.author as string}</p>
           </div>
           <div>
             <p className="mb-1 text-sm text-fd-muted-foreground">On</p>
             <p className="font-medium">
               {new Date(
-                page.data.date ??
+                (page.data.date as string) ??
                   path.basename(page.path, path.extname(page.path))
               ).toDateString()}
             </p>
