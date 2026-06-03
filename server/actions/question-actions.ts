@@ -1,29 +1,28 @@
 "use server";
 
 import { QuestionFormData } from "@/types/Question";
-import { question } from "@/db";
-import { db } from "@/db/drizzle";
+import { prisma } from "@/db/prisma";
 import { generateSlug } from "@/utils/helpers";
-import { SandpackFiles } from "@codesandbox/sandpack-react";
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function addQuestion(data: QuestionFormData) {
   try {
     const slug = generateSlug(data.title);
 
-    await db.insert(question).values({
-      title: data.title,
-      slug,
-      difficulty: data.difficulty ?? "Easy",
-      tags: data.tags ?? [],
-      content: data.content,
-      starterCode: (data.starterCode as SandpackFiles) ?? null,
-      solution: data.solution ?? null,
-      timeLimit: data.timeLimit ?? 30,
+    await prisma.question.create({
+      data: {
+        title: data.title,
+        slug,
+        difficulty: data.difficulty ?? "Easy",
+        tags: data.tags ?? [],
+        content: data.content,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        starterCode: (data.starterCode as any) ?? null,
+        solution: data.solution ?? null,
+        timeLimit: data.timeLimit ?? 30,
+      },
     });
 
-    // Revalidate the questions page to show the new question
     revalidatePath("/admin/questions");
     revalidatePath("/(home)/practice");
 
@@ -44,22 +43,21 @@ export async function updateQuestion(
   try {
     const slug = generateSlug(data.title);
 
-    await db
-      .update(question)
-      .set({
+    await prisma.question.update({
+      where: { id: questionId },
+      data: {
         title: data.title,
         slug,
         difficulty: data.difficulty ?? "Easy",
         tags: data.tags ?? [],
         content: data.content,
-        starterCode: (data.starterCode as SandpackFiles) ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        starterCode: (data.starterCode as any) ?? null,
         solution: data.solution ?? null,
         timeLimit: data.timeLimit ?? 30,
-        updatedAt: new Date(),
-      })
-      .where(eq(question.id, questionId));
+      },
+    });
 
-    // Revalidate pages that might show this question
     revalidatePath("/admin/questions");
     revalidatePath(`/admin/questions/${questionId}/edit`);
     revalidatePath("/(home)/practice");
@@ -77,9 +75,10 @@ export async function updateQuestion(
 
 export async function deleteQuestion(questionId: string) {
   try {
-    await db.delete(question).where(eq(question.id, questionId));
+    await prisma.question.delete({
+      where: { id: questionId },
+    });
 
-    // Revalidate the questions page to remove the deleted question
     revalidatePath("/admin/questions");
     revalidatePath("/(home)/practice");
 

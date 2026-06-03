@@ -1,11 +1,5 @@
 import "dotenv/config";
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
-import { question } from "./schema/questions-schema";
-import { eq } from "drizzle-orm";
-
-const client = neon(process.env.DATABASE_URL!);
-const db = drizzle({ client });
+import { prisma } from "./prisma";
 
 const questionsToSeed = [
   {
@@ -659,21 +653,25 @@ async function seed() {
   for (const q of questionsToSeed) {
     try {
       console.log(`Upserting question: ${q.title}...`);
-      
-      const existing = await db.select().from(question).where(eq(question.slug, q.slug));
-      
-      if (existing.length > 0) {
+
+      const existing = await prisma.question.findUnique({
+        where: { slug: q.slug },
+      });
+
+      if (existing) {
         console.log(`\tSkipped ${q.slug} (Already exists)`);
       } else {
-        await db.insert(question).values({
-          title: q.title,
-          slug: q.slug,
-          difficulty: q.difficulty,
-          tags: q.tags,
-          content: q.content,
-          starterCode: q.starterCode as any,
-          solution: q.solution,
-          timeLimit: q.timeLimit,
+        await prisma.question.create({
+          data: {
+            title: q.title,
+            slug: q.slug,
+            difficulty: q.difficulty,
+            tags: q.tags,
+            content: q.content,
+            starterCode: q.starterCode as any,
+            solution: q.solution,
+            timeLimit: q.timeLimit,
+          },
         });
         console.log(`\tInserted ${q.slug}`);
       }
@@ -683,6 +681,7 @@ async function seed() {
   }
 
   console.log("Seed process completed.");
+  await prisma.$disconnect();
   process.exit(0);
 }
 

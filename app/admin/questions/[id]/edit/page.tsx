@@ -1,6 +1,4 @@
-import { question } from "@/db";
-import { db } from "@/db/drizzle";
-import { eq } from "drizzle-orm";
+import { prisma } from "@/db/prisma";
 import { notFound, redirect } from "next/navigation";
 import { EditQuestionForm } from "@/components/admin-dashboard/edit-question-form";
 import { getUserSession } from "@/server/functions/getUserSession";
@@ -15,17 +13,10 @@ interface EditQuestionPageProps {
 // Server component that fetches question data
 async function getQuestion(id: string) {
   try {
-    const questionData = await db
-      .select()
-      .from(question)
-      .where(eq(question.id, id))
-      .limit(1);
-
-    if (!questionData || questionData.length === 0) {
-      return null;
-    }
-
-    return questionData[0];
+    const questionData = await prisma.question.findUnique({
+      where: { id },
+    });
+    return questionData ?? null;
   } catch (error) {
     console.error("Error fetching question:", error);
     throw new Error("Failed to fetch question");
