@@ -15,6 +15,9 @@ export const webdev = defineDocs({
   docs: {
     schema: frontmatterSchema,
     async: true,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
   },
   meta: {
     schema: metaSchema,
@@ -26,6 +29,9 @@ export const web3 = defineDocs({
   docs: {
     schema: frontmatterSchema,
     async: true,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
   },
   meta: {
     schema: metaSchema,
@@ -36,6 +42,9 @@ export const blog = defineCollections({
   type: "doc",
   dir: "content/blogs",
   async: true,
+  postprocess: {
+    includeProcessedMarkdown: true,
+  },
   schema: frontmatterSchema.extend({
     author: z.string(),
     date: z.string().date().or(z.date()),

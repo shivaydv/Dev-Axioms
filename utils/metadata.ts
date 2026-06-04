@@ -11,6 +11,12 @@ export const baseUrl =
     ? new URL("http://localhost:3000")
     : new URL(`https://devaxioms.vercel.app`);
 
+
+export const githubContentConfig = {
+  owner: "shivaydv",
+  repo: "Dev-Axioms",
+}
+
 export const keywords = [
   "web development",
   "interview preparation",

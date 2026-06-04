@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation';
+const { rewrite: rewriteLLM } = rewritePath('/docs{/*path}', '/llms.mdx/docs{/*path}');
 
 const ProtectedRoutes = ["/practice/"];
 const AuthRoutes = ["/login"];
@@ -14,6 +16,16 @@ export async function proxy(request: NextRequest) {
   const isProtectedRoute = ProtectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
   );
+
+  if (isMarkdownPreferred(request)) {
+    const result = rewriteLLM(request.nextUrl.pathname);
+    if (result) {
+      return NextResponse.rewrite(new URL(result, request.nextUrl));
+    }
+  }
+
+
+  
   // ✅ Allow non-document requests (like metadata/head/images)
   const secFetchDest = request.headers.get("sec-fetch-dest");
   if (isProtectedRoute && !isLoggedIn && secFetchDest !== "document") {

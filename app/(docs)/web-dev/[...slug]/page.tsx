@@ -2,12 +2,16 @@ import { webdev as source } from "@/lib/source";
 import {
   DocsPage,
   DocsBody,
-  DocsDescription,
-  DocsTitle,
 } from "fumadocs-ui/page";
+import {
+  MarkdownCopyButton,
+  ViewOptionsPopover,
+  PageLastUpdate
+} from 'fumadocs-ui/layouts/docs/page';
 import { notFound, redirect } from "next/navigation";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import { getMDXComponents } from "@/mdx-components";
+import {githubContentConfig} from "@/utils/metadata"; 
 
 export default async function Page(props: {
   params: Promise<{ slug?: string[] }>;
@@ -19,22 +23,32 @@ export default async function Page(props: {
   if (slug.length === 0) return redirect("/");
   if (!page) notFound();
 
-  const { body: MDXContent, toc } = await page.data.load();
+  const { body: MDXContent, toc,lastModified } = await page.data.load();
+  const markdownUrl = `/llms.mdx/docs/web-dev/${slug.join('/')}`;
 
   return (
     <DocsPage
       toc={toc}
       full={page.data.full}
       tableOfContent={{ style: "clerk" }}
+      className="mx-auto"
     >
-      <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      <h1 className="text-[1.75em] font-semibold">{page.data.title}</h1>
+      <p className="text-lg text-fd-muted-foreground mb-2">{page.data.description}</p>
+      <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6">
+        <MarkdownCopyButton markdownUrl={markdownUrl} />
+        <ViewOptionsPopover
+          markdownUrl={markdownUrl}
+          githubUrl={`https://github.com/${githubContentConfig.owner}/${githubContentConfig.repo}/blob/main/content/web-dev/${page.path}`}
+        />
+      </div>
       <DocsBody>
         <MDXContent
           components={getMDXComponents({
             a: createRelativeLink(source as any, page),
           })}
         />
+           {lastModified && <PageLastUpdate date={lastModified} />}
       </DocsBody>
     </DocsPage>
   );
