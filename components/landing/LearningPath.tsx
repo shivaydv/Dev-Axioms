@@ -42,7 +42,7 @@ const features = [
 export function LearningPath() {
     return (
         <section className="py-24 bg-background border-b border-border/40 border-dashed">
-            <div className="max-w-[1250px] mx-auto px-6">
+            <div className="max-w-page mx-auto px-6">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                     <div className="max-w-xl">
                         <span className="text-[10px] uppercase font-semibold tracking-wider text-[#FF5A26] mb-4 block">

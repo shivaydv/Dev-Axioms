@@ -7,7 +7,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer className="bg-background py-16">
-      <div className="mx-auto max-w-[1250px] px-4 md:px-6">
+      <div className="mx-auto max-w-page px-4 md:px-6">
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="flex flex-col gap-4 md:items-start md:gap-2">
             <Logo />

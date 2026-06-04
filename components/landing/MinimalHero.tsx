@@ -9,7 +9,7 @@ import Image from "next/image";
 export function MinimalHero() {
     return (
         <section className="relative pt-20 md:pt-28 pb-16 bg-background overflow-hidden border-b border-border/40 border-dashed">
-            <div className="max-w-[1250px] mx-auto px-6">
+            <div className="max-w-page mx-auto px-6">
                 {/* Text Content - Left Aligned */}
                 <div className="max-w-4xl mb-16">
                     <motion.div

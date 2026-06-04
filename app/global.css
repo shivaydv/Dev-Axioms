@@ -57,6 +57,7 @@
   @apply border border-y-0 border-r;
 }
 
+
 :root {
   --fd-layout-width: 100vw;
   --radius: 0.625rem;
@@ -145,6 +146,8 @@
 }
 
 @theme inline {
+  --spacing-page: 1436px;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

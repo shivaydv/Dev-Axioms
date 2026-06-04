@@ -56,7 +56,7 @@ export function Navbar() {
     <nav
       className={`sticky top-0 z-50 w-full border-b backdrop-blur-md ${isOpen ? "bg-background/80" : "bg-background"}`}
     >
-      <div className="relative mx-auto flex h-16 max-w-[1250px] items-center justify-between px-4 md:px-6">
+      <div className="relative mx-auto flex h-16 max-w-page items-center justify-between px-4 md:px-6">
         {/* Left side - Logo + Desktop Links */}
         <div className="flex items-center gap-6">
           <Logo />
@@ -109,7 +109,7 @@ export function Navbar() {
             overflow: "hidden",
           }}
         >
-          <div className="mx-auto max-w-[1250px] px-4 py-4 md:px-6">
+          <div className="mx-auto max-w-page px-4 py-4 md:px-6">
             <MobileNavMenu onItemClick={() => setIsOpen(false)} />
           </div>
         </div>

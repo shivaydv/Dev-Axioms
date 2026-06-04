@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export function BentoFeatures() {
     return (
         <section className="py-24 bg-background border-b border-border/40 border-dashed">
-            <div className="max-w-[1250px] mx-auto px-6">
+            <div className="max-w-page mx-auto px-6">
                 <div className="flex flex-col lg:flex-row gap-16 lg:items-start">
                     <div className="lg:w-5/12 pt-8">
                         <motion.div

@@ -5,7 +5,7 @@ import Link from "next/link";
 export function MinimalCTA() {
     return (
         <section className="py-24 bg-background border-b border-border/40 border-dashed">
-            <div className="max-w-[1250px] mx-auto px-6">
+            <div className="max-w-page mx-auto px-6">
                 <div className="mb-12 text-center md:text-left">
                     <span className="text-[10px] uppercase font-semibold tracking-wider text-[#FF5A26] mb-4 block">
                        FREE & OPEN SOURCE
