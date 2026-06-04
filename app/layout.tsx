@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     template: "%s | Dev Axioms",
-    default: "Dev Axioms",
+    default: "Dev Axioms - Learn & Practice Coding Interviews",
   },
   description:
     "All in one platform to learn and practice interview questions as a developer.",
@@ -36,6 +36,17 @@ export const metadata: Metadata = {
         url: "/site.webmanifest",
       },
     ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://dev-axioms.vercel.app/sitemap.xml 
+Sitemap: https://devaxioms.vercel.app/sitemap.xml 
