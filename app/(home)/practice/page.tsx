@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -100,11 +100,13 @@ export default async function PracticePage({
         </div>
 
         {/* Server-Synced Search & Filter Bar */}
-        <PracticeSearch
-          currentDifficulty={currentDifficulty}
-          currentSearch={currentSearch}
-          currentPage={currentPage}
-        />
+        <Suspense fallback={<div className="h-16 w-full animate-pulse bg-card/40 rounded-2xl" />}>
+          <PracticeSearch
+            currentDifficulty={currentDifficulty}
+            currentSearch={currentSearch}
+            currentPage={currentPage}
+          />
+        </Suspense>
 
         {/* Results Counter Bar */}
         <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
