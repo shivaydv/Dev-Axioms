@@ -1,8 +1,7 @@
-// Sidebar.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Share2 } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createPracticeSidebarTabs } from "@/components/playground/SidebarTabs";
 import { Badge } from "@/components/ui/badge";
@@ -21,22 +20,20 @@ interface SidebarProps {
   }>;
 }
 
-// Skeleton component for loading state
 function SidebarInteractionsSkeleton() {
   return (
-    <div className="flex justify-end gap-2">
-      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
-      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
-      <div className="bg-muted h-9 w-9 animate-pulse rounded-lg" />
+    <div className="flex items-center gap-1">
+      <div className="bg-muted/50 h-6 w-10 animate-pulse rounded-md" />
+      <div className="bg-muted/50 h-6 w-6 animate-pulse rounded-md" />
+      <div className="bg-muted/50 h-6 w-6 animate-pulse rounded-md" />
     </div>
   );
 }
 
-const difficultyColors = {
-  Easy: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-  Medium:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-  Hard: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+const difficultyStyles = {
+  Easy: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  Medium: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+  Hard: "bg-rose-500/10 text-rose-500 border-rose-500/20",
 };
 
 export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
@@ -54,19 +51,19 @@ export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
 
   if (isCollapsed) {
     return (
-      <div className="bg-background flex h-full flex-col border-r transition-all duration-300 ease-in-out">
-        <div className="flex h-16 items-center justify-center border-b border-dashed">
+      <div className="bg-card/40 flex h-full flex-col border-r border-border/50 transition-all duration-300">
+        <div className="flex h-9 items-center justify-center border-b border-border/50 bg-muted/20">
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleSidebar}
-            className="h-9 w-9 rounded-xl hover:bg-accent transition-all duration-300"
+            className="h-6 w-6 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground"
             title="Expand Sidebar"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
-        <div className="flex flex-1 flex-col items-center space-y-4 py-8">
+        <div className="flex flex-1 flex-col items-center gap-3 py-3">
           {sidebarTabs.map((tab) => (
             <button
               key={tab.id}
@@ -75,16 +72,16 @@ export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
                 toggleSidebar();
               }}
               className={cn(
-                "group relative flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-300",
+                "group relative flex h-8 w-8 items-center justify-center rounded-md transition-all",
                 activeTab === tab.id
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  ? "bg-[#FF5A26]/10 text-[#FF5A26]"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               title={tab.label}
             >
               <span className="relative z-10">{tab.icon}</span>
               {activeTab === tab.id && (
-                <div className="absolute -left-[1px] h-5 w-1 rounded-r-full bg-primary shadow-[0_0_8px_rgba(var(--primary),0.5)]" />
+                <div className="absolute -left-[1px] h-3.5 w-0.5 rounded-r-full bg-[#FF5A26]" />
               )}
             </button>
           ))}
@@ -93,94 +90,70 @@ export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
     );
   }
 
-
   return (
-    <div className="bg-background flex h-full flex-col border-r transition-all duration-300 ease-in-out">
-      {/* Premium Minimal Header */}
-      <div className="border-b bg-background/50 backdrop-blur-sm">
-        <div className="flex flex-col gap-5 p-6 pb-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 space-y-1.5">
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="secondary"
-                  className={cn(
-                    "rounded-md border px-2 py-0 text-[10px] font-bold uppercase tracking-wider shadow-none",
-                    difficultyColors[question.difficulty],
-                  )}
-                >
-                  {question.difficulty}
-                </Badge>
-              </div>
-              <h1
-                className="text-foreground line-clamp-2 text-xl font-bold tracking-tight"
-                title={question.title}
-              >
-                {question.title}
-              </h1>
-            </div>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleSidebar}
-              className="hover:bg-accent h-8 w-8 shrink-0 rounded-lg text-muted-foreground transition-all hover:text-foreground"
-              title="Collapse Sidebar"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center justify-between border-t border-dashed pt-4">
-            <Suspense fallback={<SidebarInteractionsSkeleton />}>
-              <div className="flex w-full items-center justify-between">
-                <SidebarInteractionsLoader
-                  key={question.id}
-                  questionId={question.id}
-                  onShare={() => setShareModalOpen(true)}
-                  interactionDataPromise={interactionDataPromise}
-                />
-              </div>
-            </Suspense>
-          </div>
+    <div className="bg-card/30 flex h-full flex-col border-r border-border/50 select-none">
+      {/* Top Header Bar matching h-9 height */}
+      <div className="flex h-9 items-center justify-between border-b border-border/50 px-3 bg-muted/20 backdrop-blur-sm select-none">
+        <div className="flex items-center gap-2 min-w-0">
+          <Badge
+            variant="outline"
+            className={cn(
+              "rounded-md px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wider border shrink-0",
+              difficultyStyles[question.difficulty],
+            )}
+          >
+            {question.difficulty}
+          </Badge>
+          <span className="text-xs font-semibold text-foreground truncate" title={question.title}>
+            {question.title}
+          </span>
         </div>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-6 w-6 shrink-0 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
+          title="Collapse Sidebar"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </Button>
       </div>
 
-
-      {/* Tab Navigation */}
-      <div className="bg-muted/20 border-b">
-        <div className="flex">
-          {sidebarTabs.map((tab, index) => (
+      {/* Sub Header - Tab Switcher & Interaction Icons */}
+      <div className="flex items-center justify-between border-b border-border/50 bg-background/40 px-3 py-1.5 select-none">
+        <div className="flex items-center gap-1 bg-muted/40 p-0.5 rounded-lg border border-border/40">
+          {sidebarTabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "group relative flex flex-1 items-center justify-center gap-2.5 px-6 py-4 text-sm font-semibold transition-all duration-300",
+                "flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md transition-all select-none",
                 activeTab === tab.id
-                  ? "text-primary bg-background shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/60",
-                index === 0 && "rounded-tl-lg",
-                index === sidebarTabs.length - 1 && "rounded-tr-lg",
+                  ? "bg-background text-foreground shadow-xs font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/40"
               )}
             >
-              {activeTab === tab.id && (
-                <div className="bg-primary absolute inset-x-0 bottom-0 h-0.5" />
-              )}
-
-              <span className={cn(
-                "flex h-4 w-4 items-center justify-center transition-transform duration-200",
-                activeTab === tab.id ? "scale-110" : "group-hover:scale-105",
-              )}>
+              <span className={cn("h-3.5 w-3.5", activeTab === tab.id ? "text-[#FF5A26]" : "text-muted-foreground")}>
                 {tab.icon}
               </span>
-              <span className="whitespace-nowrap">{tab.label}</span>
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
+
+        <Suspense fallback={<SidebarInteractionsSkeleton />}>
+          <SidebarInteractionsLoader
+            key={question.id}
+            questionId={question.id}
+            onShare={() => setShareModalOpen(true)}
+            interactionDataPromise={interactionDataPromise}
+          />
+        </Suspense>
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-y-auto min-h-0">
         {activeTabData?.content}
       </div>
 
@@ -192,5 +165,3 @@ export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
     </div>
   );
 }
-
-

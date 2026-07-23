@@ -1,14 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Timer } from "@/components/playground/Timer";
-import { PanelLeftClose, PanelLeft } from "lucide-react";
-import { useResponsive } from "@/hooks/useResponsive";
+import { PanelLeftClose, PanelLeft, ChevronLeft } from "lucide-react";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
-import { Logo } from "@/components/global/Logo";
+import { LogoIcon } from "@/components/global/Logo";
 import { ThemeToggle } from "@/components/global/ThemeToggle";
 
 interface PracticeHeaderProps {
+  questionTitle?: string;
   timeLimit?: number;
   onTimeUp?: () => void;
   onSubmit?: () => void;
@@ -16,6 +17,7 @@ interface PracticeHeaderProps {
 }
 
 export default function PracticeHeader({
+  questionTitle,
   timeLimit,
   onTimeUp,
   onSubmit,
@@ -24,57 +26,79 @@ export default function PracticeHeader({
   const { toggle: toggleSidebar, isCollapsed: isSidebarCollapsed } =
     useSidebar();
 
-  const getSidebarIcon = () => {
-    if (!isSidebarVisible || isSidebarCollapsed) {
-      return <PanelLeft className="h-4 w-4" />;
-    }
-    return <PanelLeftClose className="h-4 w-4" />;
-  };
-
   return (
-    <div className="sticky top-0 z-50 flex-shrink-0 border-b bg-background/60 px-3 sm:px-6 py-2 sm:py-3 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-2">
-        {/* Left Section - Logo and Navigation */}
-        <div className="flex items-center min-w-0 flex-shrink">
-          <Logo />
-        </div>
+    <header className="sticky top-0 z-50 flex h-13 shrink-0 items-center justify-between border-b border-border/60 bg-background/80 px-3 sm:px-4 backdrop-blur-xl select-none">
+      {/* Left Section - Back Button, Logo & Breadcrumb */}
+      <div className="flex items-center gap-2.5 min-w-0">
+        <Link
+          href="/practice"
+          className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/50 bg-card/50 text-muted-foreground transition-colors hover:bg-card hover:text-foreground shrink-0"
+          title="Back to Questions"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Link>
 
-
-        <div className="flex items-center gap-1.5 sm:gap-4 flex-shrink-0">
-          {timeLimit && (
-            <div className="bg-muted/30 flex items-center gap-1.5 rounded-lg border px-2 py-1 sm:px-3 sm:py-1.5 scale-90 sm:scale-100 origin-right">
-              <Timer timeLimit={timeLimit} onTimeUp={onTimeUp} />
-            </div>
-          )}
-
-          <div className="flex items-center gap-1 rounded-xl border bg-muted/20 p-0.5 sm:p-1 backdrop-blur-sm">
-            <ThemeToggle className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg hover:bg-background/80" />
-
-            <div className="mx-0.5 h-3 w-[1px] bg-border/50 hidden md:block" />
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleSidebar}
-              className="h-8 w-8 rounded-lg transition-all hover:bg-background/80 hidden md:flex"
-              title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
-            >
-              {getSidebarIcon()}
-            </Button>
-          </div>
-
-          {onSubmit && (
-            <Button
-              onClick={onSubmit}
-              variant="default"
-              size="sm"
-              className="relative h-8 sm:h-9 rounded-xl bg-green-600 px-3 sm:px-6 text-xs sm:text-sm font-bold text-white shadow-lg shadow-green-600/20 hover:bg-green-700 hover:shadow-green-600/30 active:scale-95 transition-all"
-            >
-              Submit
-            </Button>
+        <div className="flex items-center gap-2 min-w-0">
+          <LogoIcon className="shrink-0" />
+          <span className="hidden sm:inline text-xs font-medium text-muted-foreground/60">/</span>
+          <span className="hidden sm:inline text-xs font-medium text-muted-foreground shrink-0">Practice</span>
+          {questionTitle && (
+            <>
+              <span className="text-xs font-medium text-muted-foreground/60">/</span>
+              <span className="text-xs font-bold text-foreground truncate max-w-[180px] sm:max-w-[340px]" title={questionTitle}>
+                {questionTitle}
+              </span>
+            </>
           )}
         </div>
       </div>
-    </div>
+
+      {/* Right Section - Timer, Controls & Submit Button */}
+      <div className="flex items-center gap-2 shrink-0">
+        {timeLimit && (
+          <div className="flex items-center gap-1.5 rounded-lg border border-border/50 bg-card/40 px-2.5 py-1 text-xs font-mono">
+            <Timer timeLimit={timeLimit} onTimeUp={onTimeUp} />
+          </div>
+        )}
+
+        <div className="flex items-center gap-1 rounded-lg border border-border/50 bg-card/40 p-0.5">
+          <ThemeToggle className="h-7 w-7 rounded-md hover:bg-muted" />
+
+          <div className="h-3.5 w-[1px] bg-border/60 hidden md:block" />
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-7 w-7 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground hidden md:flex"
+            title={isSidebarCollapsed ? "Show Problem Sidebar" : "Hide Problem Sidebar"}
+          >
+            {isSidebarCollapsed ? (
+              <PanelLeft className="h-3.5 w-3.5" />
+            ) : (
+              <PanelLeftClose className="h-3.5 w-3.5" />
+            )}
+          </Button>
+        </div>
+
+        {onSubmit ? (
+          <Button
+            onClick={onSubmit}
+            size="sm"
+            className="h-8 rounded-lg bg-[#FF5A26] px-4 text-xs font-semibold text-white shadow-xs hover:bg-[#FF5A26]/90 active:scale-95 transition-all"
+          >
+            Submit
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {}}
+            size="sm"
+            className="h-8 rounded-lg bg-[#FF5A26] px-4 text-xs font-semibold text-white shadow-xs hover:bg-[#FF5A26]/90 active:scale-95 transition-all"
+          >
+            Submit
+          </Button>
+        )}
+      </div>
+    </header>
   );
 }

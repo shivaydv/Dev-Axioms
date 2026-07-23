@@ -20,12 +20,13 @@ export default async function PracticePage({ params }: PracticePageProps) {
     notFound();
   }
 
-  // Fetch interaction data promise (don't await it here to enable streaming)
+  // Fetch interaction data promise
   const interactionDataPromise = getUserInteractionData(question.id);
 
   return (
     <div className="bg-background flex h-screen w-full flex-col">
       <PracticeHeader
+        questionTitle={question.title}
         timeLimit={question.timeLimit || 30}
         isSidebarVisible={true}
       />
@@ -56,7 +57,6 @@ export async function generateMetadata({
   return {
     title,
     description,
-
     openGraph: {
       title,
       description,

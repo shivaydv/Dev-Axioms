@@ -1,32 +1,30 @@
 import React, { Suspense } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { LoadingTable } from "@/components/admin-dashboard/loading-table";
 import { QuestionsList } from "@/components/admin-dashboard/questions-list";
 import { getAllQuestions } from "@/server/functions/questions";
-import { getUserSession } from "@/server/functions/getUserSession";
-import { checkIsAdmin } from "@/lib/admin";
-import { redirect } from "next/navigation";
+
+export const metadata = {
+  title: "Manage Questions | Dev Axioms Admin",
+  description: "Manage practice questions and coding challenges.",
+};
 
 const QuestionsPage = async () => {
-  const session = await getUserSession();
-  const isAdmin = checkIsAdmin(session);
-  if (!isAdmin) redirect("/");
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto select-none">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/60 pb-5">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Questions</h1>
-          <p className="text-muted-foreground">
-            Manage your practice questions and coding challenges
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Questions</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage your practice questions, solutions, and sandbox starter templates.
           </p>
         </div>
-        <Button asChild>
-          <Link href="questions/add">
-            <Plus className="mr-2 h-4 w-4" />
+        <Button asChild size="sm" className="h-9 text-xs bg-[#FF5A26] text-white hover:bg-[#FF5A26]/90 font-semibold shadow-xs">
+          <Link href="/admin/questions/add">
+            <Plus className="mr-1.5 h-4 w-4" />
             Add Question
           </Link>
         </Button>

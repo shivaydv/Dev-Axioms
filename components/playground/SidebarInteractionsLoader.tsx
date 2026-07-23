@@ -21,7 +21,6 @@ export function SidebarInteractionsLoader({
   onShare,
   interactionDataPromise,
 }: SidebarInteractionsLoaderProps) {
-  // Use use() to consume the promise, which will trigger Suspense if not resolved
   const initialData = use(interactionDataPromise);
 
   const { likesCount, isLiked, isBookmarked, handleLike, handleBookmark } =
@@ -33,28 +32,28 @@ export function SidebarInteractionsLoader({
     });
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1">
       <Button
         variant="ghost"
         size="sm"
         onClick={handleLike}
         className={cn(
-          "h-8 rounded-md px-2.5 transition-colors",
+          "h-6 rounded-md px-2 text-xs transition-colors",
           isLiked
-            ? "text-red-500 hover:bg-red-500/10 hover:text-red-600"
+            ? "text-rose-500 bg-rose-500/10 hover:bg-rose-500/20"
             : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
         title={isLiked ? "Unlike question" : "Like question"}
       >
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <Heart
             className={cn(
-              "h-3.5 w-3.5 transition-colors",
+              "h-3 w-3 transition-colors",
               isLiked && "fill-current"
             )}
           />
           {likesCount > 0 && (
-            <span className="text-[11px] font-medium">
+            <span className="text-[10px] font-semibold">
               {likesCount > 99 ? "99+" : likesCount}
             </span>
           )}
@@ -66,16 +65,16 @@ export function SidebarInteractionsLoader({
         size="icon"
         onClick={handleBookmark}
         className={cn(
-          "h-8 w-8 rounded-md transition-colors",
+          "h-6 w-6 rounded-md transition-colors",
           isBookmarked
-            ? "text-blue-500 hover:bg-blue-500/10 hover:text-blue-600"
+            ? "text-amber-500 bg-amber-500/10 hover:bg-amber-500/20"
             : "text-muted-foreground hover:bg-muted hover:text-foreground",
         )}
         title={isBookmarked ? "Remove bookmark" : "Bookmark question"}
       >
         <Bookmark
           className={cn(
-            "h-3.5 w-3.5 transition-colors",
+            "h-3 w-3 transition-colors",
             isBookmarked && "fill-current"
           )}
         />
@@ -85,10 +84,10 @@ export function SidebarInteractionsLoader({
         variant="ghost"
         size="icon"
         onClick={onShare}
-        className="h-8 w-8 rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        className="h-6 w-6 rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         title="Share question"
       >
-        <Share2 className="h-3.5 w-3.5" />
+        <Share2 className="h-3 w-3" />
       </Button>
     </div>
   );

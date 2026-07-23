@@ -1,5 +1,6 @@
 "use client";
-import { Home, List, Package } from "lucide-react";
+
+import { LayoutDashboard, FileCode2, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -11,74 +12,99 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
 } from "@/components/ui/sidebar";
-import { Badge } from "@/components/ui/badge";
 import { Logo } from "../global/Logo";
-
-export type NavItem = {
-  title: string;
-  icon?: React.ElementType;
-  url: string;
-  badge?: string;
-  children?: never;
-};
-
-const NavItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: Home,
-  },
-  {
-    title: "Questions",
-    url: "/admin/questions",
-    icon: List,
-  },
-];
 
 export function AppSidebar() {
   const pathname = usePathname();
 
   function isActiveRoute(currentPath: string, itemUrl: string) {
-    // Exact match
     if (currentPath === itemUrl) return true;
-
-    // if its nested routes, check if current path starts with itemUrl
-
     if (currentPath.startsWith(itemUrl) && itemUrl !== "/admin") return true;
     return false;
   }
 
   return (
-    <Sidebar className="border-r">
-      <SidebarHeader className="flex h-16 justify-center border-b px-4 py-4">
-        <Logo />
+    <Sidebar className="border-r border-border/50 bg-background/80 backdrop-blur-xl select-none">
+      {/* Minimal Left-Aligned Text Header */}
+      <SidebarHeader className="flex items-start px-4 justify-center h-14 border-b border-border/40">
+       <Logo/>
       </SidebarHeader>
 
-      <SidebarContent className="px-4 py-4">
-        <SidebarMenu className="space-y-1">
-          {NavItems.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                className={cn(
-                  "w-full justify-start gap-3 rounded-lg px-3 py-2 text-sm font-medium",
-                  isActiveRoute(pathname, item.url) && "bg-primary/10",
-                )}
-              >
-                <Link href={item.url}>
-                  {item.icon && <item.icon className="h-4 w-4" />}
-                  <span>{item.title}</span>
-                  {item?.badge && (
-                    <Badge variant="default" className="ml-auto h-5 text-xs">
-                      {item.badge}
-                    </Badge>
+      <SidebarContent className="px-3 py-4 space-y-5">
+        {/* Overview Group */}
+        <SidebarGroup className="p-0 space-y-1">
+          <SidebarGroupLabel className="px-2 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+            Overview
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-0.5">
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "w-full justify-start gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-all",
+                    isActiveRoute(pathname, "/admin")
+                      ? "bg-[#FF5A26]/10 text-[#FF5A26] font-bold"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                   )}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+                >
+                  <Link href="/admin">
+                    <LayoutDashboard className={cn("h-4 w-4 shrink-0", isActiveRoute(pathname, "/admin") ? "text-[#FF5A26]" : "text-muted-foreground")} />
+                    <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Management Group */}
+        <SidebarGroup className="p-0 space-y-1">
+          <SidebarGroupLabel className="px-2 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+            Management
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-0.5">
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "w-full justify-start gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-all",
+                    isActiveRoute(pathname, "/admin/questions")
+                      ? "bg-[#FF5A26]/10 text-[#FF5A26] font-bold"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                >
+                  <Link href="/admin/questions">
+                    <FileCode2 className={cn("h-4 w-4 shrink-0", isActiveRoute(pathname, "/admin/questions") ? "text-[#FF5A26]" : "text-muted-foreground")} />
+                    <span>Questions</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "w-full justify-start gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-all",
+                    isActiveRoute(pathname, "/admin/users")
+                      ? "bg-[#FF5A26]/10 text-[#FF5A26] font-bold"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                >
+                  <Link href="/admin/users">
+                    <Users className={cn("h-4 w-4 shrink-0", isActiveRoute(pathname, "/admin/users") ? "text-[#FF5A26]" : "text-muted-foreground")} />
+                    <span>Users & Activity</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );

@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useTransition } from "react";
+import dynamic from "next/dynamic";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import AdvancedFileManager from "@/components/FileManager/AdvancedFileManager";
-import MarkdownEditor from "@/components/md-editor/MarkdownEditor";
 import { SandpackFiles } from "@codesandbox/sandpack-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { MultiTagInput } from "@/components/ui/multi-tag-input";
@@ -16,10 +15,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
 import z from "zod";
 import { toast } from "sonner";
 import { addQuestion } from "@/server/actions/question-actions";
 import { useRouter } from "next/navigation";
+
+// Lazy loaded heavy components with skeleton fallbacks
+const AdvancedFileManager = dynamic(
+  () => import("@/components/FileManager/AdvancedFileManager"),
+  {
+    loading: () => (
+      <div className="h-[400px] w-full rounded-xl border border-border/60 bg-card/30 flex items-center justify-center text-xs text-muted-foreground gap-2">
+        <Loader2 className="w-4 h-4 animate-spin text-[#FF5A26]" />
+        <span>Loading Sandbox File Manager...</span>
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const MarkdownEditor = dynamic(
+  () => import("@/components/md-editor/MarkdownEditor"),
+  {
+    loading: () => (
+      <div className="h-[300px] w-full rounded-xl border border-border/60 bg-card/30 flex items-center justify-center text-xs text-muted-foreground gap-2">
+        <Loader2 className="w-4 h-4 animate-spin text-[#FF5A26]" />
+        <span>Loading Editor...</span>
+      </div>
+    ),
+    ssr: false,
+  }
+);
 
 const QuestionScheme = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long"),
@@ -76,15 +105,28 @@ const AddQuestionForm = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl">
-      <div className="pb-4">
-        <h4 className="text-xl font-semibold">Add New Question</h4>
-        <p className="text-muted-foreground text-sm">
-          Fill in the information below to create a question
-        </p>
+    <div className="mx-auto max-w-5xl space-y-6 select-none">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between border-b border-border/60 pb-5">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/questions"
+              className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Questions</span>
+            </Link>
+            <span className="text-xs text-muted-foreground/60">/</span>
+            <span className="text-xs font-semibold text-foreground">Add Question</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Create New Question
+          </h1>
+        </div>
       </div>
 
-      <div className="space-y-8">
+      <Card className="border-border/60 bg-card/40 backdrop-blur-md shadow-xs p-6">
         <form onSubmit={handleOnSubmit} className="space-y-8">
           <input type="hidden" name="content" value={content} />
           <input type="hidden" name="solution" value={solution} />
@@ -93,29 +135,26 @@ const AddQuestionForm = () => {
           <Section title="Basic Information">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="space-y-2">
-                <Label
-                  htmlFor="title"
-                  className="flex items-center gap-1 text-sm font-medium"
-                >
-                  Title
+                <Label htmlFor="title" className="text-xs font-semibold text-foreground">
+                  Title <span className="text-rose-500">*</span>
                 </Label>
                 <Input
                   id="title"
                   name="title"
                   placeholder="e.g. Two Sum Algorithm Challenge"
-                  className={`focus:border-primary focus:ring-primary/20 transition-all duration-200`}
+                  className="h-9 text-xs border-border/60 bg-background/50 focus:border-[#FF5A26]"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="difficulty" className="text-sm font-medium">
+                <Label htmlFor="difficulty" className="text-xs font-semibold text-foreground">
                   Difficulty Level
                 </Label>
                 <Select name="difficulty" defaultValue="Easy">
-                  <SelectTrigger className="focus:border-primary focus:ring-primary/20 w-full transition-all duration-200">
+                  <SelectTrigger className="h-9 text-xs border-border/60 bg-background/50">
                     <SelectValue placeholder="Select difficulty" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="text-xs">
                     <SelectItem value="Easy">Easy</SelectItem>
                     <SelectItem value="Medium">Medium</SelectItem>
                     <SelectItem value="Hard">Hard</SelectItem>
@@ -124,7 +163,7 @@ const AddQuestionForm = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="timeLimit" className="text-sm font-medium">
+                <Label htmlFor="timeLimit" className="text-xs font-semibold text-foreground">
                   Time Limit (minutes)
                 </Label>
                 <Input
@@ -135,7 +174,7 @@ const AddQuestionForm = () => {
                   max="180"
                   defaultValue="30"
                   placeholder="e.g. 30"
-                  className="focus:border-primary focus:ring-primary/20 transition-all duration-200"
+                  className="h-9 text-xs border-border/60 bg-background/50 focus:border-[#FF5A26]"
                 />
               </div>
 
@@ -156,85 +195,85 @@ const AddQuestionForm = () => {
           {/* Content & Code */}
           <Section title="Question Content & Code">
             <Tabs defaultValue="content" className="w-full">
-              <TabsList className="bg-muted/50 grid w-full grid-cols-3 p-1">
+              <TabsList className="bg-muted/50 grid w-full grid-cols-3 p-1 rounded-xl">
                 <TabsTrigger
                   value="content"
-                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  className="text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-xs"
                 >
-                  Question Description
+                  Description
                 </TabsTrigger>
                 <TabsTrigger
                   value="starter"
-                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  className="text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-xs"
                 >
                   Starter Code
                 </TabsTrigger>
                 <TabsTrigger
                   value="solution"
-                  className="data-[state=active]:bg-background data-[state=active]:shadow-sm"
+                  className="text-xs font-medium data-[state=active]:bg-background data-[state=active]:shadow-xs"
                 >
                   Solution
                 </TabsTrigger>
               </TabsList>
 
               {/* Content */}
-              <TabsContent value="content" className="mt-6 space-y-4">
+              <TabsContent value="content" className="mt-6 space-y-3">
                 <LabelWithBadge
                   label="Question Description"
                   badge="Supports Markdown"
                   required
                 />
                 <MarkdownEditor markdown={content} onChange={setContent} />
-                <p className="text-muted-foreground text-sm">
-                  Provide a clear problem statement with examples, constraints,
-                  and expected output format.
+                <p className="text-muted-foreground text-xs">
+                  Provide a clear problem statement with examples, constraints, and output format.
                 </p>
               </TabsContent>
 
               {/* Starter Code */}
-              <TabsContent value="starter" className="mt-6 space-y-4">
+              <TabsContent value="starter" className="mt-6 space-y-3">
                 <LabelWithBadge
                   label="Initial Code Files"
-                  badge="Interactive File Manager"
+                  badge="Interactive Sandbox Files"
                 />
                 <AdvancedFileManager
-                  //   ref={fileManagerRef}
                   initialFiles={starterCode}
                   onChange={setStarterCode}
                   height="400px"
                   showProperties
-                  className="rounded-xl"
+                  className="rounded-xl border border-border/60"
                 />
-                <p className="text-muted-foreground text-sm">
-                  Set up the initial code structure that candidates will start
-                  with.
+                <p className="text-muted-foreground text-xs">
+                  Set up initial starter files for candidate solution playgrounds.
                 </p>
               </TabsContent>
 
               {/* Solution */}
-              <TabsContent value="solution" className="mt-6 space-y-4">
+              <TabsContent value="solution" className="mt-6 space-y-3">
                 <LabelWithBadge label="Solution Explanation" badge="Optional" />
                 <MarkdownEditor markdown={solution} onChange={setSolution} />
-                <p className="text-muted-foreground text-sm">
-                  Provide a detailed explanation of the solution approach and
-                  complexity analysis.
+                <p className="text-muted-foreground text-xs">
+                  Provide detailed complexity analysis and step-by-step solution logic.
                 </p>
               </TabsContent>
             </Tabs>
           </Section>
 
-          {/* Submit */}
-          <div>
+          {/* Submit Actions */}
+          <div className="flex items-center justify-between border-t border-border/40 pt-6">
+            <Button type="button" variant="outline" size="sm" className="text-xs h-9" asChild>
+              <Link href="/admin/questions">Cancel</Link>
+            </Button>
             <Button
               type="submit"
+              size="sm"
               disabled={isPending}
-              className="w-full md:w-auto"
+              className="bg-[#FF5A26] text-white hover:bg-[#FF5A26]/90 text-xs font-semibold h-9 px-4 shadow-xs"
             >
               {isPending ? "Creating..." : "Create Question"}
             </Button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };
@@ -247,9 +286,9 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-6">
-      <div className="border-border/50 flex items-center gap-3 border-b pb-2">
-        <h3 className="text-lg font-semibold">{title}</h3>
+    <div className="space-y-4">
+      <div className="border-b border-border/40 pb-2">
+        <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">{title}</h3>
       </div>
       {children}
     </div>
@@ -267,11 +306,11 @@ function LabelWithBadge({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <Label className="flex items-center gap-1 text-sm font-medium">
-        {label} {required && <span className="text-red-500">*</span>}
+      <Label className="text-xs font-semibold text-foreground flex items-center gap-1">
+        {label} {required && <span className="text-rose-500">*</span>}
       </Label>
       {badge && (
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-[10px] uppercase font-semibold">
           {badge}
         </Badge>
       )}

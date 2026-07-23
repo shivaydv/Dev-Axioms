@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, GithubIcon, Menu, X } from "lucide-react";
+import { ChevronDown, GithubIcon } from "lucide-react";
 import { Logo } from "@/components/global/Logo";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -19,7 +19,6 @@ interface NavLink {
 export const NAVLINKS: NavLink[] = [
   { title: "Docs", href: "/web-dev" },
   { title: "Practice", href: "/practice" },
-  // { title: "Playgrounds", href: "/comming-soon" },
   { title: "Blogs", href: "/blog" },
   {
     title: "Community",
@@ -31,12 +30,10 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  // Close mobile menu when pathname changes (navigation occurs)
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Close mobile menu when window is resized to desktop size
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -54,7 +51,7 @@ export function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 w-full border-b backdrop-blur-md ${isOpen ? "bg-background/80" : "bg-background"}`}
+      className={`sticky top-0 z-50 w-full border-b border-border/60 backdrop-blur-md ${isOpen ? "bg-background/90" : "bg-background/80"}`}
     >
       <div className="relative mx-auto flex h-16 max-w-page items-center justify-between px-4 md:px-6">
         {/* Left side - Logo + Desktop Links */}
@@ -69,15 +66,15 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <Link
             href="https://github.com/shivaydv/Dev-Axioms"
-            className={`${buttonVariants({ variant: "ghost", size: "icon" })} max-md:hidden`}
+            className={`${buttonVariants({ variant: "ghost", size: "icon" })} max-md:hidden h-8 w-8 text-muted-foreground hover:text-foreground`}
           >
-            <GithubIcon className="h-[1.2rem] w-[1.2rem]" />
+            <GithubIcon className="h-4 w-4" />
           </Link>
           <Link
             href="https://x.com/shivay1256"
-            className={`${buttonVariants({ variant: "ghost", size: "icon" })} max-md:hidden`}
+            className={`${buttonVariants({ variant: "ghost", size: "icon" })} max-md:hidden h-8 w-8 text-muted-foreground hover:text-foreground`}
           >
-            <FaXTwitter className="h-[1.2rem] w-[1.2rem]" />
+            <FaXTwitter className="h-4 w-4" />
           </Link>
           <ThemeToggle />
           <div className="hidden lg:flex">
@@ -89,23 +86,22 @@ export function Navbar() {
             variant={"ghost"}
             size={"icon"}
             onClick={toggleMenu}
-            className="lg:hidden"
+            className="lg:hidden h-8 w-8"
             aria-label="Toggle menu"
           >
             <ChevronDown
-              className={`h-[1.2rem] w-[1.2rem] ${isOpen ? "rotate-180" : "rotate-0"} transition-transform duration-200`}
+              className={`h-4 w-4 ${isOpen ? "rotate-180" : "rotate-0"} transition-transform duration-200`}
             />
           </Button>
         </div>
 
-        {/* Mobile menu dropdown - absolutely positioned */}
+        {/* Mobile menu dropdown */}
         <div
-          className={`bg-background border-border absolute top-full right-0 left-0 rounded-b-2xl border-b shadow-md backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${isOpen
+          className={`bg-background/95 border-border/60 absolute top-full right-0 left-0 rounded-b-2xl border-b shadow-md backdrop-blur-md transition-all duration-300 ease-in-out lg:hidden ${isOpen
               ? "pointer-events-auto translate-y-0 opacity-100"
               : "pointer-events-none -translate-y-2 opacity-0"
             }`}
           style={{
-            // maxHeight: isOpen ? '500px' : '0',
             overflow: "hidden",
           }}
         >
@@ -130,9 +126,9 @@ export function NavMenu() {
           <Link
             key={item.title}
             href={item.href || "#"}
-            className={`hover:text-foreground transition-colors ${isActive
+            className={`transition-colors ${isActive
                 ? "text-foreground font-semibold"
-                : "text-muted-foreground"
+                : "text-muted-foreground hover:text-foreground"
               }`}
           >
             {item.title}
@@ -171,18 +167,18 @@ export function MobileNavMenu({ onItemClick }: { onItemClick: () => void }) {
           </Link>
         );
       })}
-      <div className="flex gap-2 py-1 md:hidden">
+      <div className="flex gap-2 pt-2 md:hidden">
         <Link
           href="https://github.com/shivaydv/Dev-Axioms"
           className={buttonVariants({ variant: "ghost", size: "icon" })}
         >
-          <GithubIcon className="h-[1.2rem] w-[1.2rem]" />
+          <GithubIcon className="h-4 w-4" />
         </Link>
         <Link
           href="https://x.com/shivay1256"
           className={buttonVariants({ variant: "ghost", size: "icon" })}
         >
-          <FaXTwitter className="h-[1.2rem] w-[1.2rem]" />
+          <FaXTwitter className="h-4 w-4" />
         </Link>
         <div className="flex-1" />
 
@@ -219,13 +215,13 @@ const AuthBtns = ({ size = "sm" }: { size?: "default" | "sm" | "lg" }) => {
   };
 
   return (
-    <div className="items-center gap-2">
+    <div className="items-center gap-2 flex">
       {session ? (
         <ProfileDropdown user={user} />
       ) : (
         <Link
           href="/login"
-          className={buttonVariants({ variant: "default", size: size })}
+          className="inline-flex items-center justify-center rounded-lg bg-[#FF5A26] px-4 py-1.5 text-xs font-semibold text-white shadow-xs hover:bg-[#FF5A26]/90 active:scale-95 transition-all"
         >
           Sign In
         </Link>

@@ -34,8 +34,7 @@ function EditorLayoutContent() {
                 {settings.isConsoleVisible && (
                   <>
                     <ResizableHandle
-                      withHandle
-                      className="bg-border/40 hover:bg-primary/50 relative z-20 h-1.5 w-full transition-all duration-300"
+                      className="bg-border/40 hover:bg-[#FF5A26]/60 relative z-20 h-1 w-full transition-colors cursor-row-resize"
                     />
                     <ResizablePanel defaultSize={30} minSize={20} maxSize={70}>
                       <ConsolePanel
@@ -49,8 +48,7 @@ function EditorLayoutContent() {
             </ResizablePanel>
 
             <ResizableHandle
-              withHandle
-              className="bg-border/40 hover:bg-primary/50 relative z-20 w-1.5 transition-all duration-300"
+              className="bg-border/40 hover:bg-[#FF5A26]/60 relative z-20 w-1 transition-colors cursor-col-resize"
             />
             <PreviewPanel />
           </ResizablePanelGroup>
@@ -59,7 +57,6 @@ function EditorLayoutContent() {
     </SandpackLayout>
   );
 }
-
 
 export default function EditorLayout() {
   return (

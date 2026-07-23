@@ -16,17 +16,17 @@ export default function ConsolePanel({
   if (!isVisible) return null;
 
   return (
-    <div className="bg-background flex flex-col h-full border-t">
-      <div className="flex items-center justify-between border-b p-2 px-4 bg-muted/20">
+    <div className="bg-background flex flex-col h-full border-t border-border/50">
+      <div className="flex h-9 items-center justify-between border-b border-border/50 px-3 bg-muted/20 backdrop-blur-sm select-none">
         <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs font-semibold text-muted-foreground">Console</span>
+          <Terminal className="h-3.5 w-3.5 text-[#FF5A26]" />
+          <span className="text-xs font-semibold text-foreground">Console</span>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={onClose}
-          className="h-6 w-6 rounded-md p-0"
+          className="h-6 w-6 rounded-md p-0 text-muted-foreground hover:text-foreground hover:bg-muted"
         >
           <X className="h-3 w-3" />
         </Button>
