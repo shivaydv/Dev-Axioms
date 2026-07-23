@@ -1,80 +1,117 @@
 "use client";
 
 import { motion } from "motion/react";
-import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { ArrowRight, BookOpen, Code2, Layers } from "lucide-react";
 
-const features = [
+const steps = [
     {
-        title: "Revise Core Concepts",
-        description: "Quickly revise HTML, CSS, JavaScript, React, and more with focused, MDN-style documentation built for interview revision.",
-        iconPath: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-                <rect x="4" y="4" width="16" height="16" rx="2" />
-                <path d="M9 9l3 3-3 3" />
-                <path d="M13 15h2" />
-            </svg>
-        )
+        number: "01",
+        tag: "STEP ONE",
+        title: "Revise Concept Axioms",
+        description: "Quickly review MDN-level notes on HTML, CSS, JavaScript, React, and Next.js before your interview.",
+        href: "/web-dev",
+        actionText: "Read Axioms",
+        icon: <BookOpen className="w-4 h-4 text-[#FF5A26]" />
     },
     {
-        title: "Understand Architecture",
-        description: "Simple, diagram-driven blogs that break down complex architectures and real-world frontend patterns.",
-        iconPath: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-                <path d="M12 2v20" />
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-        )
+        number: "02",
+        tag: "STEP TWO",
+        title: "Solve Practice Questions",
+        description: "Sharpen problem-solving skills with Easy, Medium, and Hard curated interview questions.",
+        href: "/practice",
+        actionText: "Start Practice",
+        icon: <Code2 className="w-4 h-4 text-[#FF5A26]" />
     },
     {
-        title: "Machine Coding Rounds",
-        description: "Solve real React machine coding problems in a live sandbox with editor, console, preview, and timer tracking.",
-        iconPath: (
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-10 h-10">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-            </svg>
-        )
+        number: "03",
+        tag: "STEP THREE",
+        title: "Understand System Design",
+        description: "Explore deep-dive blogs breaking down token rotation, SSR streaming, and production architecture.",
+        href: "/blog",
+        actionText: "Read Architecture",
+        icon: <Layers className="w-4 h-4 text-[#FF5A26]" />
     }
 ];
 
 export function LearningPath() {
     return (
-        <section className="py-24 bg-background border-b border-border/40 border-dashed">
-            <div className="max-w-page mx-auto px-6">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                    <div className="max-w-xl">
-                        <span className="text-[10px] uppercase font-semibold tracking-wider text-[#FF5A26] mb-4 block">
-                            INTERVIEW PREPARATION FLOW
-                        </span>
-                        <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-4 text-foreground">
-                        Revise. Practice. <br className="hidden md:block" />Crack Developer Interviews.
-                        </h2>
-                        <p className="text-muted-foreground text-[15px] max-w-sm leading-relaxed">
-                            A clear path to prepare for developer interviews without jumping across multiple platforms.
-                        </p>
-                    </div>
-                    
+        <section className="py-20 bg-background border-b border-border/40 border-dashed relative">
+            <div className="max-w-6xl mx-auto px-4 md:px-6">
+                {/* Header */}
+                <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-14">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-[11px] font-bold uppercase tracking-widest text-[#FF5A26] mb-3 block"
+                    >
+                        THE PREPARATION WORKFLOW
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight mb-4"
+                    >
+                        The 3-Step Preparation Engine
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed"
+                    >
+                        A systematic approach designed to give you clarity and confidence in tech interviews.
+                    </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {features.map((feature, i) => (
+                {/* 3 Step Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    {steps.map((step, index) => (
                         <motion.div
-                            key={i}
+                            key={index}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className="bg-card rounded-xl p-8 border border-border flex flex-col items-center text-center shadow-sm"
+                            transition={{ delay: index * 0.1, duration: 0.4 }}
+                            className="rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md p-6 flex flex-col justify-between group hover:border-border transition-all shadow-sm relative"
                         >
-                            <div className="w-full h-32 mb-6 flex items-center justify-center text-foreground/80 opacity-60 bg-muted/30 rounded-lg border border-border">
-                                {feature.iconPath}
+                            <div>
+                                <div className="flex items-center justify-between mb-5 pb-3 border-b border-border/50">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-2 rounded-xl bg-primary/10 border border-primary/20">
+                                            {step.icon}
+                                        </div>
+                                        <span className="text-[11px] font-bold tracking-wider text-muted-foreground uppercase">
+                                            {step.tag}
+                                        </span>
+                                    </div>
+                                    <span className="text-xl font-bold text-muted-foreground/30 font-mono">
+                                        {step.number}
+                                    </span>
+                                </div>
+
+                                <h3 className="text-lg font-bold text-foreground mb-2 tracking-tight group-hover:text-primary transition-colors">
+                                    {step.title}
+                                </h3>
+
+                                <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                                    {step.description}
+                                </p>
                             </div>
-                            <h3 className="font-medium text-foreground mb-3 text-[15px]">{feature.title}</h3>
-                            <p className="text-xs text-muted-foreground leading-relaxed max-w-[250px]">
-                                {feature.description}
-                            </p>
+
+                            <div className="pt-3 border-t border-border/40 flex items-center justify-between">
+                                <Link
+                                    href={step.href}
+                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground group-hover:text-primary transition-colors"
+                                >
+                                    <span>{step.actionText}</span>
+                                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                                </Link>
+                            </div>
                         </motion.div>
                     ))}
                 </div>

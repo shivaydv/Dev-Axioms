@@ -1,67 +1,83 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { FaEthereum } from "react-icons/fa";
-import { SiSolana } from "react-icons/si";
-import { MoveRight } from "lucide-react";
+import { SiSolana, SiEthereum } from "react-icons/si";
+import { ArrowRight } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Web3 & Blockchain Documentation - Dev Axioms",
+  description: "Web3 and Blockchain Axioms covering Solana and Ethereum smart contract development and security architecture.",
+};
 
 export default function Web3Page() {
     const categories = [
         {
             title: "Solana",
-            description: "Master the high-performance blockchain ecosystem. Built on Proof of History for the next generation of apps.",
+            description: "Explore Solana architecture, Rust-based smart contract development, Anchor framework patterns, account model security, and transaction mechanics.",
             href: "/web3/solana",
-            icon: <SiSolana className="w-6 h-6 text-[#14F195]" />,
-            largeIcon: <SiSolana className="w-12 h-12 text-[#14F195]" />,
-            tag: "Rust"
+            topicCount: "4 Topics",
+            icon: <SiSolana className="w-5 h-5 text-purple-400" />,
+            largeIcon: <SiSolana className="w-28 h-28" />,
         },
         {
             title: "Ethereum",
-            description: "The foundation of decentralized finance and smart contracts. Deep dive into the EVM and Solidity ecosystem.",
+            description: "Master EVM architecture, Solidity smart contract optimization, gas mechanics, DeFi primitives, and web3 frontend integration.",
             href: "/web3/ethereum",
-            icon: <FaEthereum className="w-6 h-6 text-primary" />,
-            largeIcon: <FaEthereum className="w-12 h-12 text-primary" />,
-            tag: "Solidity"
+            topicCount: "5 Topics",
+            icon: <SiEthereum className="w-5 h-5 text-blue-400" />,
+            largeIcon: <SiEthereum className="w-28 h-28" />,
         }
     ];
 
     return (
-        <div className="container py-24 max-w-4xl mx-auto px-6">
-            <div className="space-y-4 mb-20 px-2">
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground/90">Web3 & Blockchain</h1>
-                <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
-                    The decentralized frontier. Explore the architectures of trustless computing, smart contracts, and sovereign digital assets.
-                </p>
-            </div>
+        <div className="bg-background min-h-screen pb-20 pt-10">
+            <div className="mx-auto max-w-5xl px-4 md:px-6 space-y-8">
+                {/* Header */}
+                <div>
+                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-2">
+                        Web3 & Blockchain
+                    </h1>
+                    <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
+                        Production-grade axioms for decentralized application developers. In-depth technical guides from Solana program state to EVM opcodes.
+                    </p>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
-                {categories.map((category) => (
-                    <Link key={category.href} href={category.href} className="group">
-                        <Card className="h-full transition-all duration-500 ease-in-out hover:ring-2 hover:ring-primary/20 border-border/40 bg-card/30 backdrop-blur-md overflow-hidden relative shadow-sm hover:shadow-xl hover:-translate-y-1">
-                            {/* Background Accent Icon */}
-                            <div className="absolute -top-3 -right-3 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-all duration-700 ease-in-out transform group-hover:scale-125 group-hover:-rotate-12">
+                {/* Categories Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {categories.map((category) => (
+                        <Link
+                            key={category.href}
+                            href={category.href}
+                            className="group relative overflow-hidden rounded-xl border border-border/70 bg-card/40 hover:bg-card hover:border-[#FF5A26]/30 p-5 transition-all shadow-sm flex flex-col justify-between space-y-4"
+                        >
+                            {/* Watermark Background Logo Effect */}
+                            <div className="absolute -right-4 -bottom-4 text-foreground opacity-[0.04] group-hover:opacity-[0.08] group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 pointer-events-none">
                                 {category.largeIcon}
                             </div>
 
-                            <CardHeader className="flex flex-row items-center gap-4 space-y-0 text-left p-6">
-                                <div className="p-3 rounded-xl bg-primary/5 text-primary border border-primary/10 transition-colors duration-500 group-hover:bg-primary/10">
-                                    {category.icon}
+                            <div className="space-y-3 relative z-10">
+                                <div className="flex items-center justify-between">
+                                    <div className="p-2 w-fit rounded-lg bg-muted/50 border border-border/40">
+                                        {category.icon}
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">{category.topicCount}</span>
                                 </div>
-                                <div>
-                                    <div className="text-[10px] font-semibold text-primary/70 mb-0.5 uppercase tracking-[0.15em]">{category.tag}</div>
-                                    <CardTitle className="text-xl font-semibold group-hover:text-primary transition-colors duration-500 tracking-tight">{category.title}</CardTitle>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="space-y-5 p-6 pt-0">
-                                <CardDescription className="text-sm leading-relaxed text-muted-foreground/80 text-left px-0">
+
+                                <h3 className="text-base font-semibold text-foreground group-hover:text-[#FF5A26] transition-colors tracking-tight">
+                                    {category.title}
+                                </h3>
+
+                                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                                     {category.description}
-                                </CardDescription>
-                                <div className="flex items-center text-xs font-bold text-primary/70 group-hover:text-primary transition-all duration-500 group-hover:pl-1">
-                                    Explore Ecosystem <MoveRight className="w-3.5 h-3.5 ml-2 opacity-50 group-hover:opacity-100 transition-all duration-500 transform group-hover:translate-x-1" />
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                ))}
+                                </p>
+                            </div>
+
+                            <div className="pt-2 flex items-center justify-between text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors relative z-10">
+                                <span>Explore Axioms</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform text-[#FF5A26]" />
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );

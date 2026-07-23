@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronRight, BookOpen, FolderIcon, ExternalLink, Search } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { Node } from "fumadocs-core/page-tree";
 
@@ -52,51 +52,42 @@ export function DynamicCards({ items }: { items: Node[] }) {
     if (validItems.length === 0) return null;
 
     return (
-        <div className="flex flex-col gap-4 not-prose w-full">
-            {/* Minimal Vercel Search Filter */}
-            <div className="relative w-full max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+        <div className="flex flex-col gap-5 not-prose w-full pt-2">
+            {/* Minimal Search Filter */}
+            <div className="relative w-full max-w-xs">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
                 <Input
                     type="text"
-                    placeholder="Filter lessons..."
+                    placeholder="Search topics..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 h-9 text-xs bg-card/50 border-border/40 focus:border-border focus:ring-0 rounded-lg placeholder:text-muted-foreground/50 transition-colors"
+                    className="pl-9 h-8 text-xs bg-card/40 border-border/50 focus:border-[#FF5A26]/40 focus:ring-0 rounded-lg placeholder:text-muted-foreground/50 transition-colors"
                 />
             </div>
 
             {filteredItems.length === 0 ? (
-                <div className="py-8 text-center text-xs text-muted-foreground">
-                    No matching lessons found for "{searchQuery}"
+                <div className="py-8 text-center text-xs text-muted-foreground border border-dashed border-border/50 rounded-xl">
+                    No topics found for "{searchQuery}"
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                    {filteredItems.map(({ title, description, url, isFolder, isLink }) => (
+                    {filteredItems.map(({ title, description, url }) => (
                         <Link key={url} href={url} className="group block">
-                            <div className="h-full p-4 rounded-xl border border-border/40 bg-card/40 hover:bg-card/80 hover:border-border/80 transition-all duration-200 flex flex-col justify-between group-hover:shadow-sm">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors shrink-0">
-                                            {isFolder ? (
-                                                <FolderIcon className="w-4 h-4" />
-                                            ) : isLink ? (
-                                                <ExternalLink className="w-4 h-4" />
-                                            ) : (
-                                                <BookOpen className="w-4 h-4" />
-                                            )}
-                                        </div>
-                                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                            <div className="h-full p-4 rounded-xl border border-border/50 bg-card/40 hover:bg-card hover:border-[#FF5A26]/30 transition-all duration-200 flex flex-col justify-between space-y-3 shadow-xs">
+                                <div className="space-y-1.5">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-[#FF5A26] transition-colors line-clamp-1">
                                             {title}
                                         </h3>
+                                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/40 group-hover:text-[#FF5A26] group-hover:translate-x-0.5 transition-all shrink-0" />
                                     </div>
-                                    <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0 mt-0.5" />
-                                </div>
 
-                                {description && (
-                                    <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-2.5 leading-normal pl-0.5">
-                                        {description}
-                                    </p>
-                                )}
+                                    {description && (
+                                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                                            {description}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </Link>
                     ))}

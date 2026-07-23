@@ -1,100 +1,196 @@
 "use client";
 
 import { motion } from "motion/react";
-import Image from "next/image";
-import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import {
+    Code2,
+    BookOpen,
+    Layers,
+    ArrowRight,
+    CheckCircle2
+} from "lucide-react";
+import { FaGithub, FaTerminal } from "react-icons/fa6";
 
 export function BentoFeatures() {
     return (
-        <section className="py-24 bg-background border-b border-border/40 border-dashed">
-            <div className="max-w-page mx-auto px-6">
-                <div className="flex flex-col lg:flex-row gap-16 lg:items-start">
-                    <div className="lg:w-5/12 pt-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <span className="text-[10px] uppercase font-semibold tracking-wider text-[#FF5A26] mb-4 block">
-                                STRUCTURED INTERVIEW PRACTICE
-                            </span>
-                            <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-4 text-foreground leading-[1.1]">
-                                From Concept Revision to Real Machine Coding Rounds
-                            </h2>
-                            <p className="text-[15px] text-muted-foreground mb-8 leading-relaxed max-w-[90%]">
-                                Revise important concepts, solve curated interview questions, and practice real machine coding rounds in a focused, distraction-free environment.
+        <section className="py-20 bg-background border-b border-border/40 border-dashed relative">
+            <div className="max-w-6xl mx-auto px-4 md:px-6">
+                {/* Header */}
+                <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-14">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-[11px] font-bold uppercase tracking-widest text-[#FF5A26] mb-3 block"
+                    >
+                        PLATFORM CAPABILITIES
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight mb-4"
+                    >
+                        Four Pillars of Dev Axioms
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                        className="text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed"
+                    >
+                        Designed for maximum signal-to-noise ratio so you focus only on what interviewers test.
+                    </motion.p>
+                </div>
+
+                {/* Bento Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 max-w-5xl mx-auto">
+                    {/* Card 1: Curated Practice Bank (7 Cols) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4 }}
+                        className="md:col-span-7 rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between group hover:border-border transition-all shadow-sm"
+                    >
+                        <div className="mb-6">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 border border-primary/20">
+                                <Code2 className="w-4 h-4 text-[#FF5A26]" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 block">Curated Questions</span>
+                            <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">
+                                Practice Question Bank
+                            </h3>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                                Categorized by difficulty (Easy, Medium, Hard) and tags. Practice DOM manipulation, state management, and polyfill challenges.
                             </p>
+                        </div>
 
-                            {/* <Link
-                                href="/practice"
-                                className={cn(
-                                    buttonVariants({ variant: "default", size: "default" }),
-                                    "rounded-md px-6 h-10 font-medium bg-foreground text-background"
-                                )}
-                            >
-                                Start Practicing
-                            </Link> */}
-
-                            <div className="mt-16 flex items-center gap-4 border-t border-border pt-6">
-                                <div className="w-5 h-5 flex items-center justify-center bg-muted rounded-sm">
-                                    <span className="w-2 h-2 bg-foreground rounded-[2px] block" />
-                                </div>
-                                <div>
-                                    <p className="font-medium text-[13px] text-muted-foreground inline-block align-middle mr-1">Live editor with preview for real interview-style practice.</p>
-                                </div>
+                        <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-background/80 border border-border/50 text-center text-xs">
+                            <div>
+                                <span className="text-[10px] text-emerald-500 font-bold block">EASY</span>
+                                <span className="font-semibold text-foreground">Fundamentals</span>
                             </div>
-                        </motion.div>
-                    </div>
-
-                    <div className="lg:w-7/12">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2, duration: 0.8 }}
-                            className="relative rounded-2xl overflow-hidden border border-border bg-muted/20 h-[500px]"
-                        >
-                            <Image
-                                src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop"
-                                alt="Platform UI Placeholder"
-                                fill
-                                className="object-cover opacity-60 transition-all duration-700"
-                            />
-
-                            {/* Floating UI element */}
-                            <div className="absolute bottom-10 left-10 right-10 md:right-auto md:w-[320px] bg-background border border-border rounded-xl shadow-2xl p-5 backdrop-blur-sm">
-                                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/50">
-                                    <div className="w-8 h-8 rounded bg-foreground text-background flex items-center justify-center font-bold text-xs">
-                                        RC
-                                    </div>
-                                    <div>
-                                        <p className="font-medium text-xs text-foreground">React Challenges</p>
-                                    </div>
-                                    <div className="ml-auto text-xs text-muted-foreground">22 Available</div>
-                                </div>
-
-                                <div className="space-y-4 text-xs font-medium">
-                                    <div className="flex justify-between text-muted-foreground">
-                                        <span className="flex items-center gap-2">Difficulty</span>
-                                        <span className="text-foreground">Advanced</span>
-                                    </div>
-                                    <div className="flex justify-between text-muted-foreground">
-                                        <span className="flex items-center gap-2">Framework</span>
-                                        <span className="text-foreground">Next.js 14</span>
-                                    </div>
-                                    <div className="flex justify-between text-muted-foreground">
-                                        <span className="flex items-center gap-2">Modules</span>
-                                        <span className="text-foreground">12 Sections</span>
-                                    </div>
-                                </div>
-                                <button className="w-full mt-6 py-2 rounded bg-muted text-foreground text-[11px] uppercase tracking-wider font-semibold hover:bg-muted/80 transition-colors">
-                                    + 15 More Attributes
-                                </button>
+                            <div>
+                                <span className="text-[10px] text-yellow-500 font-bold block">MEDIUM</span>
+                                <span className="font-semibold text-foreground">Polyfills & DOM</span>
                             </div>
-                        </motion.div>
-                    </div>
+                            <div>
+                                <span className="text-[10px] text-red-500 font-bold block">HARD</span>
+                                <span className="font-semibold text-foreground">Machine Coding</span>
+                            </div>
+                        </div>
+
+                        <Link href="/practice" className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+                            <span>Open Practice Arena</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                    </motion.div>
+
+                    {/* Card 2: Web Dev Axioms (5 Cols) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.1 }}
+                        className="md:col-span-5 rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between group hover:border-border transition-all shadow-sm"
+                    >
+                        <div className="mb-6">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 border border-primary/20">
+                                <BookOpen className="w-4 h-4 text-[#FF5A26]" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 block">MDN-Level Notes</span>
+                            <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">
+                                Web Dev Axioms
+                            </h3>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                                Distilled documentation for HTML & CSS, JavaScript, React, and Next.js built for instant revision before interviews.
+                            </p>
+                        </div>
+
+                        <div className="space-y-2 text-xs">
+                            {["HTML & CSS Layouts", "JavaScript Event Loop", "React Fiber & Hooks", "Next.js App Router"].map((topic, i) => (
+                                <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-background/60 border border-border/40 font-medium text-foreground">
+                                    <span className="flex items-center gap-2">
+                                        <CheckCircle2 className="w-3.5 h-3.5 text-[#FF5A26]" />
+                                        <span>{topic}</span>
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <Link href="/web-dev" className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+                            <span>Browse Web Dev Axioms</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                    </motion.div>
+
+                    {/* Card 3: Architecture Blogs (5 Cols) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 }}
+                        className="md:col-span-5 rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between group hover:border-border transition-all shadow-sm"
+                    >
+                        <div className="mb-6">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 border border-primary/20">
+                                <Layers className="w-4 h-4 text-[#FF5A26]" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 block">Deep-Dive System Design</span>
+                            <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">
+                                System Architecture Blogs
+                            </h3>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                                Detailed technical breakdowns on React Streaming, Token Rotation, and Signed URLs.
+                            </p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-background/80 border border-border/50 text-xs font-mono space-y-1.5 text-slate-300">
+                            <div>• React Streaming & SSR</div>
+                            <div>• Token Rotation Architecture</div>
+                            <div>• Signed vs Unsigned URLs</div>
+                        </div>
+
+                        <Link href="/blog" className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+                            <span>Read Architecture Blogs</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                    </motion.div>
+
+                    {/* Card 4: Open Source (7 Cols) */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.3 }}
+                        className="md:col-span-7 rounded-2xl border border-border/80 bg-card/40 backdrop-blur-md p-6 sm:p-7 flex flex-col justify-between group hover:border-border transition-all shadow-sm"
+                    >
+                        <div className="mb-6">
+                            <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-4 border border-primary/20">
+                                <FaGithub className="w-4 h-4 text-[#FF5A26]" />
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1 block">Community Powered</span>
+                            <h3 className="text-xl font-bold text-foreground mb-2 tracking-tight">
+                                100% Free & Open Source
+                            </h3>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                                Dev Axioms is open source. Contribute new interview questions, add documentation, or refine existing axioms on GitHub.
+                            </p>
+                        </div>
+
+                        <div className="flex items-center gap-3 p-3 rounded-xl bg-background/80 border border-border/50 text-xs">
+                            <FaTerminal className="w-3.5 h-3.5 text-[#FF5A26] shrink-0" />
+                            <span className="text-muted-foreground">Built by developers, for developers. No paywalls or hidden subscriptions.</span>
+                        </div>
+
+                        <Link href="https://github.com/shivaydv/Dev-Axioms" target="_blank" className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
+                            <span>View Repository on GitHub</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                    </motion.div>
                 </div>
             </div>
         </section>

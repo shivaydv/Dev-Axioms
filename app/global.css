@@ -146,6 +146,9 @@
 }
 
 @theme inline {
+  --color-fd-primary: #FF5A26;
+  --color-fd-primary-foreground: #ffffff;
+
   --spacing-page: 1436px;
 
   --radius-sm: calc(var(--radius) - 4px);
