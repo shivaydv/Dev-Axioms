@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "@/db/prisma";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -35,6 +36,7 @@ export const auth = betterAuth({
       maxAge: 60 * 60, // 1 hour
     },
   },
+  plugins: [nextCookies()],
 });
 
 export type Session = typeof auth.$Infer.Session;
