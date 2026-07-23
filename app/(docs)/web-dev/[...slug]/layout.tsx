@@ -4,16 +4,26 @@ import { FaHtml5, FaCss3 } from "react-icons/fa";
 import CommonLayout from "@/app/(docs)/common-layout";
 import { FaReact } from "react-icons/fa6";
 
-export default function Layout({
+export default async function Layout({
   children,
+  params,
 }: {
   children: React.ReactNode;
-}): React.ReactElement {
+  params: Promise<{ slug?: string[] }>;
+}) {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug || [];
+  const isRootPage = slug.length <= 1;
+
   return (
     <CommonLayout
       pageTree={webdev.pageTree}
       options={{
+        containerProps: {
+          style: isRootPage ? { '--fd-sidebar-width': '0px' } as React.CSSProperties : undefined,
+        },
         sidebar: {
+          style: isRootPage ? { display: 'none' } : undefined,
           tabs: [
             {
               title: "HTML & CSS",

@@ -102,7 +102,7 @@ export function DocGrid({ path, sourceType = 'webdev' }: DocGridProps) {
     }
 
     return (
-        <div className="my-10 not-prose !max-w-none">
+        <div className="my-2 not-prose !max-w-none">
             <DynamicCards items={items} />
         </div>
     );

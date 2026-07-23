@@ -41,7 +41,7 @@ export default function WebDevPage() {
     ];
 
     return (
-        <div className="container py-24 max-w-4xl mx-auto px-6">
+        <div className="container py-24 max-w-[1200px] mx-auto px-6">
             <div className="space-y-4 mb-20 px-2">
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground/90">Web Development</h1>
                 <p className="text-base text-muted-foreground max-w-xl leading-relaxed">

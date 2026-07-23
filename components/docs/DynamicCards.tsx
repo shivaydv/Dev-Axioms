@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MoveRight, ChevronRight, BookOpen, FolderIcon, ExternalLink } from "lucide-react";
+import { ChevronRight, BookOpen, FolderIcon, ExternalLink, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import type { Node } from "fumadocs-core/page-tree";
 
 export function DynamicCards({ items }: { items: Node[] }) {
+    const [searchQuery, setSearchQuery] = useState("");
+
     // Filter for valid pages, folders, and links that point to a destination
     const validItems = items.filter(item => {
         const anyItem = item as any;
@@ -15,60 +20,88 @@ export function DynamicCards({ items }: { items: Node[] }) {
         return false;
     });
 
+    const processedItems = validItems.map(item => {
+        const anyItem = item as any;
+        const rawUrl = anyItem.url || anyItem.index?.url || "";
+        const slug = rawUrl.split(/[/\\]/).filter(Boolean).pop()?.replace(/-/g, ' ');
+
+        const title = anyItem.name ||
+            anyItem.title ||
+            anyItem.index?.title ||
+            anyItem.index?.name ||
+            anyItem.data?.title ||
+            slug ||
+            "Untitled Doc";
+
+        const description = anyItem.description || anyItem.index?.description || anyItem.data?.description || "";
+        const url = rawUrl || "#";
+        const isFolder = item.type === 'folder';
+        const isLink = anyItem.type === 'link';
+
+        return { item, title, description, url, isFolder, isLink, rawUrl };
+    });
+
+    const filteredItems = processedItems.filter((data) => {
+        const q = searchQuery.toLowerCase();
+        return (
+            data.title.toLowerCase().includes(q) ||
+            data.description.toLowerCase().includes(q)
+        );
+    });
+
     if (validItems.length === 0) return null;
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 not-prose">
-            {validItems.map((item) => {
-                const anyItem = item as any;
+        <div className="flex flex-col gap-4 not-prose w-full">
+            {/* Minimal Vercel Search Filter */}
+            <div className="relative w-full max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                <Input
+                    type="text"
+                    placeholder="Filter lessons..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 h-9 text-xs bg-card/50 border-border/40 focus:border-border focus:ring-0 rounded-lg placeholder:text-muted-foreground/50 transition-colors"
+                />
+            </div>
 
-                // Fumadocs PageTree items use 'name' as label. 
-                // Source objects use 'data.title'.
-                // Fallback to URL slugs if title/name is missing.
-                const rawUrl = anyItem.url || anyItem.index?.url || "";
-                const slug = rawUrl.split(/[/\\]/).filter(Boolean).pop()?.replace(/-/g, ' ');
-
-                const title = anyItem.name ||
-                    anyItem.title ||
-                    anyItem.index?.title ||
-                    anyItem.index?.name ||
-                    anyItem.data?.title ||
-                    slug ||
-                    "Untitled Doc";
-
-                const url = anyItem.url || anyItem.index?.url || "#";
-                const isFolder = item.type === 'folder';
-                const isLink = anyItem.type === 'link';
-
-                return (
-                    <Link key={url} href={url} className="group">
-                        <Card className="h-full border-border/40 bg-card/40 backdrop-blur-sm transition-all duration-500 hover:ring-1 hover:ring-primary/20 hover:shadow-lg hover:-translate-y-1 overflow-hidden relative text-left">
-                            <CardHeader className="p-5 flex flex-row items-center justify-between space-y-0 text-left">
-                                <div className="flex items-center gap-3 text-left">
-                                    <div className="p-2.5 rounded-lg bg-primary/5 text-primary border border-primary/10 transition-colors duration-500 group-hover:bg-primary/20">
-                                        {isFolder ? (
-                                            <FolderIcon className="w-4 h-4 opacity-70" />
-                                        ) : isLink ? (
-                                            <ExternalLink className="w-4 h-4 opacity-70" />
-                                        ) : (
-                                            <BookOpen className="w-4 h-4 opacity-70" />
-                                        )}
+            {filteredItems.length === 0 ? (
+                <div className="py-8 text-center text-xs text-muted-foreground">
+                    No matching lessons found for "{searchQuery}"
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
+                    {filteredItems.map(({ title, description, url, isFolder, isLink }) => (
+                        <Link key={url} href={url} className="group block">
+                            <div className="h-full p-4 rounded-xl border border-border/40 bg-card/40 hover:bg-card/80 hover:border-border/80 transition-all duration-200 flex flex-col justify-between group-hover:shadow-sm">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors shrink-0">
+                                            {isFolder ? (
+                                                <FolderIcon className="w-4 h-4" />
+                                            ) : isLink ? (
+                                                <ExternalLink className="w-4 h-4" />
+                                            ) : (
+                                                <BookOpen className="w-4 h-4" />
+                                            )}
+                                        </div>
+                                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                                            {title}
+                                        </h3>
                                     </div>
-                                    <CardTitle className="text-[17px] font-semibold group-hover:text-primary transition-colors tracking-tight text-left">
-                                        {title}
-                                    </CardTitle>
+                                    <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-0.5 transition-all shrink-0 mt-0.5" />
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-primary/70 transition-all transform group-hover:translate-x-1" />
-                            </CardHeader>
-                            <CardContent className="px-5 pb-5 pt-0 text-left">
-                                <div className="flex items-center text-[10px] uppercase tracking-widest font-bold text-primary/40 group-hover:text-primary/70 transition-colors text-left">
-                                    {isFolder ? 'Explore Path' : isLink ? 'Visit Link' : 'Read Guide'} <MoveRight className="w-3.5 h-3.5 ml-2 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-                );
-            })}
+
+                                {description && (
+                                    <p className="text-xs text-muted-foreground/80 line-clamp-2 mt-2.5 leading-normal pl-0.5">
+                                        {description}
+                                    </p>
+                                )}
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
