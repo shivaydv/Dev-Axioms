@@ -26,6 +26,7 @@ export default async function Page(props: {
       toc={toc}
       full={page.data.full}
       tableOfContent={{ style: "clerk" }}
+      className="mx-auto min-w-0 w-full max-w-full"
     >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
