@@ -1,20 +1,174 @@
 ---
-title: History of JavaScript
-description: The unlikely story of the web's language
+title: History & Evolution of JavaScript
+description: From 10 days of coding to the world's most popular language — the full timeline
 ---
 
-JavaScript was created in **10 days** in May 1995 by **Brendan Eich** while he was working at Netscape.
+Understanding JavaScript's history helps you understand **why** certain features exist, why some things are "weird," and how the language evolves.
 
-## The Timeline
--   **1995**: "Mocha" (later LiveScript, then JavaScript) is released.
--   **1997**: The first edition of the **ECMAScript** standard is published (ECMAScript 1).
--   **2009**: **Node.js** is released by Ryan Dahl, bringing JS to the server.
--   **2015**: The release of **ES6 (ES2015)**—the biggest update to JS, adding classes, arrow functions, and more.
--   **Every Year Since**: A new version of ECMAScript is released with incremental improvements.
+## The Birth — 1995
 
-## JavaScript is NOT Java
-The name "JavaScript" was a marketing tactic by Netscape to capitalize on the popularity of the Java programming language at the time. They share almost nothing in common except some C-style syntax.
+**Brendan Eich** created JavaScript in **10 days** at Netscape Communications. The company wanted a lightweight scripting language for their browser (Netscape Navigator).
 
----
+### The Name Game
 
-**Next Step**: Learn [What is JavaScript](/web-dev/javascript/what-is-javascript) today.
+```text
+Mocha (internal codename)
+  ↓
+LiveScript (first public name)
+  ↓
+JavaScript (marketing rename to ride Java's popularity)
+```
+
+**Important**: JavaScript has **nothing to do with Java**. The name was pure marketing.
+
+## The Standardization — ECMAScript
+
+To prevent browser wars from fragmenting the language, Netscape submitted JavaScript to **ECMA International** (a standards organization) in 1996. The standardized version is called **ECMAScript** (ES).
+
+### The Relationship
+
+```text
+ECMAScript = The specification (the rulebook)
+JavaScript = The implementation (what browsers actually run)
+```
+
+Think of it like this: ECMAScript is the **recipe**, JavaScript is the **dish** each browser cooks.
+
+## The Complete Timeline
+
+| Year | Version | Key Additions |
+|------|---------|--------------|
+| 1997 | ES1 | First standard |
+| 1998 | ES2 | Editorial changes |
+| 1999 | ES3 | Regular expressions, try/catch, better string handling |
+| 2009 | ES5 | `"use strict"`, JSON, Array methods (forEach, map, filter), getters/setters |
+| **2015** | **ES6 / ES2015** | **The BIG update** — let/const, arrow functions, classes, Promises, template literals, destructuring, modules, Symbol, Map/Set, generators, default parameters |
+| 2016 | ES7 | `Array.includes()`, exponentiation operator `**` |
+| 2017 | ES8 | async/await, `Object.entries()`, `Object.values()`, string padding |
+| 2018 | ES9 | Rest/Spread for objects, `Promise.finally()`, async iteration |
+| 2019 | ES10 | `Array.flat()`, `Array.flatMap()`, `Object.fromEntries()`, optional catch binding |
+| 2020 | ES11 | Optional chaining `?.`, nullish coalescing `??`, `BigInt`, `Promise.allSettled()`, `globalThis` |
+| 2021 | ES12 | `String.replaceAll()`, logical assignment `&&=` `||=` `??=`, `Promise.any()`, numeric separators `1_000_000` |
+| 2022 | ES13 | Top-level await, `.at()` method, `Object.hasOwn()`, class fields & private methods, `Error.cause` |
+| 2023 | ES14 | Array `findLast()`, `findLastIndex()`, Hashbang grammar, `Symbol.for` keys in WeakMaps |
+| 2024 | ES15 | `Object.groupBy()`, `Promise.withResolvers()`, `ArrayBuffer` resize, well-formed Unicode strings |
+
+## ES5 vs ES6+ — The Dividing Line
+
+**ES6 (2015)** was the biggest single update in JavaScript's history. It fundamentally changed how developers write JavaScript.
+
+### Before ES6 (the old way)
+
+```javascript
+// Variables
+var name = "Shiva";
+
+// Functions
+function greet(name) {
+  return "Hello " + name;
+}
+
+// String concatenation
+var msg = "User " + name + " logged in at " + new Date();
+
+// Constructor-based OOP
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.greet = function () {
+  return "Hi, I'm " + this.name;
+};
+
+// Callbacks for async
+getUser(function (user) {
+  getPosts(user.id, function (posts) {
+    // callback hell...
+  });
+});
+```
+
+### After ES6 (the modern way)
+
+```javascript
+// Variables
+const name = "Shiva";
+
+// Arrow functions
+const greet = (name) => `Hello ${name}`;
+
+// Template literals
+const msg = `User ${name} logged in at ${new Date()}`;
+
+// Class syntax
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    return `Hi, I'm ${this.name}`;
+  }
+}
+
+// Promises / async-await
+const user = await getUser();
+const posts = await getPosts(user.id);
+```
+
+## TC39 — How JavaScript Evolves
+
+**TC39** (Technical Committee 39) is the group that decides what goes into ECMAScript. It includes engineers from Google, Mozilla, Apple, Microsoft, and others.
+
+### The 5-Stage Process
+
+Every new feature goes through these stages:
+
+| Stage | Name | What Happens |
+|-------|------|-------------|
+| 0 | Strawperson | Just an idea — anyone can propose |
+| 1 | Proposal | Formal proposal with use cases and API design |
+| 2 | Draft | Initial spec text, likely to be included |
+| 3 | Candidate | Spec complete, needs implementation feedback |
+| 4 | Finished | Ready for the next ECMAScript release |
+
+**Real-world example**: Optional chaining (`?.`) was proposed in 2017 (Stage 1), reached Stage 4 in 2020, and is now in ES2020.
+
+### How to Track Proposals
+
+- GitHub: [tc39/proposals](https://github.com/tc39/proposals)
+- Active proposals at Stage 2+: [tc39/proposals#active](https://github.com/tc39/proposals#active-proposals)
+
+## The Browser Wars
+
+### Round 1 (1995-2001)
+- Netscape Navigator vs Internet Explorer
+- Each browser added its own non-standard features
+- IE won → dark age of web development
+
+### Round 2 (2008-present)
+- Chrome (V8), Firefox (SpiderMonkey), Safari (JSC) compete on **speed**
+- V8's speed led to **Node.js** (2009) — JavaScript on the server
+- Competition drove massive performance improvements
+
+## Key Milestones
+
+```text
+1995 — JavaScript created (10 days)
+1997 — ECMAScript 1 standardized
+2006 — jQuery released (simplified DOM manipulation)
+2008 — V8 engine released by Google (made JS fast)
+2009 — Node.js released (JS on the server)
+2010 — NPM created (package ecosystem)
+2013 — React released by Facebook
+2015 — ES6 released (modern JavaScript)
+2017 — async/await standardized
+2020 — Optional chaining & nullish coalescing
+Today — JavaScript is the #1 language on GitHub
+```
+
+## Why History Matters for Interviews
+
+Interviewers don't ask dates, but they ask **why things are the way they are**:
+
+- *"Why does `typeof null` return `'object'`?"* → It's a **bug from the first implementation** in 1995 that was never fixed for backward compatibility.
+- *"Why do we have both `var` and `let`?"* → `var` was the only option until ES6 (2015). `let` and `const` were added to fix `var`'s scoping issues.
+- *"What's the difference between a library and a framework?"* → jQuery is a library (you call it). Angular is a framework (it calls you). This distinction comes from JavaScript's evolution.

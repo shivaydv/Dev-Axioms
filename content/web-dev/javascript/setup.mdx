@@ -1,30 +1,226 @@
 ---
-title: JavaScript Setup
-description: Setting up your development environment for JS
+title: Development Environment Setup
+description: Everything you need to start writing, running, and debugging JavaScript
 ---
 
-Before you start coding, you need a comfortable environment that helps you write, test, and debug your code efficiently.
+Before writing a single line of code, set up a development environment that helps you write, test, and debug efficiently.
 
-## 1. Code Editor: VS Code
-**Visual Studio Code** is the industry standard for web development.
--   **Essential Extensions**:
-    -   **ESLint**: Catch syntax and logic errors as you type.
-    -   **Prettier**: Automatically format your code for consistency.
-    -   **Live Server**: Run a local server for your HTML/JS files to see changes instantly.
+## 1. Code Editor — VS Code
 
-## 2. Browser: Chrome or Firefox
-Modern browsers have powerful **Developer Tools** (Press `F12` or `Ctrl+Shift+I`).
--   Use the **Console** to test small snippets of code and debug errors.
--   Use the **Source** tab for step-by-step debugging.
+**Visual Studio Code** is the industry standard. It's free, fast, and extensible.
 
-## 3. Runtime: Node.js
-Even for frontend developers, Node.js is essential for running build tools (like Vite, Webpack) and managing packages via npm/pnpm.
--   Download from [nodejs.org](https://nodejs.org).
+### Must-Have Extensions
 
-## 4. Global VS Local Setup
--   For small tests: Use the Browser Console or a service like **CodeSandbox** or **StackBlitz**.
--   For real projects: Set up a local repository with a build tool like **Vite**.
+| Extension | Purpose |
+|-----------|---------|
+| **ESLint** | Catches bugs and enforces code style as you type |
+| **Prettier** | Auto-formats code on save for consistent style |
+| **Live Server** | Launches a local server with live reload for HTML/JS |
+| **JavaScript (ES6) Snippets** | Code shortcuts for common patterns |
+| **Error Lens** | Shows errors inline instead of in the problems panel |
 
----
+### Key Settings (settings.json)
 
-**Next Step**: Learn the [History of JS](/web-dev/javascript/history).
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false
+}
+```
+
+## 2. Browser Developer Tools
+
+Every modern browser has built-in developer tools. Press `F12` or `Ctrl + Shift + I` to open them.
+
+### Console Tab
+Your best friend for testing code. Type any JavaScript and hit Enter.
+
+```javascript
+// Try these in your browser console
+console.log("Hello from the console!");
+console.table([{ name: "Shiva", age: 25 }, { name: "Alex", age: 30 }]);
+console.time("loop");
+for (let i = 0; i < 1000000; i++) {}
+console.timeEnd("loop"); // Shows execution time
+```
+
+### Useful Console Methods
+
+| Method | Use Case |
+|--------|----------|
+| `console.log()` | General output |
+| `console.error()` | Shows in red — for errors |
+| `console.warn()` | Shows in yellow — for warnings |
+| `console.table()` | Displays arrays/objects as a table |
+| `console.time()` / `timeEnd()` | Measure execution time |
+| `console.group()` / `groupEnd()` | Group related logs |
+| `console.dir()` | Shows object properties (DOM elements) |
+
+### Sources Tab
+Step through your code line by line with breakpoints. This is **far better than** adding `console.log` everywhere.
+
+### Network Tab
+See every HTTP request your page makes — headers, response, timing. Essential for debugging API calls.
+
+## 3. Node.js Runtime
+
+Even if you only do frontend, you need Node.js for:
+- Running build tools (Vite, Webpack, Next.js)
+- Managing packages via npm/pnpm
+- Running JS files outside the browser
+
+### Installation
+Download from [nodejs.org](https://nodejs.org) — always pick the **LTS (Long Term Support)** version.
+
+```bash
+# Check installation
+node --version    # v20.x.x
+npm --version     # 10.x.x
+```
+
+### Running JavaScript with Node
+
+```bash
+# Run a file
+node app.js
+
+# Interactive mode (REPL)
+node
+> 2 + 2
+4
+> const arr = [1, 2, 3]
+> arr.map(x => x * 2)
+[ 2, 4, 6 ]
+```
+
+## 4. Package Managers
+
+Package managers install and manage third-party libraries.
+
+| Manager | Command | Speed | Lock File |
+|---------|---------|-------|-----------|
+| **npm** | `npm install` | Moderate | `package-lock.json` |
+| **pnpm** | `pnpm install` | Fastest | `pnpm-lock.yaml` |
+| **yarn** | `yarn install` | Fast | `yarn.lock` |
+
+**Recommendation**: Use **pnpm** — it's faster and uses less disk space than npm.
+
+```bash
+# Install pnpm
+npm install -g pnpm
+
+# Initialize a project
+pnpm init
+
+# Install a package
+pnpm add lodash
+
+# Install dev dependency
+pnpm add -D eslint
+```
+
+## 5. Ways to Run JavaScript
+
+### Option A: Browser Console (Quickest)
+Open Chrome → Press `F12` → Console tab → Type code.
+
+**Best for**: Quick experiments and testing snippets.
+
+### Option B: HTML File + Script Tag
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JS Practice</title>
+</head>
+<body>
+  <h1>Check the console</h1>
+  <script src="app.js"></script>
+</body>
+</html>
+```
+
+```javascript
+// app.js
+console.log("Script loaded!");
+```
+
+Open with Live Server extension for auto-reload.
+
+**Best for**: DOM manipulation practice.
+
+### Option C: Node.js (Terminal)
+
+```bash
+node app.js
+```
+
+**Best for**: Logic-only practice, DSA, backend code.
+
+### Option D: Online Playgrounds (No Setup)
+
+| Platform | URL | Best For |
+|----------|-----|---------|
+| **CodeSandbox** | codesandbox.io | Full projects |
+| **StackBlitz** | stackblitz.com | Framework projects |
+| **JS Fiddle** | jsfiddle.net | Quick HTML/CSS/JS |
+| **Repl.it** | replit.com | Node.js + frontend |
+
+**Best for**: When you don't want to set up anything locally.
+
+## 6. Project Structure — Best Practice
+
+For any non-trivial JavaScript project:
+
+```text
+my-project/
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── app.js        ← entry point
+│   ├── utils.js      ← helper functions
+│   └── api.js        ← API calls
+├── assets/
+│   └── images/
+├── package.json
+└── README.md
+```
+
+For modern projects with a bundler (Vite):
+
+```bash
+pnpm create vite my-app -- --template vanilla
+cd my-app
+pnpm install
+pnpm dev
+```
+
+## Common Setup Mistakes
+
+1. **Not using `"use strict"`** — Always enabled in ES modules, but add it manually in scripts
+2. **Script tag placement** — Put `<script>` at the bottom of `<body>` or use `defer`
+3. **Forgetting `.js` extension** — In modules, you often need the full path
+4. **Using `var`** — Start with `const` by default, use `let` only when you need to reassign
+
+```html
+<!-- Wrong: blocks HTML parsing -->
+<head>
+  <script src="app.js"></script>
+</head>
+
+<!-- Right: loads after HTML is parsed -->
+<body>
+  <!-- ... content ... -->
+  <script src="app.js"></script>
+</body>
+
+<!-- Also right: defer attribute -->
+<head>
+  <script src="app.js" defer></script>
+</head>
+```

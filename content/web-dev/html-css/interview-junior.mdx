@@ -1,0 +1,165 @@
+---
+title: "Interview Prep: Junior Level"
+description: Essential HTML and CSS interview questions for freshers and junior developers — fundamentals, markup, and basic styling
+---
+
+These questions test your **understanding of core HTML and CSS**. Expect these in fresher and 0-2 year experience interviews.
+
+---
+
+## HTML Fundamentals
+
+### 1. What is semantic HTML and why is it important?
+
+Semantic HTML means using tags that **describe their purpose** (`<header>`, `<nav>`, `<main>`, `<article>`, `<footer>`) instead of generic tags like `<div>` and `<span>`.
+
+**Why it matters:**
+- **Accessibility:** Screen readers use semantic tags as landmarks to navigate.
+- **SEO:** Search engines understand the page structure and content hierarchy better.
+- **Maintainability:** Code is easier to read and understand.
+
+📖 Deep dive: [Semantic HTML](/web-dev/html-css/semantic-html)
+
+---
+
+### 2. What is the difference between `id` and `class`?
+
+| Feature | `id` | `class` |
+|---------|------|---------|
+| Unique per page | Yes | No (reusable) |
+| CSS specificity | Higher (0,1,0,0) | Lower (0,0,1,0) |
+| JavaScript | `getElementById` | `getElementsByClassName` |
+| Primary use | Unique landmarks, JS hooks, anchor links | Styling, grouping elements |
+
+---
+
+### 3. What does the `alt` attribute do in an `<img>` tag?
+
+It provides alternative text for an image. It is critical for three reasons:
+1. **Accessibility:** Screen readers announce it to visually impaired users.
+2. **SEO:** Search engines use it to understand what the image represents.
+3. **Fallback:** It displays on the screen if the image fails to load.
+
+---
+
+### 4. What is the difference between `<strong>` and `<b>`?
+
+- `<strong>` gives the text **semantic importance**. Screen readers will emphasize it.
+- `<b>` only makes the text visually bold without adding any semantic meaning.
+
+Always prefer `<strong>` unless you only need a visual change for stylistic reasons.
+
+---
+
+### 5. What does the `<meta name="viewport">` tag do?
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+```
+
+It tells the browser how to control the page's dimensions and scaling. **It is absolutely required for responsive design.** Without it, mobile browsers will render the page at a desktop width (usually 980px) and zoom out, making text unreadable.
+
+📖 Deep dive: [Responsive Design](/web-dev/html-css/responsive-design)
+
+---
+
+### 6. What is `<!DOCTYPE html>`?
+
+It is the Document Type Declaration. It tells the browser that this is an HTML5 document. Without it, browsers will render the page in **quirks mode** (emulating old, buggy browser behavior) instead of **standards mode**.
+
+---
+
+### 7. Why should you use `<label for="...">` with form inputs?
+
+It links a text label to a specific input field using the input's `id`.
+- **Accessibility:** Screen readers announce the label when the user focuses the input.
+- **Usability:** Clicking the label text automatically focuses (or toggles) the associated input, creating a larger click target.
+
+📖 Deep dive: [Forms & Inputs](/web-dev/html-css/forms-inputs)
+
+---
+
+## CSS Fundamentals
+
+### 8. Explain the CSS Box Model.
+
+Every HTML element is considered a rectangular box composed of four layers (from inside out):
+1. **Content:** The actual text, image, or child elements.
+2. **Padding:** The transparent space inside the border, surrounding the content.
+3. **Border:** The line going around the padding and content.
+4. **Margin:** The transparent space outside the border, separating the element from others.
+
+📖 Deep dive: [The Box Model](/web-dev/html-css/box-model)
+
+---
+
+### 9. What is `box-sizing: border-box`?
+
+By default (which is `content-box`), if you set `width: 300px` and add 20px padding, the total width becomes 340px.
+
+`box-sizing: border-box` changes this so that the `width` and `height` properties **include** the padding and border. If you set `width: 300px`, the final size will be exactly 300px.
+
+```css
+*, *::before, *::after {
+  box-sizing: border-box; /* The universal reset */
+}
+```
+
+---
+
+### 10. What is the difference between `display: none` and `visibility: hidden`?
+
+| Property | Takes up space? | Visible? | Clickable/Accessible? |
+|----------|-----------------|----------|-----------------------|
+| `display: none` | No (removed from document flow) | No | No |
+| `visibility: hidden` | **Yes** (leaves an empty hole) | No | No |
+
+---
+
+### 11. How do you center a div horizontally?
+
+If it is a block-level element with a defined width, you can use:
+```css
+.center-me {
+  width: 50%; /* or a fixed width */
+  margin: 0 auto;
+}
+```
+*Note: `margin-inline: auto` is the modern logical property equivalent.*
+
+---
+
+### 12. What is CSS Specificity?
+
+Specificity is the algorithm browsers use to determine which CSS rule applies when multiple rules target the exact same element.
+
+The hierarchy (from highest to lowest) is:
+1. **Inline styles** (e.g., `style="color: red;"`)
+2. **IDs** (e.g., `#header`)
+3. **Classes, attributes, and pseudo-classes** (e.g., `.btn`, `[type="text"]`, `:hover`)
+4. **Elements and pseudo-elements** (e.g., `h1`, `::before`)
+
+📖 Deep dive: [Selectors & Specificity](/web-dev/html-css/selectors-specificity)
+
+---
+
+### 13. What is the difference between `px`, `em`, and `rem`?
+
+- `px` (Pixels): An **absolute** unit. It does not scale based on user settings.
+- `em`: A **relative** unit based on the font-size of the element's **parent**. (Can cause compounding issues if nested).
+- `rem` (Root em): A **relative** unit based on the font-size of the **root element** (`<html>`).
+
+**Best Practice:** Use `rem` for font sizes and spacing to ensure accessibility and consistent scaling. Use `px` for small, fixed details like borders.
+
+---
+
+### 14. How do you make an image responsive?
+
+Set the `max-width` to `100%` and `height` to `auto`. This ensures the image never overflows its container, but scales down proportionally if the container is smaller than the image.
+
+```css
+img {
+  max-width: 100%;
+  height: auto;
+}
+```

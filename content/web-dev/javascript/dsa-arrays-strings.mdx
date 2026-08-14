@@ -1,0 +1,202 @@
+---
+title: DSA — Arrays & Strings
+description: Essential array and string algorithms with JavaScript — Two Sum, Sliding Window, Kadane's, Anagrams, and more
+---
+
+Arrays and strings are the **most common** DSA interview topics. These patterns solve 80% of array/string problems.
+
+## Pattern 1: Two Pointers
+
+### Two Sum (Sorted Array)
+
+```javascript
+function twoSum(nums, target) {
+  let left = 0, right = nums.length - 1;
+
+  while (left < right) {
+    const sum = nums[left] + nums[right];
+    if (sum === target) return [left, right];
+    if (sum < target) left++;
+    else right--;
+  }
+  return [-1, -1];
+}
+```
+
+### Two Sum (Unsorted — Hash Map)
+
+```javascript
+function twoSum(nums, target) {
+  const map = new Map();
+
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement), i];
+    }
+    map.set(nums[i], i);
+  }
+  return [-1, -1];
+}
+
+// Time: O(n), Space: O(n)
+```
+
+## Pattern 2: Sliding Window
+
+### Maximum Sum Subarray of Size K
+
+```javascript
+function maxSumSubarray(arr, k) {
+  let windowSum = 0;
+  let maxSum = -Infinity;
+
+  for (let i = 0; i < arr.length; i++) {
+    windowSum += arr[i];
+
+    if (i >= k - 1) {
+      maxSum = Math.max(maxSum, windowSum);
+      windowSum -= arr[i - (k - 1)]; // shrink window
+    }
+  }
+
+  return maxSum;
+}
+```
+
+### Longest Substring Without Repeating Characters
+
+```javascript
+function lengthOfLongestSubstring(s) {
+  const seen = new Map(); // char → last index
+  let maxLen = 0;
+  let start = 0;
+
+  for (let end = 0; end < s.length; end++) {
+    if (seen.has(s[end]) && seen.get(s[end]) >= start) {
+      start = seen.get(s[end]) + 1;
+    }
+    seen.set(s[end], end);
+    maxLen = Math.max(maxLen, end - start + 1);
+  }
+
+  return maxLen;
+}
+
+// "abcabcbb" → 3 ("abc")
+// Time: O(n), Space: O(min(n, alphabet))
+```
+
+## Pattern 3: Kadane's Algorithm
+
+### Maximum Subarray Sum
+
+```javascript
+function maxSubArray(nums) {
+  let currentMax = nums[0];
+  let globalMax = nums[0];
+
+  for (let i = 1; i < nums.length; i++) {
+    currentMax = Math.max(nums[i], currentMax + nums[i]);
+    globalMax = Math.max(globalMax, currentMax);
+  }
+
+  return globalMax;
+}
+
+// [-2, 1, -3, 4, -1, 2, 1, -5, 4] → 6 (subarray [4, -1, 2, 1])
+// Time: O(n), Space: O(1)
+```
+
+## Pattern 4: Prefix Sum
+
+```javascript
+function prefixSum(arr) {
+  const prefix = [0];
+  for (let i = 0; i < arr.length; i++) {
+    prefix.push(prefix[i] + arr[i]);
+  }
+  return prefix;
+}
+
+// Range sum query: sum from index i to j
+function rangeSum(prefix, i, j) {
+  return prefix[j + 1] - prefix[i];
+}
+```
+
+## Pattern 5: Frequency Counter
+
+```javascript
+function isAnagram(s, t) {
+  if (s.length !== t.length) return false;
+
+  const freq = {};
+  for (const char of s) {
+    freq[char] = (freq[char] || 0) + 1;
+  }
+  for (const char of t) {
+    if (!freq[char]) return false;
+    freq[char]--;
+  }
+
+  return true;
+}
+
+// isAnagram("listen", "silent") → true
+// Time: O(n), Space: O(n)
+```
+
+## String Problems
+
+### Palindrome Check
+
+```javascript
+function isPalindrome(s) {
+  const clean = s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  let left = 0, right = clean.length - 1;
+
+  while (left < right) {
+    if (clean[left] !== clean[right]) return false;
+    left++;
+    right--;
+  }
+  return true;
+}
+```
+
+### String Reversal
+
+```javascript
+const reverse = (s) => [...s].reverse().join("");
+
+// Without built-in
+function reverseString(s) {
+  let result = "";
+  for (let i = s.length - 1; i >= 0; i--) {
+    result += s[i];
+  }
+  return result;
+}
+```
+
+## JavaScript-Specific Tricks
+
+```javascript
+// Remove duplicates
+const unique = [...new Set(arr)];
+
+// Frequency counter with Map
+const freq = new Map();
+for (const x of arr) freq.set(x, (freq.get(x) || 0) + 1);
+
+// Sort numbers correctly
+arr.sort((a, b) => a - b);
+
+// Quick array of 0s
+new Array(n).fill(0);
+
+// 2D array
+Array.from({ length: rows }, () => new Array(cols).fill(0));
+```
+

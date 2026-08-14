@@ -1,0 +1,200 @@
+---
+title: call, apply, bind
+description: Explicitly control what this refers to — the three methods every JS developer must know
+---
+
+When you need to **explicitly set** what `this` refers to, you use `call`, `apply`, or `bind`. These are methods available on every function.
+
+## Quick Reference
+
+```text
+call  → invoke immediately, pass args with commas
+apply → invoke immediately, pass args as array
+bind  → returns NEW function with this preset (doesn't invoke)
+```
+
+### Memory Trick
+
+```text
+call  → Comma separated args
+apply → Array of args
+bind  → Binds and returns new function
+```
+
+## Function.prototype.call()
+
+Calls the function with a specified `this` and comma-separated arguments:
+
+```javascript
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, I'm ${this.name}${punctuation}`);
+}
+
+const user = { name: "Shiva" };
+
+greet.call(user, "Hello", "!"); // "Hello, I'm Shiva!"
+```
+
+### Real-World Use: Method Borrowing
+
+```javascript
+const arr = [1, 2, 3];
+const max = Math.max.call(null, ...arr); // 3
+
+// Borrow array methods for array-like objects
+function example() {
+  // `arguments` is array-like, not a real array
+  const args = Array.prototype.slice.call(arguments);
+  console.log(args); // now a real array
+}
+```
+
+## Function.prototype.apply()
+
+Same as `call`, but takes arguments as an **array**:
+
+```javascript
+greet.apply(user, ["Hello", "!"]); // "Hello, I'm Shiva!"
+
+// Useful when you already have an array of args
+const args = ["Hi", "?"];
+greet.apply(user, args);
+```
+
+### Classic Use: Math.max with Arrays
+
+```javascript
+const numbers = [5, 2, 8, 1, 9];
+
+// Before spread operator existed, apply was the way:
+Math.max.apply(null, numbers); // 9
+
+// Modern: use spread instead
+Math.max(...numbers); // 9
+```
+
+## Function.prototype.bind()
+
+Returns a **new function** with `this` permanently set. Does NOT call the function immediately:
+
+```javascript
+const boundGreet = greet.bind(user, "Hey");
+
+boundGreet("!"); // "Hey, I'm Shiva!"
+boundGreet("?"); // "Hey, I'm Shiva?"
+// "Hey" was preset by bind, only punctuation changes
+```
+
+### Real-World Use: Event Handlers
+
+```javascript
+class Button {
+  constructor(label) {
+    this.label = label;
+  }
+
+  handleClick() {
+    console.log(`${this.label} clicked`);
+  }
+
+  mount() {
+    const btn = document.querySelector("button");
+
+    // ❌ `this` will be the button element, not the class
+    btn.addEventListener("click", this.handleClick);
+
+    // ✅ Fix with bind
+    btn.addEventListener("click", this.handleClick.bind(this));
+
+    // ✅ Fix with arrow function
+    btn.addEventListener("click", () => this.handleClick());
+  }
+}
+```
+
+### Partial Application with bind
+
+Pre-fill some arguments:
+
+```javascript
+function multiply(a, b) {
+  return a * b;
+}
+
+const double = multiply.bind(null, 2);  // a is always 2
+const triple = multiply.bind(null, 3);  // a is always 3
+
+double(5);  // 10
+triple(5);  // 15
+```
+
+## call vs apply vs bind — Comparison
+
+| Feature | `call` | `apply` | `bind` |
+|---------|--------|---------|--------|
+| **Invokes immediately?** | Yes | Yes | No (returns new fn) |
+| **Arguments** | Comma separated | Array | Comma separated |
+| **Returns** | Function result | Function result | New function |
+| **Use case** | Immediate invocation | When args are in array | Deferred execution |
+
+## Polyfill Implementations (Interview Must-Know)
+
+### myCall
+
+```javascript
+Function.prototype.myCall = function (context = globalThis, ...args) {
+  const key = Symbol(); // unique key to avoid overwriting
+  context[key] = this;  // attach function to context
+  const result = context[key](...args);
+  delete context[key];  // clean up
+  return result;
+};
+
+// Test
+greet.myCall(user, "Hello", "!"); // "Hello, I'm Shiva!"
+```
+
+### myApply
+
+```javascript
+Function.prototype.myApply = function (context = globalThis, args = []) {
+  const key = Symbol();
+  context[key] = this;
+  const result = context[key](...args);
+  delete context[key];
+  return result;
+};
+```
+
+### myBind
+
+```javascript
+Function.prototype.myBind = function (context, ...bindArgs) {
+  const fn = this;
+  return function (...callArgs) {
+    return fn.apply(context, [...bindArgs, ...callArgs]);
+  };
+};
+```
+
+## Interview Questions
+
+### Q: What happens if you bind twice?
+
+```javascript
+function greet() {
+  return this.name;
+}
+
+const fn1 = greet.bind({ name: "First" });
+const fn2 = fn1.bind({ name: "Second" });
+
+fn2(); // ?
+```
+
+**Answer**: `"First"`. Once bound, `this` cannot be re-bound. The second `bind` is ignored.
+
+### Q: What's the difference between call and apply?
+
+**Answer**: They do the same thing — call a function with a specific `this`. The only difference is how you pass arguments: `call` takes them individually, `apply` takes them as an array. With modern spread syntax, `apply` is rarely needed.
+

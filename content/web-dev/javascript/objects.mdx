@@ -1,0 +1,191 @@
+---
+title: Objects in JavaScript
+description: Object creation, property access, methods, utilities, deep vs shallow copy, and mastering objects
+---
+
+Objects are the **fundamental building block** of JavaScript. Almost everything in JS is an object — arrays, functions, dates, even errors.
+
+## Creating Objects
+
+```javascript
+// Object literal (most common)
+const user = {
+  name: "Shiva",
+  age: 25,
+  isAdmin: true,
+  address: { city: "Mumbai", country: "India" }
+};
+
+// Shorthand properties (ES6)
+const name = "Shiva";
+const age = 25;
+const user = { name, age }; // same as { name: name, age: age }
+
+// Computed property names
+const key = "role";
+const obj = { [key]: "admin" }; // { role: "admin" }
+```
+
+## Accessing Properties
+
+```javascript
+// Dot notation
+user.name; // "Shiva"
+
+// Bracket notation (required for dynamic keys)
+const key = "name";
+user[key]; // "Shiva"
+
+// Optional chaining
+user.address?.city; // "Mumbai"
+user.phone?.number; // undefined (no error)
+```
+
+## Object Methods
+
+```javascript
+const calc = {
+  value: 0,
+  add(n) {
+    this.value += n;
+    return this; // enables chaining
+  },
+  result() {
+    return this.value;
+  }
+};
+
+calc.add(10).add(5).result(); // 15
+```
+
+## Object Utilities
+
+```javascript
+const user = { name: "Shiva", age: 25, role: "admin" };
+
+Object.keys(user);    // ["name", "age", "role"]
+Object.values(user);  // ["Shiva", 25, "admin"]
+Object.entries(user); // [["name", "Shiva"], ["age", 25], ["role", "admin"]]
+
+// Iterate over object
+for (const [key, value] of Object.entries(user)) {
+  console.log(`${key}: ${value}`);
+}
+
+// Merge objects
+const config = Object.assign({}, defaults, userPrefs);
+const config = { ...defaults, ...userPrefs }; // modern spread
+```
+
+## Object.freeze / Object.seal
+
+```javascript
+// freeze — no changes at all
+const frozen = Object.freeze({ name: "Shiva" });
+frozen.name = "Alex"; // silently fails
+frozen.age = 25;      // silently fails
+
+// seal — can modify existing, can't add/delete
+const sealed = Object.seal({ name: "Shiva" });
+sealed.name = "Alex"; // ✅ Works
+sealed.age = 25;      // ❌ Fails
+
+// Both are SHALLOW — nested objects are NOT affected
+```
+
+## Getters and Setters
+
+```javascript
+const user = {
+  firstName: "Shiva",
+  lastName: "Yadav",
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+
+  set fullName(name) {
+    [this.firstName, this.lastName] = name.split(" ");
+  }
+};
+
+user.fullName; // "Shiva Yadav"
+user.fullName = "Alex Kumar";
+user.firstName; // "Alex"
+```
+
+## Deep vs Shallow Copy
+
+### Shallow Copy (1 level deep only)
+
+```javascript
+const original = { name: "Shiva", address: { city: "Mumbai" } };
+
+const copy = { ...original };
+copy.address.city = "Delhi";
+console.log(original.address.city); // "Delhi" — shared reference!
+```
+
+### Deep Copy
+
+```javascript
+// ✅ structuredClone (modern — use this!)
+const deep = structuredClone(original);
+deep.address.city = "Delhi";
+console.log(original.address.city); // "Mumbai" — independent
+
+// ❌ JSON trick (loses functions, dates, undefined)
+const deep = JSON.parse(JSON.stringify(original));
+```
+
+## Property Descriptors
+
+```javascript
+Object.defineProperty(user, "id", {
+  value: 1,
+  writable: false,     // can't change
+  enumerable: false,   // hidden from Object.keys, for...in
+  configurable: false  // can't delete or reconfigure
+});
+```
+
+## Real-World Patterns
+
+### Config Pattern
+
+```javascript
+function createServer(options = {}) {
+  const config = {
+    port: 3000,
+    host: "localhost",
+    debug: false,
+    ...options
+  };
+  return config;
+}
+```
+
+### Check if Object is Empty
+
+```javascript
+const isEmpty = (obj) => Object.keys(obj).length === 0;
+```
+
+### Remove a Property (Without Mutating)
+
+```javascript
+const { password, ...safeUser } = user;
+// safeUser has everything except password
+```
+
+## Common Mistakes
+
+### Comparing Objects
+
+```javascript
+{ a: 1 } === { a: 1 } // false — different references!
+
+// Compare by value:
+JSON.stringify(obj1) === JSON.stringify(obj2); // fragile but works
+```
+

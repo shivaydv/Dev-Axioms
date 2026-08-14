@@ -1,37 +1,314 @@
 ---
-title: JavaScript Data Types
-description: Understanding how JS stores information
+title: Data Types in JavaScript
+description: The 7 primitives, objects, reference vs value, typeof quirks, and real-world type checking
 ---
 
-JavaScript is a dynamically typed language, but it still has a robust set of data types that you must master.
+JavaScript is **dynamically typed** — you don't declare types, the engine figures them out at runtime. Understanding data types deeply is essential for avoiding subtle bugs.
 
-## 1. Primitives (Stored by Value)
+## Two Categories
 
--   **`String`**: "Hello World"
--   **`Number`**: `42`, `3.14` (There is no separate `integer` vs `double`).
--   **`Boolean`**: `true` or `false`.
--   **`Undefined`**: A variable that has been declared but not assigned a value.
--   **`Null`**: An empty value. (Note: `typeof null === 'object'` - a famous JS bug).
--   **`Symbol`**: Unique and immutable values (ES6).
--   **`BigInt`**: For integers larger than $2^{53} - 1$.
-
-## 2. Objects (Stored by Reference)
-
--   **`Object`**: A collection of properties (`{ key: value }`).
--   **`Array`**: An ordered list of values (`[1, 2, 3]`).
--   **`Function`**: A callable object.
--   **`Date`**: For handling dates and times.
-
-### Reference Axiom:
-When you copy a primitive, you create a new value. When you copy an object, you create a new reference to the **same** object in memory.
-
-```javascript
-const obj1 = { name: 'A' };
-const obj2 = obj1;
-obj2.name = 'B';
-console.log(obj1.name); // 'B' (Changes affect both)
+```text
+Data Types
+├── Primitives (stored by VALUE)
+│   ├── String
+│   ├── Number
+│   ├── BigInt
+│   ├── Boolean
+│   ├── Undefined
+│   ├── Null
+│   └── Symbol
+│
+└── Non-Primitives (stored by REFERENCE)
+    ├── Object
+    ├── Array
+    ├── Function
+    ├── Date
+    ├── Map / Set
+    ├── WeakMap / WeakSet
+    └── RegExp
 ```
 
----
+## The 7 Primitive Types
 
-**Next Step**: Mastering [Complex Syntax](/web-dev/javascript/complex-syntax).types, type coercion, and memory allocation.
+### String
+
+```javascript
+const single = 'hello';
+const double = "hello";
+const template = `Hello, ${name}!`; // template literal (ES6)
+
+// Strings are IMMUTABLE
+const str = "hello";
+str[0] = "H"; // Does nothing — no error, but doesn't change
+console.log(str); // "hello"
+```
+
+### Number
+
+JavaScript has **one number type** for both integers and decimals (64-bit IEEE 754 floating point).
+
+```javascript
+const age = 25;          // integer
+const price = 19.99;     // decimal
+const negative = -10;
+const infinity = Infinity;
+const notANumber = NaN;  // "Not a Number" — but typeof NaN is "number" 🤯
+
+// Safe integer range
+console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991 (2^53 - 1)
+console.log(Number.MIN_SAFE_INTEGER); // -9007199254740991
+```
+
+### BigInt
+
+For numbers larger than `Number.MAX_SAFE_INTEGER`:
+
+```javascript
+const big = 9007199254740991n; // Note the 'n' suffix
+const huge = BigInt("123456789012345678901234567890");
+
+// Cannot mix BigInt and Number
+big + 1;  // ❌ TypeError
+big + 1n; // ✅ 9007199254740992n
+```
+
+### Boolean
+
+```javascript
+const isActive = true;
+const isDeleted = false;
+```
+
+### Undefined
+
+A variable that has been **declared but not assigned** a value:
+
+```javascript
+let x;
+console.log(x); // undefined
+
+function greet(name) {
+  console.log(name);
+}
+greet(); // undefined (no argument passed)
+```
+
+### Null
+
+An **intentional absence** of value. You set it explicitly:
+
+```javascript
+let user = null; // "there is no user right now"
+
+// Later...
+user = { name: "Shiva" }; // now there's a user
+```
+
+### Symbol
+
+Creates a **unique identifier** — no two symbols are the same:
+
+```javascript
+const id1 = Symbol("id");
+const id2 = Symbol("id");
+console.log(id1 === id2); // false — always unique
+
+// Primary use: object property keys that won't collide
+const SECRET = Symbol("secret");
+const obj = {
+  [SECRET]: "hidden value",
+  name: "visible"
+};
+
+console.log(obj[SECRET]); // "hidden value"
+console.log(Object.keys(obj)); // ["name"] — Symbol keys are hidden
+```
+
+## Non-Primitive Types (Reference Types)
+
+### Object
+
+```javascript
+const user = {
+  name: "Shiva",
+  age: 25,
+  address: {
+    city: "Mumbai",
+    country: "India"
+  }
+};
+```
+
+### Array (technically an object)
+
+```javascript
+const colors = ["red", "green", "blue"];
+console.log(typeof colors); // "object" — not "array"!
+console.log(Array.isArray(colors)); // true — correct way to check
+```
+
+### Function (technically an object)
+
+```javascript
+function greet() {
+  return "hello";
+}
+console.log(typeof greet); // "function" — special typeof case
+```
+
+## Value vs Reference — The Most Common Bug Source
+
+### Primitives are Copied by Value
+
+```javascript
+let a = 10;
+let b = a;    // b gets a COPY of 10
+b = 20;
+console.log(a); // 10 — unchanged
+```
+
+### Objects are Copied by Reference
+
+```javascript
+const obj1 = { name: "Shiva" };
+const obj2 = obj1;       // obj2 points to the SAME object
+obj2.name = "Alex";
+console.log(obj1.name);  // "Alex" — BOTH changed!
+```
+
+**Visual**:
+
+```text
+Primitives:          Objects:
+a → [10]             obj1 → ┐
+b → [20]             obj2 → ┤→ { name: "Alex" }
+(separate boxes)     (same box)
+```
+
+### How to Actually Copy an Object
+
+```javascript
+// Shallow copy (1 level deep)
+const copy1 = { ...obj1 };
+const copy2 = Object.assign({}, obj1);
+
+// Deep copy (all levels)
+const deepCopy = structuredClone(obj1); // Modern — use this!
+const jsonCopy = JSON.parse(JSON.stringify(obj1)); // Old way — loses functions, dates, undefined
+```
+
+## The `typeof` Operator and Its Quirks
+
+```javascript
+typeof "hello"      // "string"
+typeof 42           // "number"
+typeof 42n          // "bigint"
+typeof true         // "boolean"
+typeof undefined    // "undefined"
+typeof Symbol()     // "symbol"
+typeof {}           // "object"
+typeof []           // "object"  ← gotcha!
+typeof function(){} // "function"
+typeof null         // "object"  ← FAMOUS BUG
+typeof NaN          // "number"  ← confusing!
+```
+
+### Why `typeof null === "object"`?
+
+This is a **bug from the original JavaScript implementation** in 1995. In the first version, values were stored as a type tag + value. Objects had a type tag of `0`, and `null` was represented as the NULL pointer (`0x00`) — so its type tag was also `0`, making `typeof null` return `"object"`.
+
+It was never fixed because too much existing code depends on this behavior.
+
+## Proper Type Checking Patterns
+
+```javascript
+// Check for null
+value === null
+
+// Check for undefined
+value === undefined
+// or
+typeof value === "undefined"
+
+// Check for null OR undefined
+value == null  // true for both null and undefined (one of the few good uses of ==)
+
+// Check for array
+Array.isArray(value)
+
+// Check for NaN
+Number.isNaN(value)  // ✅ Use this
+isNaN(value)         // ❌ Avoid — isNaN("hello") returns true (coerces first)
+
+// Check for plain object
+typeof value === "object" && value !== null && !Array.isArray(value)
+
+// Check instance type
+value instanceof Date
+value instanceof RegExp
+value instanceof Map
+```
+
+## Truthy and Falsy Values
+
+Every value in JavaScript is either **truthy** or **falsy** when used in a boolean context.
+
+### The 8 Falsy Values (Memorize These)
+
+```javascript
+false
+0
+-0
+0n        // BigInt zero
+""        // empty string
+null
+undefined
+NaN
+```
+
+**Everything else is truthy**, including:
+
+```javascript
+"0"       // truthy (non-empty string)
+" "       // truthy (space is a character)
+[]        // truthy (empty array)
+{}        // truthy (empty object)
+function(){} // truthy
+```
+
+### Real-World Pattern
+
+```javascript
+// Using truthy/falsy for defaults
+const username = inputValue || "Anonymous";
+
+// Better: nullish coalescing (handles 0 and "" correctly)
+const count = inputCount ?? 0;
+// inputCount = 0   → count = 0 (preserves 0)
+// inputCount = null → count = 0 (falls back)
+```
+
+## Interview Deep-Dives
+
+### Q: What's the difference between `undefined` and `null`?
+
+| | `undefined` | `null` |
+|---|---|---|
+| **Meaning** | Variable declared but not assigned | Intentional absence of value |
+| **Set by** | JavaScript engine | The developer |
+| **typeof** | `"undefined"` | `"object"` (bug) |
+| **In math** | `NaN` (`undefined + 1`) | `0` (`null + 1`) |
+
+### Q: Why is `NaN !== NaN`?
+
+```javascript
+console.log(NaN === NaN); // false
+```
+
+This is by design (IEEE 754 standard). `NaN` represents "the result of a failed math operation" — and two different failed operations shouldn't be considered equal.
+
+```javascript
+// Correct way to check for NaN
+Number.isNaN(NaN);   // true
+Number.isNaN("abc"); // false (doesn't coerce)
+```

@@ -1,0 +1,230 @@
+---
+title: The Box Model
+description: Understanding content, padding, border, and margin — the foundation of all CSS layout
+---
+
+Every HTML element is a **rectangular box**. The box model defines how the element's size is calculated. This is **the most important CSS concept** for interviews.
+
+## The Four Layers
+
+```text
+┌─────────────────────────────────────────┐
+│                MARGIN                    │
+│  ┌───────────────────────────────────┐  │
+│  │             BORDER                │  │
+│  │  ┌───────────────────────────┐    │  │
+│  │  │         PADDING           │    │  │
+│  │  │  ┌───────────────────┐    │    │  │
+│  │  │  │     CONTENT       │    │    │  │
+│  │  │  │  (text, images)   │    │    │  │
+│  │  │  └───────────────────┘    │    │  │
+│  │  └───────────────────────────┘    │  │
+│  └───────────────────────────────────┘  │
+└─────────────────────────────────────────┘
+```
+
+| Layer | What It Is | Visible? |
+|-------|-----------|----------|
+| **Content** | The actual text, images, etc. | Yes |
+| **Padding** | Space between content and border | Background shows through |
+| **Border** | Line around the padding | Yes (if set) |
+| **Margin** | Space outside the border | No (transparent) |
+
+## Content
+
+The area where text and child elements live. Controlled by `width` and `height`:
+
+```css
+.box {
+  width: 300px;
+  height: 200px;
+}
+```
+
+## Padding
+
+Space **inside** the box, between content and border:
+
+```css
+.box {
+  padding: 20px;              /* all sides */
+  padding: 10px 20px;         /* vertical | horizontal */
+  padding: 10px 20px 15px;    /* top | horizontal | bottom */
+  padding: 10px 20px 15px 5px; /* top | right | bottom | left (clockwise) */
+
+  /* Individual sides */
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 15px;
+  padding-left: 5px;
+}
+```
+
+**Padding takes the element's background color** — useful for spacing content from edges.
+
+## Border
+
+```css
+.box {
+  border: 2px solid #333;     /* width | style | color */
+  border-radius: 8px;         /* rounded corners */
+
+  /* Individual sides */
+  border-top: 1px solid #ddd;
+  border-bottom: none;
+
+  /* Border styles */
+  border-style: solid;        /* solid, dashed, dotted, double, none */
+}
+```
+
+### Border Radius
+
+```css
+.circle { border-radius: 50%; }         /* perfect circle (if square) */
+.rounded { border-radius: 8px; }        /* rounded corners */
+.pill { border-radius: 9999px; }        /* pill shape */
+.custom { border-radius: 10px 0 10px 0; } /* top-left and bottom-right only */
+```
+
+## Margin
+
+Space **outside** the box, between this element and others:
+
+```css
+.box {
+  margin: 20px;               /* all sides */
+  margin: 0 auto;             /* centered horizontally (block elements) */
+
+  /* Individual sides */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+```
+
+### Margin Collapse (Interview Favorite)
+
+When vertical margins of two block elements **touch**, they **collapse** — only the larger margin applies:
+
+```css
+.paragraph-1 { margin-bottom: 20px; }
+.paragraph-2 { margin-top: 30px; }
+
+/* The gap between them is 30px, NOT 50px */
+/* The larger margin (30px) wins */
+```
+
+**Margin collapse happens**:
+- Between adjacent siblings (vertical only)
+- Between parent and first/last child (if no padding/border between)
+- Empty blocks
+
+**Margin collapse does NOT happen**:
+- Horizontally (left/right margins)
+- With Flexbox or Grid children
+- When there's padding or border separating elements
+- With floated or absolutely positioned elements
+
+## `box-sizing` — The Critical Property
+
+### Default: `content-box`
+
+Width and height apply to **content only**. Padding and border are **added on top**:
+
+```css
+.box {
+  width: 300px;
+  padding: 20px;
+  border: 2px solid #333;
+  /* Total width = 300 + 20 + 20 + 2 + 2 = 344px ❌ unexpected */
+}
+```
+
+### Better: `border-box`
+
+Width and height **include** padding and border:
+
+```css
+.box {
+  box-sizing: border-box;
+  width: 300px;
+  padding: 20px;
+  border: 2px solid #333;
+  /* Total width = 300px ✅ (content area shrinks to accommodate) */
+}
+```
+
+### The Universal Reset (Use This Always)
+
+```css
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+```
+
+This is the **single most important CSS reset**. Use it in every project.
+
+## Seeing the Box Model
+
+Open DevTools (`F12`) → **Computed** tab → see the box model diagram with exact values:
+
+```text
+       margin: 20
+    ┌──────────────┐
+    │ border: 2    │
+    │ ┌──────────┐ │
+    │ │padding:20│ │
+    │ │ ┌──────┐ │ │
+    │ │ │300×200│ │ │  ← content
+    │ │ └──────┘ │ │
+    │ └──────────┘ │
+    └──────────────┘
+```
+
+## Width and Height Helpers
+
+```css
+.box {
+  width: 100%;          /* full width of parent */
+  max-width: 1200px;    /* never wider than 1200px */
+  min-width: 300px;     /* never narrower than 300px */
+
+  height: auto;         /* grow with content (default) */
+  min-height: 100vh;    /* at least full viewport height */
+}
+```
+
+**Tip**: Avoid setting fixed `height` — let content determine height naturally.
+
+## Outline vs Border
+
+```css
+/* Outline does NOT affect layout (doesn't add to box size) */
+.focused {
+  outline: 2px solid blue;
+  outline-offset: 4px;  /* gap between element and outline */
+}
+```
+
+| | Border | Outline |
+|---|--------|---------|
+| Affects layout | Yes | No |
+| Part of box model | Yes | No |
+| Can be rounded | Yes | Limited (`outline-radius` in Firefox only) |
+| Per-side control | Yes | No |
+
+## Interview Questions
+
+### Q: Explain the CSS box model.
+
+Every element is a box with four layers: Content (the actual content), Padding (space inside the border), Border (line around padding), and Margin (space outside the border). The total size depends on `box-sizing`.
+
+### Q: What is `box-sizing: border-box`?
+
+It makes `width` and `height` include padding and border, so a `width: 300px` element stays 300px total. The default `content-box` adds padding and border on top of the width.
+
+### Q: What is margin collapse?
+
+When two vertical margins touch, only the larger one applies. For example, if one element has `margin-bottom: 20px` and the next has `margin-top: 30px`, the gap is 30px (not 50px).

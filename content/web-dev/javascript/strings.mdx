@@ -1,0 +1,235 @@
+---
+title: Strings in JavaScript
+description: String creation, template literals, 20+ essential methods, and real-world manipulation patterns
+---
+
+Strings are one of the most used data types. You'll manipulate them in almost every project — from formatting user names to parsing API responses.
+
+## Creating Strings
+
+```javascript
+const single = 'hello';
+const double = "hello";
+const template = `hello ${name}`; // template literal (ES6)
+
+// All three create the same type
+typeof single === typeof double; // true
+```
+
+## Template Literals — The Modern Way
+
+```javascript
+const name = "Shiva";
+const age = 25;
+
+// Old way (concatenation)
+const msg1 = "Hello, " + name + "! You are " + age + " years old.";
+
+// Modern way (template literal)
+const msg2 = `Hello, ${name}! You are ${age} years old.`;
+
+// Multi-line strings
+const html = `
+  <div class="card">
+    <h2>${name}</h2>
+    <p>Age: ${age}</p>
+  </div>
+`;
+
+// Expressions inside ${}
+const status = `Status: ${age >= 18 ? "Adult" : "Minor"}`;
+```
+
+## String Immutability
+
+Strings in JavaScript are **immutable** — once created, they cannot be changed. Every string method returns a **new string**.
+
+```javascript
+const str = "hello";
+str[0] = "H";          // Does nothing — no error either
+console.log(str);      // "hello" — unchanged
+
+// You must create a new string
+const newStr = "H" + str.slice(1); // "Hello"
+```
+
+## Essential String Methods
+
+### Searching
+
+```javascript
+const str = "JavaScript is awesome";
+
+str.indexOf("is");        // 11 (first occurrence, -1 if not found)
+str.lastIndexOf("a");     // 14 (last occurrence)
+str.includes("Script");   // true (ES6)
+str.startsWith("Java");   // true (ES6)
+str.endsWith("awesome");  // true (ES6)
+str.search(/is/i);        // 11 (works with regex)
+```
+
+### Extracting
+
+```javascript
+const str = "JavaScript";
+
+str.slice(0, 4);          // "Java" (start, end — end not included)
+str.slice(4);             // "Script" (from index 4 to end)
+str.slice(-6);            // "Script" (negative = from end)
+str.substring(0, 4);      // "Java" (similar, but no negative indexes)
+str.at(0);                // "J" (ES2022)
+str.at(-1);               // "t" (last character — ES2022)
+str[0];                   // "J" (bracket notation)
+```
+
+### Transforming
+
+```javascript
+const str = "  Hello World  ";
+
+str.trim();               // "Hello World" (removes whitespace from both ends)
+str.trimStart();          // "Hello World  " (ES2019)
+str.trimEnd();            // "  Hello World" (ES2019)
+str.toUpperCase();        // "  HELLO WORLD  "
+str.toLowerCase();        // "  hello world  "
+str.repeat(3);            // "  Hello World    Hello World    Hello World  "
+str.padStart(20, "-");    // "-----  Hello World  "
+str.padEnd(20, "-");      // "  Hello World  -----"
+```
+
+### Replacing
+
+```javascript
+const str = "I love cats. Cats are great.";
+
+str.replace("cats", "dogs");       // "I love dogs. Cats are great." (first match only)
+str.replace(/cats/gi, "dogs");     // "I love dogs. dogs are great." (regex, global + case-insensitive)
+str.replaceAll("cats", "dogs");    // Error — case-sensitive, doesn't match "Cats"
+str.replaceAll(/cats/gi, "dogs");  // "I love dogs. dogs are great." (ES2021)
+```
+
+### Splitting and Joining
+
+```javascript
+const csv = "apple,banana,cherry";
+const arr = csv.split(",");        // ["apple", "banana", "cherry"]
+const back = arr.join(" - ");      // "apple - banana - cherry"
+
+// Split by each character
+"hello".split("");                 // ["h", "e", "l", "l", "o"]
+
+// Limit the split
+"a-b-c-d".split("-", 2);          // ["a", "b"]
+```
+
+## Real-World String Patterns
+
+### Capitalize First Letter
+
+```javascript
+const capitalize = (str) =>
+  str.charAt(0).toUpperCase() + str.slice(1);
+
+capitalize("hello"); // "Hello"
+```
+
+### Slug Generator (for URLs)
+
+```javascript
+const slugify = (str) =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")   // remove special chars
+    .replace(/\s+/g, "-")            // spaces → hyphens
+    .replace(/-+/g, "-");            // multiple hyphens → single
+
+slugify("Hello World! This is a Test");
+// "hello-world-this-is-a-test"
+```
+
+### Truncate with Ellipsis
+
+```javascript
+const truncate = (str, maxLength) =>
+  str.length > maxLength
+    ? str.slice(0, maxLength - 3) + "..."
+    : str;
+
+truncate("This is a long sentence", 15);
+// "This is a lo..."
+```
+
+### Email Validation (Basic)
+
+```javascript
+const isValidEmail = (email) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+isValidEmail("user@example.com"); // true
+isValidEmail("invalid@");         // false
+```
+
+## Tagged Template Literals (Advanced)
+
+You can create custom template literal processors:
+
+```javascript
+function highlight(strings, ...values) {
+  return strings.reduce((result, str, i) => {
+    return result + str + (values[i] ? `<mark>${values[i]}</mark>` : "");
+  }, "");
+}
+
+const name = "Shiva";
+const city = "Mumbai";
+
+highlight`Hello ${name} from ${city}!`;
+// "Hello <mark>Shiva</mark> from <mark>Mumbai</mark>!"
+```
+
+**Real-world use**: Styled-components in React uses tagged templates for CSS-in-JS.
+
+## Unicode and Emojis
+
+```javascript
+// Emoji length can be surprising
+"😀".length;        // 2 (emoji is 2 UTF-16 code units)
+[..."😀"].length;   // 1 (spread handles it correctly)
+
+// Iterate over characters correctly
+for (const char of "Hello 😀") {
+  console.log(char); // H, e, l, l, o, " ", 😀
+}
+```
+
+## Common Mistakes
+
+### 1. Forgetting Strings Are Immutable
+
+```javascript
+const str = "hello";
+str.toUpperCase();      // returns "HELLO"
+console.log(str);       // still "hello" — original unchanged
+```
+
+### 2. Using `==` for String Comparison
+
+```javascript
+"5" == 5;   // true (coercion!)
+"5" === 5;  // false ← always use this
+```
+
+### 3. Not Handling Edge Cases
+
+```javascript
+// What if the input is null/undefined?
+const name = null;
+name.toUpperCase(); // ❌ TypeError
+
+// Always guard
+const safeName = (name || "").toUpperCase();
+// or
+const safeName = name?.toUpperCase() ?? "";
+```
+

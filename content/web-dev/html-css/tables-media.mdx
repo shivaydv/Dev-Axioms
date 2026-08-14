@@ -1,0 +1,222 @@
+---
+title: Tables & Media
+description: HTML tables for data display, and embedding images, video, and audio
+---
+
+Tables are for **tabular data** (not layout). Media elements let you embed images, video, and audio natively.
+
+## HTML Tables
+
+### Basic Table
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Shiva</td>
+      <td>Developer</td>
+      <td>shiva@example.com</td>
+    </tr>
+    <tr>
+      <td>Alex</td>
+      <td>Designer</td>
+      <td>alex@example.com</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+### Table Elements
+
+| Tag | Purpose |
+|-----|---------|
+| `<table>` | Container for the table |
+| `<thead>` | Header row group |
+| `<tbody>` | Body row group |
+| `<tfoot>` | Footer row group |
+| `<tr>` | Table row |
+| `<th>` | Header cell (bold, centered by default) |
+| `<td>` | Data cell |
+| `<caption>` | Table title/description |
+
+### Spanning Cells
+
+```html
+<table>
+  <tr>
+    <th colspan="2">Full Name</th>  <!-- spans 2 columns -->
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>First</td>
+    <td>Last</td>
+    <td rowspan="2">25</td>         <!-- spans 2 rows -->
+  </tr>
+</table>
+```
+
+### Making Tables Accessible
+
+```html
+<table>
+  <caption>Employee Directory</caption>
+  <thead>
+    <tr>
+      <th scope="col">Name</th>     <!-- scope tells screen readers -->
+      <th scope="col">Department</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Shiva</th>    <!-- row header -->
+      <td>Engineering</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+### Basic Table Styling
+
+```css
+table {
+  width: 100%;
+  border-collapse: collapse;  /* removes double borders */
+}
+
+th, td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+thead {
+  background-color: #f5f5f5;
+}
+
+tbody tr:hover {
+  background-color: #fafafa;
+}
+```
+
+**Important**: Tables are for **data**, not page layout. Use CSS Grid/Flexbox for layout.
+
+## Images
+
+### Basic Usage
+
+```html
+<img src="photo.jpg" alt="A sunset over mountains" />
+```
+
+### Responsive Images
+
+```html
+<!-- Fluid image -->
+<img src="photo.jpg" alt="Photo" style="max-width: 100%; height: auto;" />
+
+<!-- srcset for different resolutions -->
+<img
+  src="photo-400.jpg"
+  srcset="photo-400.jpg 400w, photo-800.jpg 800w, photo-1200.jpg 1200w"
+  sizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
+  alt="Responsive photo"
+/>
+
+<!-- <picture> for art direction -->
+<picture>
+  <source media="(min-width: 800px)" srcset="wide.jpg" />
+  <source media="(min-width: 400px)" srcset="medium.jpg" />
+  <img src="small.jpg" alt="Adaptive image" />
+</picture>
+```
+
+### Figure with Caption
+
+```html
+<figure>
+  <img src="chart.png" alt="Sales data chart" />
+  <figcaption>Q4 2024 Sales — 40% growth over Q3</figcaption>
+</figure>
+```
+
+### Image Formats
+
+| Format | Best For | Transparency |
+|--------|----------|-------------|
+| **JPEG** | Photos, gradients | No |
+| **PNG** | Graphics, screenshots | Yes |
+| **WebP** | Everything (modern) | Yes |
+| **SVG** | Icons, logos (vector) | Yes |
+| **AVIF** | Photos (smallest size) | Yes |
+
+**Modern best practice**: Use **WebP** with JPEG fallback.
+
+## Video
+
+```html
+<video width="640" controls>
+  <source src="video.mp4" type="video/mp4" />
+  <source src="video.webm" type="video/webm" />
+  Your browser does not support the video tag.
+</video>
+```
+
+### Attributes
+
+| Attribute | Purpose |
+|-----------|---------|
+| `controls` | Show play/pause/volume controls |
+| `autoplay` | Auto-start (muted required for most browsers) |
+| `muted` | Start muted |
+| `loop` | Repeat when finished |
+| `poster` | Image shown before playing |
+| `preload` | `auto`, `metadata`, or `none` |
+
+```html
+<!-- Autoplay (must be muted) -->
+<video autoplay muted loop poster="thumbnail.jpg">
+  <source src="hero.mp4" type="video/mp4" />
+</video>
+```
+
+### Embedding YouTube/Vimeo
+
+```html
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Video title"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+  allowfullscreen
+></iframe>
+```
+
+## Audio
+
+```html
+<audio controls>
+  <source src="song.mp3" type="audio/mpeg" />
+  <source src="song.ogg" type="audio/ogg" />
+  Your browser does not support the audio tag.
+</audio>
+```
+
+## When to Use `<iframe>`
+
+Embeds another HTML page inside the current page:
+
+```html
+<iframe src="https://maps.google.com/..." title="Google Map" width="600" height="400"></iframe>
+```
+
+**Use for**: Google Maps, YouTube embeds, third-party widgets.
+**Avoid for**: Everything else — iframes are slow and can be security risks.

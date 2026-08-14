@@ -1,0 +1,242 @@
+---
+title: Backgrounds, Borders & Shadows
+description: Background images, gradients, border-radius, box-shadow, and building modern UI components
+---
+
+These properties are what make UI components feel **polished and professional** — cards, buttons, hero sections, and more.
+
+## Backgrounds
+
+### Background Color
+
+```css
+.card { background-color: #f8f9fa; }
+.dark { background-color: hsl(220, 20%, 10%); }
+```
+
+### Background Image
+
+```css
+.hero {
+  background-image: url("hero.jpg");
+  background-size: cover;       /* fill entire container */
+  background-position: center;  /* center the image */
+  background-repeat: no-repeat; /* don't tile */
+}
+
+/* Shorthand */
+.hero {
+  background: url("hero.jpg") center / cover no-repeat;
+}
+```
+
+### Background Size Options
+
+| Value | Behavior |
+|-------|----------|
+| `cover` | Fill container, crop if needed (most common) |
+| `contain` | Fit entirely inside, may have gaps |
+| `100% 100%` | Stretch to fill (distorts) |
+| `auto` | Original size |
+
+### Gradients
+
+```css
+/* Linear gradient */
+.gradient {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* With direction */
+.gradient {
+  background: linear-gradient(to right, #000, #fff);
+}
+
+/* Multi-stop */
+.gradient {
+  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%);
+}
+
+/* Radial gradient */
+.spotlight {
+  background: radial-gradient(circle at center, #fff, #000);
+}
+```
+
+### Image + Overlay
+
+```css
+/* Dark overlay on background image for readable text */
+.hero {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("hero.jpg") center / cover no-repeat;
+  color: white;
+}
+```
+
+## Borders
+
+```css
+.box {
+  border: 1px solid #e2e8f0;               /* solid border */
+  border: 2px dashed #999;                  /* dashed */
+  border-bottom: 3px solid #2563eb;         /* bottom only */
+}
+```
+
+### Border Radius
+
+```css
+.rounded { border-radius: 8px; }           /* rounded corners */
+.pill { border-radius: 9999px; }           /* pill shape */
+.circle { border-radius: 50%; }            /* circle (if square element) */
+.custom { border-radius: 12px 12px 0 0; }  /* top corners only */
+```
+
+## Box Shadow
+
+```css
+/* Basic shadow */
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Elevated shadow */
+.elevated {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Large dramatic shadow */
+.floating {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Inner shadow (inset) */
+.inset {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Colored glow */
+.glow {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+}
+
+/* No shadow */
+.flat {
+  box-shadow: none;
+}
+```
+
+### Shadow Syntax
+
+```text
+box-shadow: offset-x | offset-y | blur | spread | color;
+             ↓          ↓         ↓       ↓        ↓
+             0px       4px      10px    -2px    rgba(0,0,0,0.1)
+```
+
+### Shadow Scale (Consistent Elevation)
+
+```css
+:root {
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+```
+
+## Overflow
+
+Controls what happens when content exceeds the element's size:
+
+```css
+.box { overflow: visible; }  /* default: content spills out */
+.box { overflow: hidden; }   /* clip overflow (commonly used with border-radius) */
+.box { overflow: scroll; }   /* always show scrollbar */
+.box { overflow: auto; }     /* scrollbar only when needed */
+
+/* Per axis */
+.box {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+```
+
+### Clipping Rounded Corners
+
+```css
+/* Content inside may peek outside rounded corners */
+.card {
+  border-radius: 12px;
+  overflow: hidden; /* clips child content to the rounded shape */
+}
+```
+
+## Building a Modern Card
+
+```css
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+```
+
+## Building a Modern Button
+
+```css
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+```
+
+## `object-fit` — Controlling Image Fit
+
+```css
+img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;    /* fill, crop if needed (like background-size: cover) */
+  object-fit: contain;  /* fit entirely, may have gaps */
+  object-fit: fill;     /* stretch to fill (distorts) */
+  object-position: top; /* which part to show when cropped */
+}
+```

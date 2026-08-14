@@ -1,0 +1,164 @@
+---
+title: Call Stack & Memory
+description: How JavaScript manages function calls, memory allocation, and garbage collection
+---
+
+Understanding the Call Stack and memory model helps you debug stack overflows, memory leaks, and understand why some code behaves unexpectedly.
+
+## The Call Stack
+
+The Call Stack is a **LIFO (Last In, First Out)** data structure that tracks which function is currently executing.
+
+```javascript
+function multiply(a, b) {
+  return a * b;
+}
+
+function square(n) {
+  return multiply(n, n);
+}
+
+function printSquare(n) {
+  const result = square(n);
+  console.log(result);
+}
+
+printSquare(4);
+```
+
+```text
+Step 1: printSquare(4)   → pushed
+Step 2: square(4)        → pushed
+Step 3: multiply(4, 4)   → pushed
+Step 4: multiply returns  → popped
+Step 5: square returns    → popped
+Step 6: console.log(16)  → pushed, runs, popped
+Step 7: printSquare done  → popped
+```
+
+### Stack Overflow
+
+```javascript
+function recurse() {
+  recurse();
+}
+recurse(); // RangeError: Maximum call stack size exceeded
+```
+
+The stack has a **limited size** (varies by browser, typically ~10,000-25,000 frames).
+
+## Memory Model — Heap and Stack
+
+JavaScript uses two memory areas:
+
+### Stack Memory (Primitives)
+Fast, fixed-size, stores primitives and references.
+
+```javascript
+let a = 10;     // stored directly on stack
+let b = "hello"; // stored directly on stack
+let c = a;       // copies the VALUE (10)
+c = 20;
+console.log(a);  // 10 — unaffected
+```
+
+### Heap Memory (Objects)
+Slower, dynamic-size, stores objects, arrays, and functions.
+
+```javascript
+const obj1 = { name: "Shiva" }; // object in heap, reference on stack
+const obj2 = obj1;               // copies the REFERENCE, not the object
+obj2.name = "Alex";
+console.log(obj1.name); // "Alex" — same object!
+```
+
+```text
+Stack:              Heap:
+┌─────────────┐     ┌──────────────────┐
+│ a: 10       │     │ { name: "Alex" } │ ← both obj1 & obj2
+│ b: "hello"  │     │                  │   point here
+│ obj1: ref───┼────►│                  │
+│ obj2: ref───┼────►│                  │
+└─────────────┘     └──────────────────┘
+```
+
+## Garbage Collection
+
+JavaScript automatically frees memory that's no longer needed using the **Garbage Collector**.
+
+### Mark-and-Sweep Algorithm
+
+1. Start from "roots" (global object, current execution contexts)
+2. **Mark** all objects reachable from roots
+3. **Sweep** (free) all unmarked objects
+
+```javascript
+function process() {
+  const data = { large: new Array(1000000) };
+  // data is used here...
+  return data.large.length;
+}
+// After process() returns, `data` is unreachable → garbage collected
+```
+
+## Common Memory Leak Causes
+
+### 1. Forgotten Timers
+
+```javascript
+// ❌ This interval runs forever
+setInterval(() => {
+  const data = fetchData();
+  updateUI(data);
+}, 1000);
+
+// ✅ Clear when done
+const timer = setInterval(() => { /* ... */ }, 1000);
+clearInterval(timer); // when component unmounts
+```
+
+### 2. Event Listeners Not Removed
+
+```javascript
+// ❌ Listener stays even after element is removed
+element.addEventListener("click", handler);
+
+// ✅ Remove when done
+element.removeEventListener("click", handler);
+```
+
+### 3. Closures Retaining Large Data
+
+```javascript
+// ❌ Closure keeps `hugeData` alive
+function createHandler() {
+  const hugeData = new Array(1000000).fill("x");
+  return () => console.log(hugeData.length);
+}
+const handler = createHandler(); // hugeData stays in memory
+```
+
+### 4. Detached DOM Nodes
+
+```javascript
+// ❌ Element removed from DOM but still referenced
+const element = document.getElementById("old");
+document.body.removeChild(element);
+// `element` variable still holds a reference — not garbage collected
+element = null; // ✅ Fix: release the reference
+```
+
+## Debugging Memory
+
+### Chrome DevTools
+
+1. **Memory tab** → Take heap snapshot
+2. **Performance tab** → Record and look for growing memory
+3. **Console** → `performance.memory` (Chrome only)
+
+```javascript
+// Quick check
+console.log(performance.memory);
+// { usedJSHeapSize, totalJSHeapSize, jsHeapSizeLimit }
+```
+

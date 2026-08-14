@@ -1,0 +1,276 @@
+---
+title: Operators in JavaScript
+description: Every operator you'll ever need — arithmetic, comparison, logical, assignment, and modern ES6+ operators
+---
+
+Operators are the symbols that tell JavaScript to **perform an action** on values. Knowing them well means writing cleaner, shorter code.
+
+## Arithmetic Operators
+
+```javascript
+5 + 3    // 8   (addition)
+10 - 4   // 6   (subtraction)
+3 * 4    // 12  (multiplication)
+10 / 3   // 3.333... (division — always float)
+10 % 3   // 1   (remainder / modulo)
+2 ** 3   // 8   (exponentiation — ES7)
+```
+
+### Increment / Decrement
+
+```javascript
+let a = 5;
+
+// Postfix: returns value THEN increments
+console.log(a++); // 5 (returns 5, then a becomes 6)
+console.log(a);   // 6
+
+// Prefix: increments THEN returns
+console.log(++a); // 7 (a becomes 7, returns 7)
+```
+
+**Interview trap**: The difference between `a++` and `++a` is a common question.
+
+## Comparison Operators
+
+```javascript
+5 === 5     // true  (strict equality — ALWAYS use this)
+5 !== "5"   // true  (strict inequality)
+5 == "5"    // true  (loose equality — avoid)
+5 != "5"    // false (loose inequality — avoid)
+5 > 3       // true
+5 < 3       // false
+5 >= 5      // true
+5 <= 4      // false
+```
+
+## Logical Operators
+
+### AND (`&&`)
+
+Returns the **first falsy value** or the **last value** if all are truthy.
+
+```javascript
+true && true      // true
+true && false     // false
+"hello" && 42     // 42 (both truthy → returns last)
+0 && "hello"      // 0  (first falsy value)
+null && undefined  // null (first falsy value)
+```
+
+**Real-world use — conditional rendering:**
+
+```javascript
+const isAdmin = true;
+isAdmin && showAdminPanel(); // runs showAdminPanel() only if isAdmin is true
+```
+
+### OR (`||`)
+
+Returns the **first truthy value** or the **last value** if all are falsy.
+
+```javascript
+false || true     // true
+"" || "default"   // "default" (first truthy)
+0 || 42           // 42
+null || undefined  // undefined (both falsy → returns last)
+```
+
+**Real-world use — default values:**
+
+```javascript
+const name = userInput || "Anonymous";
+const port = process.env.PORT || 3000;
+```
+
+### NOT (`!`)
+
+```javascript
+!true      // false
+!0         // true
+!""        // true
+!!"hello"  // true  (double NOT = Boolean conversion)
+!!0        // false
+```
+
+## Nullish Coalescing (`??`) — ES2020
+
+Returns the right-hand side **only when the left is `null` or `undefined`** (NOT for `0`, `""`, or `false`).
+
+```javascript
+null ?? "default"      // "default"
+undefined ?? "default" // "default"
+0 ?? "default"         // 0         ← preserves 0!
+"" ?? "default"        // ""        ← preserves ""!
+false ?? "default"     // false     ← preserves false!
+```
+
+### `??` vs `||` — Critical Difference
+
+```javascript
+const count = 0;
+
+count || 10   // 10 ← WRONG — treated 0 as "no value"
+count ?? 10   // 0  ← CORRECT — 0 is a valid value
+
+const name = "";
+name || "Anonymous"  // "Anonymous" ← WRONG if empty string is valid
+name ?? "Anonymous"  // ""          ← CORRECT
+```
+
+**Rule**: Use `??` for fallback values. Use `||` only when you want to treat ALL falsy values as "empty."
+
+## Optional Chaining (`?.`) — ES2020
+
+Safely access nested properties without checking each level.
+
+```javascript
+const user = {
+  address: {
+    city: "Mumbai"
+  }
+};
+
+// Without optional chaining
+const city = user && user.address && user.address.city; // "Mumbai"
+
+// With optional chaining
+const city = user?.address?.city; // "Mumbai"
+const zip = user?.address?.zip;   // undefined (no error)
+
+// Works with methods too
+const result = user?.getAddress?.(); // calls getAddress if it exists
+
+// Works with arrays
+const first = arr?.[0]; // first element if arr exists
+```
+
+## Assignment Operators
+
+```javascript
+let x = 10;     // assignment
+
+x += 5;   // x = x + 5  → 15
+x -= 3;   // x = x - 3  → 12
+x *= 2;   // x = x * 2  → 24
+x /= 4;   // x = x / 4  → 6
+x %= 4;   // x = x % 4  → 2
+x **= 3;  // x = x ** 3 → 8
+```
+
+## Logical Assignment Operators — ES2021
+
+These combine logical operators with assignment:
+
+```javascript
+// OR assignment: assign only if current value is falsy
+let a = null;
+a ||= "default";  // a = "default"
+
+let b = "hello";
+b ||= "default";  // b = "hello" (already truthy, no change)
+
+// AND assignment: assign only if current value is truthy
+let c = "old";
+c &&= "new";      // c = "new"
+
+let d = null;
+d &&= "new";      // d = null (falsy, no change)
+
+// Nullish assignment: assign only if null/undefined
+let e = 0;
+e ??= 42;         // e = 0 (not null/undefined)
+
+let f = null;
+f ??= 42;         // f = 42
+```
+
+## Ternary Operator
+
+```javascript
+const age = 20;
+const status = age >= 18 ? "adult" : "minor";
+// status = "adult"
+
+// Nested ternary (avoid — hard to read)
+const grade = score >= 90 ? "A" : score >= 80 ? "B" : score >= 70 ? "C" : "F";
+
+// Better: use if/else or a function
+```
+
+## Comma Operator
+
+Evaluates both expressions, returns the **last one**. Rarely used directly.
+
+```javascript
+const x = (1, 2, 3); // x = 3
+
+// Most common in for loops
+for (let i = 0, j = 10; i < j; i++, j--) {
+  console.log(i, j);
+}
+```
+
+## `typeof` and `instanceof`
+
+```javascript
+// typeof — checks primitive types
+typeof "hello"   // "string"
+typeof 42        // "number"
+typeof true      // "boolean"
+typeof undefined // "undefined"
+typeof null      // "object" (bug!)
+typeof {}        // "object"
+typeof []        // "object" (use Array.isArray instead)
+
+// instanceof — checks if object was created by a constructor
+[] instanceof Array   // true
+{} instanceof Object  // true
+new Date() instanceof Date // true
+```
+
+## Spread Operator (`...`)
+
+```javascript
+// Array spread
+const arr1 = [1, 2];
+const arr2 = [3, 4];
+const combined = [...arr1, ...arr2]; // [1, 2, 3, 4]
+
+// Object spread
+const defaults = { theme: "dark", lang: "en" };
+const custom = { ...defaults, theme: "light" }; // { theme: "light", lang: "en" }
+
+// Function arguments
+const nums = [1, 2, 3];
+Math.max(...nums); // 3
+```
+
+## Operator Precedence — What Runs First?
+
+```text
+1. ()              Grouping
+2. ?.              Optional chaining
+3. ++ -- ! typeof  Unary
+4. **              Exponentiation
+5. * / %           Multiplication
+6. + -             Addition
+7. < > <= >=       Comparison
+8. == === != !==   Equality
+9. &&              Logical AND
+10. ||             Logical OR
+11. ??             Nullish coalescing
+12. ? :            Ternary
+13. = += -=        Assignment
+```
+
+**Tip**: When in doubt, use **parentheses** to make intent clear.
+
+```javascript
+// Ambiguous
+const result = a || b && c;
+
+// Clear
+const result = a || (b && c); // && has higher precedence
+```
+

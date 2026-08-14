@@ -1,0 +1,201 @@
+---
+title: Hoisting
+description: Why you can use functions before declaring them, and why var behaves differently from let/const
+---
+
+Hoisting is JavaScript's behavior of **moving declarations to the top of their scope** during the creation phase. It's not literally moving code — it's about how memory is allocated before execution.
+
+## The Core Concept
+
+```javascript
+// You might think this should error:
+console.log(greeting);
+var greeting = "Hello";
+// But it prints: undefined
+```
+
+What the engine effectively does:
+
+```javascript
+var greeting;            // declaration hoisted to top
+console.log(greeting);   // undefined
+greeting = "Hello";      // assignment stays in place
+```
+
+## var Hoisting
+
+`var` declarations are hoisted and **initialized as `undefined`**:
+
+```javascript
+console.log(a); // undefined
+var a = 5;
+console.log(a); // 5
+```
+
+## let / const Hoisting (Temporal Dead Zone)
+
+`let` and `const` ARE hoisted, but they're placed in a **Temporal Dead Zone (TDZ)** — they exist in memory but are **not accessible** until the declaration line:
+
+```javascript
+console.log(b); // ❌ ReferenceError: Cannot access 'b' before initialization
+let b = 10;
+```
+
+```text
+{ // scope starts — TDZ begins for 'b'
+  // ... accessing 'b' here throws ReferenceError
+  let b = 10;  // TDZ ends — 'b' is now initialized
+  console.log(b); // ✅ 10
+}
+```
+
+## Function Declaration Hoisting
+
+Entire function declarations (body and all) are hoisted:
+
+```javascript
+sayHello(); // ✅ "Hello!" — works even before the declaration
+
+function sayHello() {
+  console.log("Hello!");
+}
+```
+
+## Function Expression — NOT Hoisted
+
+```javascript
+sayHello(); // ❌ TypeError: sayHello is not a function (with var)
+            // ❌ ReferenceError (with let/const)
+
+var sayHello = function () {
+  console.log("Hello!");
+};
+```
+
+With `var`, `sayHello` is hoisted as `undefined`, so calling it throws `TypeError: undefined is not a function`.
+
+## Class Hoisting
+
+Classes are hoisted but NOT initialized (like `let`):
+
+```javascript
+const p = new Person(); // ❌ ReferenceError
+
+class Person {
+  constructor() {
+    this.name = "Shiva";
+  }
+}
+```
+
+## Hoisting Priority
+
+When both a variable and function share the same name:
+
+```javascript
+console.log(typeof foo); // "function"
+
+var foo = "hello";
+function foo() {
+  return "world";
+}
+
+console.log(typeof foo); // "string"
+```
+
+**Rule**: Function declarations are hoisted **above** `var` declarations.
+
+## Interview Output Questions
+
+### Question 1
+
+```javascript
+var x = 1;
+
+function test() {
+  console.log(x);
+  var x = 2;
+  console.log(x);
+}
+
+test();
+```
+
+**Answer**: `undefined`, then `2`.
+
+The inner `var x` is hoisted within `test()`, shadowing the outer `x`. During the creation phase of `test()`, `x` is `undefined`.
+
+### Question 2
+
+```javascript
+foo();
+bar();
+
+function foo() {
+  console.log("foo");
+}
+
+var bar = function () {
+  console.log("bar");
+};
+```
+
+**Answer**: `"foo"` prints, then `TypeError: bar is not a function`.
+
+`foo` is a declaration (fully hoisted). `bar` is a `var` expression (hoisted as `undefined`).
+
+### Question 3
+
+```javascript
+console.log(a);
+console.log(b);
+console.log(c);
+
+var a = 1;
+let b = 2;
+const c = 3;
+```
+
+**Answer**:
+- `a` → `undefined`
+- `b` → `ReferenceError` (stops execution — `c` never runs)
+
+### Question 4
+
+```javascript
+function test() {
+  console.log(a); // ?
+  console.log(fn()); // ?
+
+  var a = 10;
+  function fn() {
+    return 20;
+  }
+}
+
+test();
+```
+
+**Answer**: `undefined`, then `20`.
+
+## The Mental Model
+
+```text
+What you write:          What JS "sees":
+
+                          var a;           ← var hoisted
+                          function fn(){}  ← function hoisted
+                          // let/const in TDZ
+console.log(a);           console.log(a);
+let b = 2;                let b = 2; ← TDZ ends
+var a = 1;                a = 1; ← assignment
+function fn() {}          // (already hoisted above)
+```
+
+## Best Practices to Avoid Hoisting Confusion
+
+1. **Use `const` and `let`** — TDZ catches bugs immediately
+2. **Declare variables at the top** of their scope
+3. **Define functions before using them** — even though declarations are hoisted
+4. **Never rely on hoisting** — write code as if it doesn't exist
+

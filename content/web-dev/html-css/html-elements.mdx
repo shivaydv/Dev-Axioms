@@ -1,0 +1,225 @@
+---
+title: HTML Elements
+description: Every essential HTML tag — headings, paragraphs, links, images, lists, and the building blocks of web pages
+---
+
+These are the HTML elements you'll use in **every single project**. Master these and you can build any web page structure.
+
+## Headings
+
+HTML has 6 levels of headings:
+
+```html
+<h1>Main Title</h1>      <!-- one per page, biggest -->
+<h2>Section Title</h2>
+<h3>Subsection</h3>
+<h4>Sub-subsection</h4>
+<h5>Minor heading</h5>
+<h6>Smallest heading</h6>
+```
+
+### Rules
+
+- Use **only one `<h1>`** per page (for SEO and accessibility)
+- **Don't skip levels** — go h1 → h2 → h3, never h1 → h3
+- Headings define the **document outline**, not visual size (use CSS for that)
+
+## Paragraphs
+
+```html
+<p>This is a paragraph. Browsers add spacing above and below.</p>
+<p>Each paragraph starts on a new line with default margins.</p>
+```
+
+Line breaks within text:
+
+```html
+<p>Line one<br />Line two on a new line</p>
+```
+
+Horizontal rule (divider):
+
+```html
+<p>Section one content</p>
+<hr />
+<p>Section two content</p>
+```
+
+## Links
+
+```html
+<!-- Basic link -->
+<a href="https://example.com">Visit Example</a>
+
+<!-- Open in new tab -->
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+  External Link
+</a>
+
+<!-- Link to another page in your site -->
+<a href="/about.html">About Us</a>
+
+<!-- Link to section on same page -->
+<a href="#contact">Jump to Contact</a>
+<section id="contact">...</section>
+
+<!-- Email link -->
+<a href="mailto:shiva@example.com">Email Me</a>
+
+<!-- Phone link -->
+<a href="tel:+911234567890">Call Us</a>
+```
+
+### Important Attributes
+
+| Attribute | Purpose |
+|-----------|---------|
+| `href` | URL destination (required) |
+| `target="_blank"` | Open in new tab |
+| `rel="noopener noreferrer"` | Security for external links |
+| `download` | Download the file instead of navigating |
+
+## Images
+
+```html
+<img src="photo.jpg" alt="A sunset over mountains" />
+<img src="https://example.com/logo.png" alt="Company Logo" width="200" />
+```
+
+### The `alt` Attribute (Critical)
+
+- **Accessibility**: Screen readers read it aloud for visually impaired users
+- **SEO**: Search engines use it to understand the image
+- **Fallback**: Displayed when the image fails to load
+- **Required** on every `<img>` — using `alt=""` is valid for decorative images
+
+### Responsive Images
+
+```html
+<!-- Image never wider than its container -->
+<img src="photo.jpg" alt="Photo" style="max-width: 100%; height: auto;" />
+
+<!-- Picture element for different screen sizes -->
+<picture>
+  <source media="(min-width: 800px)" srcset="large.jpg" />
+  <source media="(min-width: 400px)" srcset="medium.jpg" />
+  <img src="small.jpg" alt="Responsive image" />
+</picture>
+```
+
+## Lists
+
+### Unordered List (Bullets)
+
+```html
+<ul>
+  <li>HTML</li>
+  <li>CSS</li>
+  <li>JavaScript</li>
+</ul>
+```
+
+### Ordered List (Numbers)
+
+```html
+<ol>
+  <li>Learn HTML</li>
+  <li>Learn CSS</li>
+  <li>Learn JavaScript</li>
+</ol>
+```
+
+### Nested Lists
+
+```html
+<ul>
+  <li>Frontend
+    <ul>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JavaScript</li>
+    </ul>
+  </li>
+  <li>Backend
+    <ul>
+      <li>Node.js</li>
+      <li>Python</li>
+    </ul>
+  </li>
+</ul>
+```
+
+### Description List
+
+```html
+<dl>
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language — defines structure</dd>
+
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets — defines presentation</dd>
+</dl>
+```
+
+## `div` vs `span`
+
+The two **generic containers** in HTML:
+
+| | `<div>` | `<span>` |
+|---|---------|----------|
+| **Display** | Block (full width) | Inline (flows with text) |
+| **Use** | Group block content | Highlight inline content |
+| **Semantic meaning** | None | None |
+
+```html
+<!-- div: wraps a section of the page -->
+<div class="card">
+  <h3>Card Title</h3>
+  <p>Card content goes here.</p>
+</div>
+
+<!-- span: wraps text within a sentence -->
+<p>The price is <span class="price">$99</span> per month.</p>
+```
+
+**Best practice**: Prefer semantic tags (`<section>`, `<article>`, `<nav>`) over `<div>` when they make sense.
+
+## Text Formatting
+
+```html
+<strong>Bold with semantic importance</strong>
+<b>Bold without importance (rare)</b>
+
+<em>Italic with emphasis</em>
+<i>Italic without emphasis (rare)</i>
+
+<mark>Highlighted text</mark>
+<del>Deleted (strikethrough)</del>
+<ins>Inserted (underlined)</ins>
+<small>Smaller text (fine print)</small>
+<sub>Subscript</sub> and <sup>Superscript</sup>
+<code>Inline code</code>
+<pre>Preformatted text (preserves whitespace)</pre>
+<blockquote>A block quotation from another source</blockquote>
+```
+
+### `<strong>` vs `<b>` — The Difference
+
+- `<strong>` = **semantically important** (screen readers emphasize it)
+- `<b>` = just visually bold (no semantic meaning)
+
+Same for `<em>` (semantic emphasis) vs `<i>` (just italic).
+
+## Interview Questions
+
+### Q: Difference between `div` and `span`?
+
+`div` is block-level (takes full width, starts a new line). `span` is inline (only takes needed width, stays in line with text). Neither has semantic meaning.
+
+### Q: Why is the `alt` attribute important?
+
+Three reasons: accessibility (screen readers), SEO (search engines), and fallback (when images don't load).
+
+### Q: What's the difference between `<strong>` and `<b>`?
+
+`<strong>` carries semantic importance (the text is important). `<b>` is purely visual. Screen readers treat `<strong>` differently.

@@ -1,0 +1,418 @@
+[
+  {
+    "$id": "_7",
+    "type": "separator",
+    "name": "Foundation"
+  },
+  {
+    "$id": "javascript/what-is-javascript.mdx",
+    "type": "page",
+    "name": "What is JavaScript?",
+    "description": "The complete introduction — what JS is, how it runs, and why it dominates the web",
+    "url": "/web-dev/javascript/what-is-javascript",
+    "$ref": "javascript/what-is-javascript.mdx"
+  },
+  {
+    "$id": "javascript/history.mdx",
+    "type": "page",
+    "name": "History & Evolution of JavaScript",
+    "description": "From 10 days of coding to the world's most popular language — the full timeline",
+    "url": "/web-dev/javascript/history",
+    "$ref": "javascript/history.mdx"
+  },
+  {
+    "$id": "javascript/setup.mdx",
+    "type": "page",
+    "name": "Development Environment Setup",
+    "description": "Everything you need to start writing, running, and debugging JavaScript",
+    "url": "/web-dev/javascript/setup",
+    "$ref": "javascript/setup.mdx"
+  },
+  {
+    "$id": "_8",
+    "type": "separator",
+    "name": "Core Language"
+  },
+  {
+    "$id": "javascript/variables.mdx",
+    "type": "page",
+    "name": "Variables — var, let, const",
+    "description": "Deep dive into JavaScript variable declarations, scoping rules, and the Temporal Dead Zone",
+    "url": "/web-dev/javascript/variables",
+    "$ref": "javascript/variables.mdx"
+  },
+  {
+    "$id": "javascript/datatypes.mdx",
+    "type": "page",
+    "name": "Data Types in JavaScript",
+    "description": "The 7 primitives, objects, reference vs value, typeof quirks, and real-world type checking",
+    "url": "/web-dev/javascript/datatypes",
+    "$ref": "javascript/datatypes.mdx"
+  },
+  {
+    "$id": "javascript/type-coercion.mdx",
+    "type": "page",
+    "name": "Type Coercion & Equality",
+    "description": "How JavaScript converts types behind your back — the source of its weirdest behavior",
+    "url": "/web-dev/javascript/type-coercion",
+    "$ref": "javascript/type-coercion.mdx"
+  },
+  {
+    "$id": "javascript/operators.mdx",
+    "type": "page",
+    "name": "Operators in JavaScript",
+    "description": "Every operator you'll ever need — arithmetic, comparison, logical, assignment, and modern ES6+ operators",
+    "url": "/web-dev/javascript/operators",
+    "$ref": "javascript/operators.mdx"
+  },
+  {
+    "$id": "javascript/strings.mdx",
+    "type": "page",
+    "name": "Strings in JavaScript",
+    "description": "String creation, template literals, 20+ essential methods, and real-world manipulation patterns",
+    "url": "/web-dev/javascript/strings",
+    "$ref": "javascript/strings.mdx"
+  },
+  {
+    "$id": "javascript/numbers-math.mdx",
+    "type": "page",
+    "name": "Numbers & Math",
+    "description": "The Number type, floating point traps, parseInt/parseFloat, and the Math object",
+    "url": "/web-dev/javascript/numbers-math",
+    "$ref": "javascript/numbers-math.mdx"
+  },
+  {
+    "$id": "javascript/control-flow.mdx",
+    "type": "page",
+    "name": "Control Flow",
+    "description": "Conditionals, loops, and every way to control the execution path of your JavaScript code",
+    "url": "/web-dev/javascript/control-flow",
+    "$ref": "javascript/control-flow.mdx"
+  },
+  {
+    "$id": "javascript/functions.mdx",
+    "type": "page",
+    "name": "Functions in JavaScript",
+    "description": "Declarations, expressions, arrows, IIFE, first-class functions, pure functions, and everything in between",
+    "url": "/web-dev/javascript/functions",
+    "$ref": "javascript/functions.mdx"
+  },
+  {
+    "$id": "javascript/scope.mdx",
+    "type": "page",
+    "name": "Scope in JavaScript",
+    "description": "Global, function, block, lexical scope — understanding where variables live and how the scope chain works",
+    "url": "/web-dev/javascript/scope",
+    "$ref": "javascript/scope.mdx"
+  },
+  {
+    "$id": "javascript/closures.mdx",
+    "type": "page",
+    "name": "Closures",
+    "description": "The most important concept in JavaScript — how functions remember their outer scope",
+    "url": "/web-dev/javascript/closures",
+    "$ref": "javascript/closures.mdx"
+  },
+  {
+    "$id": "javascript/arrays.mdx",
+    "type": "page",
+    "name": "Arrays in JavaScript",
+    "description": "Every array method you need — mutating, non-mutating, functional, and real-world data manipulation patterns",
+    "url": "/web-dev/javascript/arrays",
+    "$ref": "javascript/arrays.mdx"
+  },
+  {
+    "$id": "javascript/objects.mdx",
+    "type": "page",
+    "name": "Objects in JavaScript",
+    "description": "Object creation, property access, methods, utilities, deep vs shallow copy, and mastering objects",
+    "url": "/web-dev/javascript/objects",
+    "$ref": "javascript/objects.mdx"
+  },
+  {
+    "$id": "javascript/destructuring-spread.mdx",
+    "type": "page",
+    "name": "Destructuring & Spread",
+    "description": "Extract values from arrays and objects with clean, modern syntax",
+    "url": "/web-dev/javascript/destructuring-spread",
+    "$ref": "javascript/destructuring-spread.mdx"
+  },
+  {
+    "$id": "_9",
+    "type": "separator",
+    "name": "Behind the Scenes"
+  },
+  {
+    "$id": "javascript/execution-context.mdx",
+    "type": "page",
+    "name": "Execution Context",
+    "description": "How JavaScript runs your code — the creation phase, execution phase, and the environment record",
+    "url": "/web-dev/javascript/execution-context",
+    "$ref": "javascript/execution-context.mdx"
+  },
+  {
+    "$id": "javascript/hoisting.mdx",
+    "type": "page",
+    "name": "Hoisting",
+    "description": "Why you can use functions before declaring them, and why var behaves differently from let/const",
+    "url": "/web-dev/javascript/hoisting",
+    "$ref": "javascript/hoisting.mdx"
+  },
+  {
+    "$id": "javascript/call-stack-memory.mdx",
+    "type": "page",
+    "name": "Call Stack & Memory",
+    "description": "How JavaScript manages function calls, memory allocation, and garbage collection",
+    "url": "/web-dev/javascript/call-stack-memory",
+    "$ref": "javascript/call-stack-memory.mdx"
+  },
+  {
+    "$id": "javascript/event-loop.mdx",
+    "type": "page",
+    "name": "The Event Loop",
+    "description": "How JavaScript handles asynchronous code despite being single-threaded — the interview king topic",
+    "url": "/web-dev/javascript/event-loop",
+    "$ref": "javascript/event-loop.mdx"
+  },
+  {
+    "$id": "javascript/this-keyword.mdx",
+    "type": "page",
+    "name": "The this Keyword",
+    "description": "How this works in every context — global, methods, arrows, classes, and callbacks",
+    "url": "/web-dev/javascript/this-keyword",
+    "$ref": "javascript/this-keyword.mdx"
+  },
+  {
+    "$id": "javascript/call-apply-bind.mdx",
+    "type": "page",
+    "name": "call, apply, bind",
+    "description": "Explicitly control what this refers to — the three methods every JS developer must know",
+    "url": "/web-dev/javascript/call-apply-bind",
+    "$ref": "javascript/call-apply-bind.mdx"
+  },
+  {
+    "$id": "_10",
+    "type": "separator",
+    "name": "Advanced Concepts"
+  },
+  {
+    "$id": "javascript/prototypes.mdx",
+    "type": "page",
+    "name": "Prototypes & Prototype Chain",
+    "description": "JavaScript's real inheritance system — how objects inherit from other objects",
+    "url": "/web-dev/javascript/prototypes",
+    "$ref": "javascript/prototypes.mdx"
+  },
+  {
+    "$id": "javascript/oop.mdx",
+    "type": "page",
+    "name": "OOP in JavaScript",
+    "description": "Constructor functions, ES6 classes, inheritance, encapsulation, and when to use classes vs factory functions",
+    "url": "/web-dev/javascript/oop",
+    "$ref": "javascript/oop.mdx"
+  },
+  {
+    "$id": "javascript/async-javascript.mdx",
+    "type": "page",
+    "name": "Async JavaScript",
+    "description": "Callbacks, Promises, async/await — handling asynchronous operations from basics to advanced patterns",
+    "url": "/web-dev/javascript/async-javascript",
+    "$ref": "javascript/async-javascript.mdx"
+  },
+  {
+    "$id": "javascript/higher-order-functions.mdx",
+    "type": "page",
+    "name": "Higher-Order Functions",
+    "description": "Functions that accept or return functions — the foundation of functional JavaScript",
+    "url": "/web-dev/javascript/higher-order-functions",
+    "$ref": "javascript/higher-order-functions.mdx"
+  },
+  {
+    "$id": "javascript/currying-partial.mdx",
+    "type": "page",
+    "name": "Currying & Partial Application",
+    "description": "Transforming functions to accept arguments one at a time — a powerful pattern for code reuse",
+    "url": "/web-dev/javascript/currying-partial",
+    "$ref": "javascript/currying-partial.mdx"
+  },
+  {
+    "$id": "javascript/debounce-throttle.mdx",
+    "type": "page",
+    "name": "Debounce & Throttle",
+    "description": "Essential performance patterns for controlling how often functions execute — interview favorites",
+    "url": "/web-dev/javascript/debounce-throttle",
+    "$ref": "javascript/debounce-throttle.mdx"
+  },
+  {
+    "$id": "javascript/iterators-generators.mdx",
+    "type": "page",
+    "name": "Iterators & Generators",
+    "description": "Lazy evaluation, custom iterables, yield, and the iteration protocol",
+    "url": "/web-dev/javascript/iterators-generators",
+    "$ref": "javascript/iterators-generators.mdx"
+  },
+  {
+    "$id": "javascript/modules.mdx",
+    "type": "page",
+    "name": "JavaScript Modules",
+    "description": "From script tags to ES Modules — organizing code across files for maintainable applications",
+    "url": "/web-dev/javascript/modules",
+    "$ref": "javascript/modules.mdx"
+  },
+  {
+    "$id": "javascript/error-handling.mdx",
+    "type": "page",
+    "name": "Error Handling",
+    "description": "try/catch, custom errors, async error patterns, and building robust JavaScript applications",
+    "url": "/web-dev/javascript/error-handling",
+    "$ref": "javascript/error-handling.mdx"
+  },
+  {
+    "$id": "javascript/es6-plus-features.mdx",
+    "type": "page",
+    "name": "ES6+ Features",
+    "description": "Every modern JavaScript feature from ES6 to ES2024 — the complete reference",
+    "url": "/web-dev/javascript/es6-plus-features",
+    "$ref": "javascript/es6-plus-features.mdx"
+  },
+  {
+    "$id": "_11",
+    "type": "separator",
+    "name": "Browser & DOM"
+  },
+  {
+    "$id": "javascript/dom-manipulation.mdx",
+    "type": "page",
+    "name": "DOM Manipulation",
+    "description": "Selecting, creating, modifying, and removing elements — mastering the Document Object Model",
+    "url": "/web-dev/javascript/dom-manipulation",
+    "$ref": "javascript/dom-manipulation.mdx"
+  },
+  {
+    "$id": "javascript/events.mdx",
+    "type": "page",
+    "name": "Events in JavaScript",
+    "description": "Event handling, propagation, delegation, and building interactive web applications",
+    "url": "/web-dev/javascript/events",
+    "$ref": "javascript/events.mdx"
+  },
+  {
+    "$id": "javascript/browser-apis.mdx",
+    "type": "page",
+    "name": "Browser APIs",
+    "description": "localStorage, fetch, IntersectionObserver, Web Workers, and other powerful built-in browser features",
+    "url": "/web-dev/javascript/browser-apis",
+    "$ref": "javascript/browser-apis.mdx"
+  },
+  {
+    "$id": "javascript/memory-performance.mdx",
+    "type": "page",
+    "name": "Memory & Performance",
+    "description": "Memory leaks, garbage collection, rendering optimization, and building fast JavaScript applications",
+    "url": "/web-dev/javascript/memory-performance",
+    "$ref": "javascript/memory-performance.mdx"
+  },
+  {
+    "$id": "_12",
+    "type": "separator",
+    "name": "Patterns & Architecture"
+  },
+  {
+    "$id": "javascript/design-patterns.mdx",
+    "type": "page",
+    "name": "Design Patterns in JavaScript",
+    "description": "Proven solutions to common coding problems — Module, Singleton, Factory, Observer, and more",
+    "url": "/web-dev/javascript/design-patterns",
+    "$ref": "javascript/design-patterns.mdx"
+  },
+  {
+    "$id": "_13",
+    "type": "separator",
+    "name": "DSA"
+  },
+  {
+    "$id": "javascript/polyfills.mdx",
+    "type": "page",
+    "name": "Polyfills",
+    "description": "Implement built-in JavaScript methods from scratch — the ultimate interview coding challenge",
+    "url": "/web-dev/javascript/polyfills",
+    "$ref": "javascript/polyfills.mdx"
+  },
+  {
+    "$id": "javascript/dsa-arrays-strings.mdx",
+    "type": "page",
+    "name": "DSA — Arrays & Strings",
+    "description": "Essential array and string algorithms with JavaScript — Two Sum, Sliding Window, Kadane's, Anagrams, and more",
+    "url": "/web-dev/javascript/dsa-arrays-strings",
+    "$ref": "javascript/dsa-arrays-strings.mdx"
+  },
+  {
+    "$id": "javascript/dsa-linked-lists-stacks-queues.mdx",
+    "type": "page",
+    "name": "DSA — Linked Lists, Stacks & Queues",
+    "description": "Implement fundamental data structures from scratch in JavaScript",
+    "url": "/web-dev/javascript/dsa-linked-lists-stacks-queues",
+    "$ref": "javascript/dsa-linked-lists-stacks-queues.mdx"
+  },
+  {
+    "$id": "javascript/dsa-trees-graphs.mdx",
+    "type": "page",
+    "name": "DSA — Trees & Graphs",
+    "description": "Binary trees, BSTs, DFS, BFS, graph traversal, and essential tree/graph algorithms in JavaScript",
+    "url": "/web-dev/javascript/dsa-trees-graphs",
+    "$ref": "javascript/dsa-trees-graphs.mdx"
+  },
+  {
+    "$id": "javascript/dsa-dynamic-programming.mdx",
+    "type": "page",
+    "name": "DSA — Dynamic Programming",
+    "description": "Memoization, tabulation, and the most important DP problems solved in JavaScript",
+    "url": "/web-dev/javascript/dsa-dynamic-programming",
+    "$ref": "javascript/dsa-dynamic-programming.mdx"
+  },
+  {
+    "$id": "javascript/machine-coding.mdx",
+    "type": "page",
+    "name": "Machine Coding Challenges",
+    "description": "Implement real components and utilities from scratch — the practical interview round",
+    "url": "/web-dev/javascript/machine-coding",
+    "$ref": "javascript/machine-coding.mdx"
+  },
+  {
+    "$id": "javascript/projects.mdx",
+    "type": "page",
+    "name": "JavaScript Project Ideas",
+    "description": "Build these projects to solidify your JavaScript skills — from beginner to advanced",
+    "url": "/web-dev/javascript/projects",
+    "$ref": "javascript/projects.mdx"
+  },
+  {
+    "$id": "_14",
+    "type": "separator",
+    "name": "Interview Prep"
+  },
+  {
+    "$id": "javascript/interview-junior.mdx",
+    "type": "page",
+    "name": "Interview Prep: Junior Level",
+    "description": "Essential JavaScript interview questions for freshers and junior developers — fundamentals, syntax, and core concepts",
+    "url": "/web-dev/javascript/interview-junior",
+    "$ref": "javascript/interview-junior.mdx"
+  },
+  {
+    "$id": "javascript/interview-mid.mdx",
+    "type": "page",
+    "name": "Interview Prep: Mid Level",
+    "description": "JavaScript interview questions for 2-4 year experience — async, prototypes, event loop, this keyword, and design patterns",
+    "url": "/web-dev/javascript/interview-mid",
+    "$ref": "javascript/interview-mid.mdx"
+  },
+  {
+    "$id": "javascript/interview-senior.mdx",
+    "type": "page",
+    "name": "Interview Prep: Senior Level",
+    "description": "Advanced JavaScript interview questions for 4+ year experience — engine internals, design patterns, architecture, and tricky outputs",
+    "url": "/web-dev/javascript/interview-senior",
+    "$ref": "javascript/interview-senior.mdx"
+  }
+]

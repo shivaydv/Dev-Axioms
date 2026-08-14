@@ -1,0 +1,302 @@
+---
+title: "Interview Prep: Junior Level"
+description: Essential JavaScript interview questions for freshers and junior developers — fundamentals, syntax, and core concepts
+---
+
+These questions test your **understanding of core JavaScript**. Expect these in fresher and 0-2 year experience interviews.
+
+---
+
+## Fundamentals
+
+### 1. What are the data types in JavaScript?
+
+7 primitives and Objects:
+
+| Primitive | Example |
+|-----------|---------|
+| String | `"hello"` |
+| Number | `42`, `3.14` |
+| BigInt | `9007199254740991n` |
+| Boolean | `true`, `false` |
+| Undefined | `undefined` |
+| Null | `null` |
+| Symbol | `Symbol("id")` |
+
+**Objects** include: `{}`, `[]`, `function(){}`, `Date`, `Map`, `Set`, `RegExp`.
+
+📖 Deep dive: [Data Types](/web-dev/javascript/datatypes)
+
+---
+
+### 2. Difference between `var`, `let`, and `const`?
+
+| Feature | `var` | `let` | `const` |
+|---------|-------|-------|---------|
+| Scope | Function | Block | Block |
+| Hoisting | Yes (as `undefined`) | Yes (TDZ) | Yes (TDZ) |
+| Reassign | ✅ | ✅ | ❌ |
+| Redeclare | ✅ | ❌ | ❌ |
+
+**Rule**: Use `const` by default, `let` when you need reassignment, never `var`.
+
+📖 Deep dive: [Variables](/web-dev/javascript/variables)
+
+---
+
+### 3. What is the difference between `==` and `===`?
+
+`==` converts types before comparing (type coercion). `===` compares both type AND value without conversion.
+
+```javascript
+0 == ""      // true (both coerce to 0)
+0 === ""     // false (number vs string)
+null == undefined  // true (special case)
+null === undefined // false
+```
+
+**Always use `===`** unless intentionally checking `null == undefined`.
+
+📖 Deep dive: [Type Coercion](/web-dev/javascript/type-coercion)
+
+---
+
+### 4. What is hoisting?
+
+JavaScript moves declarations to the top of their scope during the creation phase:
+
+```javascript
+console.log(x);  // undefined (var is hoisted)
+var x = 5;
+
+console.log(y);  // ❌ ReferenceError (let is in TDZ)
+let y = 10;
+
+greet();          // ✅ works (function declarations are fully hoisted)
+function greet() { console.log("hi"); }
+```
+
+📖 Deep dive: [Hoisting](/web-dev/javascript/hoisting)
+
+---
+
+### 5. What is the difference between `null` and `undefined`?
+
+- `undefined` — variable declared but **not assigned** (JS sets this)
+- `null` — explicitly set to mean **"no value"** (developer sets this)
+
+```javascript
+let x;
+console.log(x);       // undefined
+typeof undefined;      // "undefined"
+typeof null;           // "object" (historic bug)
+```
+
+---
+
+### 6. What are template literals?
+
+Backtick strings that support **interpolation** and **multi-line**:
+
+```javascript
+const name = "Shiva";
+const msg = `Hello ${name}! 2+2 = ${2 + 2}`;
+
+const html = `
+  <div>
+    <p>${msg}</p>
+  </div>
+`;
+```
+
+---
+
+### 7. What is the difference between a function declaration and expression?
+
+```javascript
+// Declaration — hoisted (can call before definition)
+function greet() { return "hi"; }
+
+// Expression — NOT hoisted
+const greet = function() { return "hi"; };
+
+// Arrow — NOT hoisted, no own `this`
+const greet = () => "hi";
+```
+
+📖 Deep dive: [Functions](/web-dev/javascript/functions)
+
+---
+
+### 8. What is an arrow function? How is it different?
+
+| Feature | Normal Function | Arrow Function |
+|---------|----------------|----------------|
+| `this` | Own (dynamic) | Inherited (lexical) |
+| `arguments` | Yes | No |
+| Constructor | Yes (`new`) | No |
+| Syntax | `function() {}` | `() => {}` |
+
+```javascript
+const obj = {
+  name: "JS",
+  // ❌ Arrow — `this` is NOT obj
+  bad: () => console.log(this.name),
+  // ✅ Normal — `this` IS obj
+  good() { console.log(this.name); }
+};
+```
+
+📖 Deep dive: [Functions](/web-dev/javascript/functions)
+
+---
+
+### 9. What is `typeof`? What are the quirks?
+
+```javascript
+typeof "hello"     // "string"
+typeof 42          // "number"
+typeof true        // "boolean"
+typeof undefined   // "undefined"
+typeof null        // "object" ← BUG (historic)
+typeof []          // "object" ← use Array.isArray()
+typeof function(){} // "function"
+typeof NaN         // "number" ← NaN is technically a number
+```
+
+---
+
+### 10. What are truthy and falsy values?
+
+**Falsy** (6 values): `false`, `0`, `""`, `null`, `undefined`, `NaN`
+
+**Everything else is truthy**, including: `"0"`, `" "`, `[]`, `{}`, `function(){}`
+
+```javascript
+if ([]) console.log("truthy!");  // ✅ runs — empty array is truthy!
+if ("") console.log("nope");     // ❌ doesn't run — empty string is falsy
+```
+
+📖 Deep dive: [Type Coercion](/web-dev/javascript/type-coercion)
+
+---
+
+## Core Concepts
+
+### 11. What is scope?
+
+Where variables are accessible. JavaScript has 4 types:
+
+1. **Global** — accessible everywhere
+2. **Function** — accessible only inside the function
+3. **Block** — `let`/`const` inside `{ }` (if, for, while)
+4. **Module** — scoped to the file (ES modules)
+
+📖 Deep dive: [Scope](/web-dev/javascript/scope)
+
+---
+
+### 12. What is a closure?
+
+A function that **remembers variables from its outer scope** even after the outer function has returned.
+
+```javascript
+function counter() {
+  let count = 0;
+  return () => ++count;
+}
+
+const inc = counter();
+inc(); // 1
+inc(); // 2
+inc(); // 3
+```
+
+📖 Deep dive: [Closures](/web-dev/javascript/closures)
+
+---
+
+### 13. Name the most used array methods.
+
+| Mutating | Non-Mutating | Functional |
+|----------|-------------|------------|
+| `push`, `pop` | `slice` | `map` |
+| `shift`, `unshift` | `concat` | `filter` |
+| `splice` | `flat` | `reduce` |
+| `sort`, `reverse` | `at` | `find`, `some`, `every` |
+
+📖 Deep dive: [Arrays](/web-dev/javascript/arrays)
+
+---
+
+### 14. Difference between `map`, `forEach`, `filter`, and `reduce`?
+
+| Method | Returns | Purpose |
+|--------|---------|---------|
+| `forEach` | `undefined` | Just iterate (no return) |
+| `map` | New array | Transform each element |
+| `filter` | New array | Keep elements that pass test |
+| `reduce` | Single value | Accumulate to one result |
+
+---
+
+### 15. How do you remove duplicates from an array?
+
+```javascript
+const unique = [...new Set([1, 2, 2, 3, 3, 4])];
+// [1, 2, 3, 4]
+```
+
+---
+
+## Guess the Output
+
+### Q1
+
+```javascript
+console.log(1 + "2" + 3);
+console.log(1 + 2 + "3");
+```
+
+**Output**: `"123"`, `"33"`
+
+`1 + "2"` → string concat `"12"` → `"12" + 3` → `"123"`. Second: `1 + 2` → `3` → `3 + "3"` → `"33"`.
+
+---
+
+### Q2
+
+```javascript
+console.log(typeof null);
+console.log(typeof NaN);
+console.log(NaN === NaN);
+```
+
+**Output**: `"object"`, `"number"`, `false`
+
+---
+
+### Q3
+
+```javascript
+var x = 10;
+function test() {
+  console.log(x);
+  var x = 20;
+}
+test();
+```
+
+**Output**: `undefined` — inner `var x` is hoisted inside `test()`, shadowing outer `x`.
+
+---
+
+### Q4
+
+```javascript
+console.log([] == ![]);
+```
+
+**Output**: `true` — `![]` → `false` → `0`, `[]` → `""` → `0`, so `0 == 0`.
+
+📖 Deep dive: [Type Coercion](/web-dev/javascript/type-coercion)

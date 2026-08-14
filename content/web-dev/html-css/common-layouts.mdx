@@ -1,0 +1,308 @@
+---
+title: Common Layouts
+description: Build real-world UI layouts — navbars, hero sections, card grids, sidebars, and footers
+---
+
+These are the layouts you'll build in **every project**. Each example is a complete, practical pattern.
+
+## Responsive Navbar
+
+```html
+<nav class="navbar">
+  <a href="/" class="logo">DevAxioms</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/docs">Docs</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+  <a href="/login" class="btn-nav">Login</a>
+</nav>
+```
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: #2563eb; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+}
+```
+
+## Hero Section
+
+```html
+<section class="hero">
+  <div class="hero-content">
+    <h1>Build Better Websites</h1>
+    <p>Learn HTML, CSS, and JavaScript from zero to hero.</p>
+    <div class="hero-actions">
+      <a href="/start" class="btn-primary">Get Started</a>
+      <a href="/docs" class="btn-secondary">Read Docs</a>
+    </div>
+  </div>
+</section>
+```
+
+```css
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 48px 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0f172a;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: #64748b;
+  margin-top: 16px;
+  max-width: 600px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+}
+```
+
+## Card Grid
+
+```html
+<div class="card-grid">
+  <div class="card">
+    <h3>HTML</h3>
+    <p>Structure your web pages with semantic markup.</p>
+  </div>
+  <div class="card">
+    <h3>CSS</h3>
+    <p>Style your pages with modern layout techniques.</p>
+  </div>
+  <div class="card">
+    <h3>JavaScript</h3>
+    <p>Add interactivity and dynamic behavior.</p>
+  </div>
+</div>
+```
+
+```css
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 48px 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.card p {
+  color: #64748b;
+  line-height: 1.6;
+}
+```
+
+## Sidebar Layout
+
+```html
+<div class="layout">
+  <aside class="sidebar">
+    <nav>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/settings">Settings</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <h1>Dashboard</h1>
+    <p>Main content area</p>
+  </main>
+</div>
+```
+
+```css
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: #1e293b;
+  color: white;
+  padding: 24px 16px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px 12px;
+  color: #94a3b8;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar a:hover {
+  background: #334155;
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; }
+}
+```
+
+## Pricing Cards
+
+```css
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.pricing-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+}
+
+.pricing-card.featured {
+  border: 2px solid #2563eb;
+  position: relative;
+  transform: scale(1.05);
+}
+
+.pricing-card .price {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.pricing-card .price span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #64748b;
+}
+```
+
+## Footer
+
+```css
+.footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 48px 24px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer h4 {
+  color: white;
+  margin-bottom: 16px;
+}
+
+.footer a {
+  display: block;
+  color: #94a3b8;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+
+.footer a:hover { color: white; }
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 32px;
+  margin-top: 32px;
+  border-top: 1px solid #1e293b;
+  font-size: 0.875rem;
+}
+```
+
+## Two-Column Content (Blog)
+
+```css
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+@media (max-width: 768px) {
+  .article-layout {
+    grid-template-columns: 1fr;
+  }
+}
+```

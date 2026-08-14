@@ -1,0 +1,243 @@
+---
+title: DSA — Linked Lists, Stacks & Queues
+description: Implement fundamental data structures from scratch in JavaScript
+---
+
+JavaScript doesn't have built-in linked lists, stacks, or queues. Implementing them from scratch is a **core interview skill**.
+
+## Linked List
+
+### Implementation
+
+```javascript
+class ListNode {
+  constructor(val, next = null) {
+    this.val = val;
+    this.next = next;
+  }
+}
+
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.size = 0;
+  }
+
+  append(val) {
+    const node = new ListNode(val);
+    if (!this.head) {
+      this.head = node;
+    } else {
+      let current = this.head;
+      while (current.next) current = current.next;
+      current.next = node;
+    }
+    this.size++;
+  }
+
+  prepend(val) {
+    this.head = new ListNode(val, this.head);
+    this.size++;
+  }
+
+  delete(val) {
+    if (!this.head) return;
+    if (this.head.val === val) {
+      this.head = this.head.next;
+      this.size--;
+      return;
+    }
+    let current = this.head;
+    while (current.next && current.next.val !== val) {
+      current = current.next;
+    }
+    if (current.next) {
+      current.next = current.next.next;
+      this.size--;
+    }
+  }
+
+  toArray() {
+    const result = [];
+    let current = this.head;
+    while (current) {
+      result.push(current.val);
+      current = current.next;
+    }
+    return result;
+  }
+}
+```
+
+### Reverse a Linked List
+
+```javascript
+function reverseList(head) {
+  let prev = null;
+  let current = head;
+
+  while (current) {
+    const next = current.next;
+    current.next = prev;
+    prev = current;
+    current = next;
+  }
+
+  return prev; // new head
+}
+// Time: O(n), Space: O(1)
+```
+
+### Detect Cycle (Floyd's Algorithm)
+
+```javascript
+function hasCycle(head) {
+  let slow = head;
+  let fast = head;
+
+  while (fast && fast.next) {
+    slow = slow.next;
+    fast = fast.next.next;
+    if (slow === fast) return true;
+  }
+
+  return false;
+}
+```
+
+### Merge Two Sorted Lists
+
+```javascript
+function mergeTwoLists(l1, l2) {
+  const dummy = new ListNode(0);
+  let current = dummy;
+
+  while (l1 && l2) {
+    if (l1.val <= l2.val) {
+      current.next = l1;
+      l1 = l1.next;
+    } else {
+      current.next = l2;
+      l2 = l2.next;
+    }
+    current = current.next;
+  }
+
+  current.next = l1 || l2;
+  return dummy.next;
+}
+```
+
+## Stack
+
+LIFO — Last In, First Out:
+
+```javascript
+class Stack {
+  #items = [];
+
+  push(item) { this.#items.push(item); }
+  pop() { return this.#items.pop(); }
+  peek() { return this.#items[this.#items.length - 1]; }
+  isEmpty() { return this.#items.length === 0; }
+  get size() { return this.#items.length; }
+}
+```
+
+### Valid Parentheses
+
+```javascript
+function isValid(s) {
+  const stack = [];
+  const map = { ")": "(", "]": "[", "}": "{" };
+
+  for (const char of s) {
+    if ("({[".includes(char)) {
+      stack.push(char);
+    } else {
+      if (stack.pop() !== map[char]) return false;
+    }
+  }
+
+  return stack.length === 0;
+}
+
+// isValid("()[]{}") → true
+// isValid("(]")     → false
+```
+
+### Min Stack
+
+```javascript
+class MinStack {
+  #stack = [];
+  #minStack = [];
+
+  push(val) {
+    this.#stack.push(val);
+    const min = this.#minStack.length === 0
+      ? val
+      : Math.min(val, this.#minStack[this.#minStack.length - 1]);
+    this.#minStack.push(min);
+  }
+
+  pop() {
+    this.#stack.pop();
+    this.#minStack.pop();
+  }
+
+  top() { return this.#stack[this.#stack.length - 1]; }
+  getMin() { return this.#minStack[this.#minStack.length - 1]; }
+}
+
+// All operations O(1)
+```
+
+## Queue
+
+FIFO — First In, First Out:
+
+```javascript
+class Queue {
+  #items = {};
+  #head = 0;
+  #tail = 0;
+
+  enqueue(item) { this.#items[this.#tail++] = item; }
+
+  dequeue() {
+    if (this.isEmpty()) return undefined;
+    const item = this.#items[this.#head];
+    delete this.#items[this.#head++];
+    return item;
+  }
+
+  peek() { return this.#items[this.#head]; }
+  isEmpty() { return this.#tail === this.#head; }
+  get size() { return this.#tail - this.#head; }
+}
+// Note: using object instead of array to get O(1) dequeue
+```
+
+### Queue Using Two Stacks
+
+```javascript
+class QueueFromStacks {
+  #inbox = [];
+  #outbox = [];
+
+  enqueue(val) { this.#inbox.push(val); }
+
+  dequeue() {
+    if (this.#outbox.length === 0) {
+      while (this.#inbox.length) {
+        this.#outbox.push(this.#inbox.pop());
+      }
+    }
+    return this.#outbox.pop();
+  }
+}
+
+// Amortized O(1) per operation
+```
+

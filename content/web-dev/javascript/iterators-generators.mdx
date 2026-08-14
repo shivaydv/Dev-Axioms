@@ -1,0 +1,147 @@
+---
+title: Iterators & Generators
+description: Lazy evaluation, custom iterables, yield, and the iteration protocol
+---
+
+Iterators and generators let you **produce values on demand** instead of computing everything upfront. They're the engine behind `for...of`, spread, and destructuring.
+
+## The Iteration Protocol
+
+Any object is **iterable** if it has a `[Symbol.iterator]()` method that returns an **iterator** — an object with a `next()` method.
+
+```javascript
+const arr = [1, 2, 3];
+const iterator = arr[Symbol.iterator]();
+
+iterator.next(); // { value: 1, done: false }
+iterator.next(); // { value: 2, done: false }
+iterator.next(); // { value: 3, done: false }
+iterator.next(); // { value: undefined, done: true }
+```
+
+### Custom Iterable
+
+```javascript
+const range = {
+  from: 1,
+  to: 5,
+
+  [Symbol.iterator]() {
+    let current = this.from;
+    const last = this.to;
+
+    return {
+      next() {
+        return current <= last
+          ? { value: current++, done: false }
+          : { done: true };
+      }
+    };
+  }
+};
+
+for (const n of range) {
+  console.log(n); // 1, 2, 3, 4, 5
+}
+
+[...range]; // [1, 2, 3, 4, 5]
+```
+
+## Generator Functions
+
+Generators are a simpler way to create iterators using the `function*` syntax and `yield`:
+
+```javascript
+function* numberGenerator() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+const gen = numberGenerator();
+gen.next(); // { value: 1, done: false }
+gen.next(); // { value: 2, done: false }
+gen.next(); // { value: 3, done: false }
+gen.next(); // { value: undefined, done: true }
+
+// Works with for...of
+for (const n of numberGenerator()) {
+  console.log(n); // 1, 2, 3
+}
+```
+
+### Infinite Sequences
+
+```javascript
+function* fibonacci() {
+  let a = 0, b = 1;
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+// Take first 10 Fibonacci numbers
+const fib = fibonacci();
+const first10 = Array.from({ length: 10 }, () => fib.next().value);
+// [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+```
+
+### Passing Values to Generators
+
+```javascript
+function* conversation() {
+  const name = yield "What is your name?";
+  const age = yield `Hello ${name}! How old are you?`;
+  return `${name} is ${age} years old`;
+}
+
+const gen = conversation();
+console.log(gen.next().value);         // "What is your name?"
+console.log(gen.next("Shiva").value);  // "Hello Shiva! How old are you?"
+console.log(gen.next(25).value);       // "Shiva is 25 years old"
+```
+
+### ID Generator (Practical Use)
+
+```javascript
+function* idGenerator(prefix = "id") {
+  let id = 1;
+  while (true) {
+    yield `${prefix}_${id++}`;
+  }
+}
+
+const getId = idGenerator("user");
+getId.next().value; // "user_1"
+getId.next().value; // "user_2"
+getId.next().value; // "user_3"
+```
+
+### yield* — Delegating to Another Generator
+
+```javascript
+function* inner() {
+  yield "a";
+  yield "b";
+}
+
+function* outer() {
+  yield 1;
+  yield* inner(); // delegate to inner
+  yield 2;
+}
+
+[...outer()]; // [1, "a", "b", 2]
+```
+
+## When to Use Generators
+
+| Use Case | Why Generators |
+|----------|----------------|
+| Lazy sequences | Compute values on demand, not all upfront |
+| Infinite data | Can't create an infinite array, but can yield forever |
+| Unique IDs | Sequential, stateful value generation |
+| Tree/graph traversal | Yield nodes as you visit them |
+| Async control flow | Historical (now mostly replaced by async/await) |
+

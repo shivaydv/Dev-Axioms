@@ -1,0 +1,147 @@
+---
+title: Memory & Performance
+description: Memory leaks, garbage collection, rendering optimization, and building fast JavaScript applications
+---
+
+Writing fast JavaScript isn't just about algorithms — it's about understanding how the browser renders, how memory works, and where bottlenecks hide.
+
+## Memory Leaks — The Silent Performance Killer
+
+### Common Leak Patterns
+
+```javascript
+// 1. Forgotten timers
+const timer = setInterval(() => {
+  fetchAndUpdate();
+}, 1000);
+// Fix: clearInterval(timer) when done
+
+// 2. Event listeners not removed
+element.addEventListener("click", handler);
+// Fix: element.removeEventListener("click", handler)
+
+// 3. Closures retaining references
+function createLeak() {
+  const huge = new Array(1_000_000);
+  return () => huge.length; // closure keeps `huge` alive
+}
+
+// 4. DOM references after removal
+const el = document.getElementById("temp");
+document.body.removeChild(el);
+// `el` still references the removed DOM node
+// Fix: el = null;
+
+// 5. Global variables
+function oops() {
+  leaked = "I'm global!"; // no const/let/var
+}
+```
+
+## Rendering Performance
+
+### The Browser Rendering Pipeline
+
+```text
+JavaScript → Style → Layout → Paint → Composite
+```
+
+**Layout (reflow)** is expensive — avoid triggering it repeatedly:
+
+```javascript
+// ❌ Triggers layout on EVERY iteration (layout thrashing)
+for (let i = 0; i < 100; i++) {
+  const height = element.offsetHeight; // read → triggers layout
+  element.style.height = height + 1 + "px"; // write → invalidates layout
+}
+
+// ✅ Batch reads then writes
+const height = element.offsetHeight; // single read
+for (let i = 0; i < 100; i++) {
+  element.style.height = height + i + "px";
+}
+```
+
+### requestAnimationFrame for Animations
+
+```javascript
+// ❌ setInterval for animation — misses frames
+setInterval(() => { element.style.left = x++ + "px"; }, 16);
+
+// ✅ requestAnimationFrame — syncs with browser refresh
+function animate() {
+  element.style.left = x++ + "px";
+  if (x < 500) requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+```
+
+## Performance Optimization Checklist
+
+### JavaScript
+
+- Use `const` and `let` over `var`
+- Avoid creating objects in hot loops
+- Use `Map`/`Set` instead of plain objects for frequent lookups
+- Memoize expensive computations
+- Use Web Workers for CPU-intensive tasks
+
+### DOM
+
+- Minimize DOM access — cache references
+- Use `DocumentFragment` for batch inserts
+- Use CSS classes instead of inline styles
+- Use event delegation instead of many listeners
+- Use `textContent` over `innerHTML` when possible
+
+### Loading
+
+- **Lazy loading**: Load images/components only when visible
+- **Code splitting**: Load JavaScript modules on demand
+- **Tree shaking**: Remove unused code (bundler feature)
+- **Defer/async scripts**: Don't block HTML parsing
+
+```html
+<script src="app.js" defer></script>  <!-- deferred: runs after HTML parsed -->
+<script src="analytics.js" async></script> <!-- async: runs when ready -->
+```
+
+## Measuring Performance
+
+```javascript
+// Timing code execution
+console.time("operation");
+expensiveOperation();
+console.timeEnd("operation"); // "operation: 142ms"
+
+// Performance API
+const start = performance.now();
+expensiveOperation();
+const end = performance.now();
+console.log(`Took ${end - start}ms`);
+
+// Mark and Measure
+performance.mark("start-fetch");
+await fetch("/api/data");
+performance.mark("end-fetch");
+performance.measure("fetch-time", "start-fetch", "end-fetch");
+```
+
+### Chrome DevTools
+
+1. **Performance tab**: Record and analyze frame rate, CPU usage
+2. **Memory tab**: Take heap snapshots, find leaks
+3. **Lighthouse**: Automated performance audit
+
+## Virtual Scrolling Concept
+
+For lists with thousands of items, render only what's visible:
+
+```javascript
+// Instead of rendering 10,000 list items:
+// Only render the ~20 items visible in the viewport
+// Recycle DOM nodes as user scrolls
+
+// Libraries: react-virtualized, @tanstack/virtual
+```
+

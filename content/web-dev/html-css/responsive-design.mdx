@@ -1,0 +1,252 @@
+---
+title: Responsive Design
+description: Mobile-first approach, media queries, relative units, and building websites that work on every screen
+---
+
+Responsive design ensures your website **looks good on every device** — from phones to ultrawide monitors.
+
+## Mobile-First Approach
+
+Start designing for **mobile** (small screens), then add styles for larger screens. This is the industry standard.
+
+```css
+/* Base styles = mobile (no media query needed) */
+.container {
+  padding: 16px;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .container {
+    padding: 24px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+```
+
+### Why Mobile-First?
+
+1. **Performance** — mobile loads less CSS (base styles are simpler)
+2. **Progressive enhancement** — add complexity for capable devices
+3. **Prioritization** — forces you to focus on essential content first
+
+## The Viewport Meta Tag
+
+**Required** for responsive design:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+```
+
+Without this, mobile browsers render the page at desktop width and zoom out.
+
+## Media Queries
+
+### Common Breakpoints
+
+```css
+/* Mobile: 0 - 767px (base styles, no query needed) */
+
+@media (min-width: 768px) { /* Tablet */ }
+@media (min-width: 1024px) { /* Desktop */ }
+@media (min-width: 1280px) { /* Large desktop */ }
+```
+
+### Other Useful Queries
+
+```css
+/* Max-width (desktop-first approach) */
+@media (max-width: 767px) { /* mobile only */ }
+
+/* Orientation */
+@media (orientation: landscape) { /* wider than tall */ }
+@media (orientation: portrait) { /* taller than wide */ }
+
+/* Hover support (touch vs mouse) */
+@media (hover: hover) { /* device has a mouse */ }
+@media (hover: none) { /* touch device */ }
+
+/* Prefers color scheme */
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a1a; color: #eee; }
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* Print styles */
+@media print {
+  .no-print { display: none; }
+}
+```
+
+## Relative Units
+
+### `rem` vs `em` vs `px`
+
+| Unit | Relative To | Best For |
+|------|-------------|----------|
+| `px` | Nothing (absolute) | Borders, shadows, small fixed values |
+| `rem` | Root font-size (16px default) | Font sizes, spacing, consistent scaling |
+| `em` | Parent element font-size | Padding/margin relative to text size |
+| `%` | Parent element | Widths, responsive containers |
+| `vw` | 1% of viewport width | Full-width elements |
+| `vh` | 1% of viewport height | Hero sections, full-screen layouts |
+
+```css
+html { font-size: 16px; }      /* 1rem = 16px */
+
+h1 { font-size: 2rem; }        /* 32px — scales with root */
+p { font-size: 1rem; }         /* 16px */
+.small { font-size: 0.875rem; } /* 14px */
+
+.container { width: 90%; max-width: 1200px; }
+.hero { height: 100vh; }       /* full viewport height */
+```
+
+**Best practice**: Use `rem` for most things, `px` for borders and shadows.
+
+## Responsive Techniques
+
+### Fluid Widths
+
+```css
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+img {
+  max-width: 100%;
+  height: auto; /* maintain aspect ratio */
+}
+```
+
+### Responsive Typography
+
+```css
+/* Scale font size with viewport */
+h1 {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  /* min: 1.5rem, preferred: 4vw, max: 3rem */
+}
+```
+
+### Responsive Grid (No Media Queries)
+
+```css
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+```
+
+### Hide/Show Elements
+
+```css
+/* Hidden on mobile, visible on desktop */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-only { display: block; }
+}
+
+/* Hidden on desktop, visible on mobile */
+@media (min-width: 768px) {
+  .mobile-only { display: none; }
+}
+```
+
+## Responsive Navigation Pattern
+
+```css
+/* Mobile: hamburger menu (stacked) */
+.nav-links {
+  display: none;
+  flex-direction: column;
+}
+
+.nav-links.active {
+  display: flex;
+}
+
+/* Desktop: horizontal nav */
+@media (min-width: 768px) {
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}
+```
+
+## The `clamp()` Function
+
+Responsive values without media queries:
+
+```css
+.container {
+  width: clamp(300px, 90%, 1200px);
+  /* min: 300px, preferred: 90%, max: 1200px */
+}
+
+h1 {
+  font-size: clamp(1.5rem, 2.5vw + 1rem, 3.5rem);
+}
+
+.card {
+  padding: clamp(16px, 3vw, 48px);
+}
+```
+
+## Container Queries (Modern CSS)
+
+Style elements based on their **container's** size, not the viewport:
+
+```css
+.card-container {
+  container-type: inline-size;
+}
+
+@container (min-width: 400px) {
+  .card {
+    display: flex;
+    flex-direction: row;
+  }
+}
+```
+
+## Interview Questions
+
+### Q: Difference between `px`, `em`, and `rem`?
+
+`px` is absolute (fixed). `em` is relative to the parent's font-size. `rem` is relative to the root (`<html>`) font-size. Use `rem` for consistency and accessibility.
+
+### Q: What is mobile-first design?
+
+Write base CSS for mobile, then use `min-width` media queries to add styles for larger screens. Benefits: better performance, progressive enhancement, forces content prioritization.

@@ -1,0 +1,429 @@
+---
+title: "Interview Prep: Senior Level"
+description: Advanced JavaScript interview questions for 4+ year experience — engine internals, design patterns, architecture, and tricky outputs
+---
+
+These questions test **deep engine knowledge**, **architectural thinking**, and **real-world problem-solving**. Expect these at senior (4+ YOE) and lead-level interviews.
+
+---
+
+## Engine Internals
+
+### 1. Explain the JavaScript execution context in detail.
+
+Every function call creates an **Execution Context** with two phases:
+
+**Creation Phase**:
+1. Create the Variable Environment (hoist `var`, functions)
+2. Create the Scope Chain (lexical environment references)
+3. Determine `this`
+
+**Execution Phase**:
+1. Execute code line by line
+2. Assign values to variables
+
+The **Call Stack** manages contexts — push on call, pop on return. Stack overflow happens when recursion exceeds the stack limit (~10,000-15,000 frames).
+
+📖 Deep dive: [Execution Context](/web-dev/javascript/execution-context)
+
+---
+
+### 2. How does the V8 engine optimize JavaScript?
+
+```text
+Source Code → Parser → AST → Ignition (Interpreter, Bytecode)
+                                    ↓
+                              TurboFan (JIT Compiler, Optimized Machine Code)
+                                    ↓
+                              Deoptimization (if assumptions break)
+```
+
+**Key optimizations**:
+- **Inline Caching**: Remembers object shapes for fast property access
+- **Hidden Classes**: Objects with same property order share a class
+- **Deoptimization**: Falls back to bytecode when assumptions break (e.g., changing property types)
+
+**Why this matters**: Consistent object shapes, avoiding `delete`, and keeping functions monomorphic makes your code faster.
+
+📖 Deep dive: [Memory & Performance](/web-dev/javascript/memory-performance)
+
+---
+
+### 3. What is the Temporal Dead Zone (TDZ) and why does it exist?
+
+The TDZ is the region between the start of a scope and the point where a `let`/`const` is declared. Accessing the variable in this zone throws `ReferenceError`.
+
+```javascript
+{
+  // TDZ starts here for `x`
+  console.log(x); // ❌ ReferenceError
+  let x = 10;     // TDZ ends here
+}
+```
+
+**Why it exists**: Prevents bugs from using variables before they're initialized. `var` allows this and it causes subtle bugs.
+
+📖 Deep dive: [Hoisting](/web-dev/javascript/hoisting)
+
+---
+
+### 4. Explain stale closures and how to avoid them.
+
+A closure captures variables **by reference**, not by value. If the variable changes, the closure sees the new value:
+
+```javascript
+function createCallbacks() {
+  const callbacks = [];
+  for (var i = 0; i < 3; i++) {
+    callbacks.push(() => console.log(i));
+  }
+  return callbacks;
+}
+createCallbacks().forEach(cb => cb()); // 3, 3, 3
+```
+
+**In React**, stale closures happen when a `useEffect` captures old state:
+
+```javascript
+// ❌ Stale: `count` is captured once
+useEffect(() => {
+  setInterval(() => console.log(count), 1000);
+}, []);
+
+// ✅ Fix: use ref or functional updater
+setCount(prev => prev + 1);
+```
+
+📖 Deep dive: [Closures](/web-dev/javascript/closures)
+
+---
+
+## Memory & Performance
+
+### 5. What causes memory leaks in JavaScript?
+
+Common causes:
+
+1. **Accidental globals**: `function() { leak = "oops"; }` (missing `let`/`const`)
+2. **Forgotten timers**: `setInterval` that's never cleared
+3. **Detached DOM nodes**: Removed from DOM but referenced in JS
+4. **Closures holding large objects**: Inner function keeps outer scope alive
+5. **Event listeners**: Added but never removed
+
+```javascript
+// ❌ Leak: closure retains `hugeData`
+function setup() {
+  const hugeData = new Array(1e6);
+  return () => hugeData.length; // hugeData never GC'd
+}
+```
+
+📖 Deep dive: [Memory & Performance](/web-dev/javascript/memory-performance)
+
+---
+
+### 6. Explain `WeakMap` and `WeakRef`. When would you use them?
+
+**WeakMap**: Keys must be objects and are held **weakly** — if nothing else references the key, it gets garbage collected along with its value.
+
+```javascript
+const cache = new WeakMap();
+let obj = { data: "big" };
+cache.set(obj, "computed result");
+obj = null; // obj is GC'd, cache entry disappears automatically
+```
+
+**WeakRef**: A weak reference to an object. Doesn't prevent garbage collection.
+
+**Use cases**: Caching, memoization without memory leaks, metadata on DOM elements.
+
+📖 Deep dive: [ES6+ Features](/web-dev/javascript/es6-plus-features)
+
+---
+
+### 7. What is `requestAnimationFrame` and why use it over `setInterval` for animations?
+
+`rAF` syncs with the browser's **repaint cycle** (60fps = every ~16ms):
+
+```javascript
+function animate() {
+  element.style.transform = `translateX(${x++}px)`;
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+```
+
+**vs `setInterval`**: `rAF` pauses in background tabs (saves CPU), syncs with display refresh rate, doesn't cause jank.
+
+📖 Deep dive: [Browser APIs](/web-dev/javascript/browser-apis)
+
+---
+
+## Design Patterns & Architecture
+
+### 8. Explain the Module Pattern and why it matters.
+
+Encapsulates private state using closures:
+
+```javascript
+const UserService = (() => {
+  let users = []; // private
+
+  return {
+    add(user) { users.push(user); },
+    getAll() { return [...users]; },
+    count() { return users.length; }
+  };
+})();
+```
+
+With ES modules, the module pattern is less necessary, but understanding it shows deep closure mastery.
+
+📖 Deep dive: [Design Patterns](/web-dev/javascript/design-patterns)
+
+---
+
+### 9. Implement a pub/sub (Observer) pattern.
+
+```javascript
+class EventBus {
+  #events = {};
+
+  on(event, callback) {
+    (this.#events[event] ??= []).push(callback);
+    return () => this.off(event, callback); // unsubscribe
+  }
+
+  off(event, callback) {
+    this.#events[event] = this.#events[event]?.filter(cb => cb !== callback);
+  }
+
+  emit(event, ...args) {
+    this.#events[event]?.forEach(cb => cb(...args));
+  }
+}
+```
+
+📖 Deep dive: [Design Patterns](/web-dev/javascript/design-patterns)
+
+---
+
+### 10. What is the Proxy object? Give a real use case.
+
+Proxy intercepts fundamental operations on objects:
+
+```javascript
+const validator = new Proxy({}, {
+  set(target, prop, value) {
+    if (prop === "age" && typeof value !== "number") {
+      throw new TypeError("Age must be a number");
+    }
+    target[prop] = value;
+    return true;
+  }
+});
+
+validator.age = 25;     // ✅
+validator.age = "old";  // ❌ TypeError
+```
+
+**Real use cases**: Vue 3 reactivity, validation, logging, default values, access control.
+
+📖 Deep dive: [ES6+ Features](/web-dev/javascript/es6-plus-features)
+
+---
+
+## Polyfill & Implementation
+
+### 11. Implement `Promise.all` from scratch.
+
+```javascript
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let completed = 0;
+    if (promises.length === 0) return resolve([]);
+
+    promises.forEach((p, i) => {
+      Promise.resolve(p).then(value => {
+        results[i] = value;
+        if (++completed === promises.length) resolve(results);
+      }, reject);
+    });
+  });
+}
+```
+
+📖 More implementations: [Polyfills](/web-dev/javascript/polyfills)
+
+---
+
+### 12. Implement `Function.prototype.bind`.
+
+```javascript
+Function.prototype.myBind = function (context, ...boundArgs) {
+  const fn = this;
+  return function (...callArgs) {
+    return fn.apply(context, [...boundArgs, ...callArgs]);
+  };
+};
+```
+
+📖 More implementations: [Polyfills](/web-dev/javascript/polyfills)
+
+---
+
+### 13. Implement an LRU Cache.
+
+```javascript
+class LRUCache {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) return -1;
+    const value = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, value); // move to end
+    return value;
+  }
+
+  put(key, value) {
+    if (this.cache.has(key)) this.cache.delete(key);
+    this.cache.set(key, value);
+    if (this.cache.size > this.capacity) {
+      this.cache.delete(this.cache.keys().next().value);
+    }
+  }
+}
+```
+
+📖 More challenges: [Machine Coding](/web-dev/javascript/machine-coding)
+
+---
+
+## Advanced Concepts
+
+### 14. What are generators and when would you use them?
+
+Functions that can be **paused and resumed** with `yield`:
+
+```javascript
+function* idGenerator() {
+  let id = 1;
+  while (true) yield id++;
+}
+const gen = idGenerator();
+gen.next().value; // 1
+gen.next().value; // 2
+```
+
+**Use cases**: Infinite sequences, lazy evaluation, Redux-Saga, custom iterables, paginated API fetching.
+
+📖 Deep dive: [Iterators & Generators](/web-dev/javascript/iterators-generators)
+
+---
+
+### 15. Explain `Symbol` and its use cases.
+
+Symbols are **unique, immutable identifiers**:
+
+```javascript
+const id = Symbol("id");
+const user = { [id]: 123, name: "Shiva" };
+user[id]; // 123
+Object.keys(user); // ["name"] — symbol keys are hidden
+```
+
+**Use cases**: Private-ish properties, custom iterators (`Symbol.iterator`), avoiding name collisions in libraries.
+
+📖 Deep dive: [Data Types](/web-dev/javascript/datatypes)
+
+---
+
+### 16. What is `Object.create(null)` and why use it?
+
+Creates an object with **no prototype** (no `.toString`, `.hasOwnProperty`, etc.):
+
+```javascript
+const dict = Object.create(null);
+dict.constructor; // undefined — truly clean
+```
+
+**Use case**: Pure dictionaries/maps where you don't want prototype pollution. Used internally by many frameworks.
+
+---
+
+## Guess the Output (Tricky)
+
+### Q1
+
+```javascript
+const a = {};
+const b = { key: "b" };
+const c = { key: "c" };
+
+a[b] = 123;
+a[c] = 456;
+
+console.log(a[b]);
+```
+
+**Output**: `456`
+
+Objects as keys get stringified to `"[object Object]"`. Both `b` and `c` become the same key, so `c` overwrites `b`.
+
+---
+
+### Q2
+
+```javascript
+function Foo() {
+  return this;
+}
+
+console.log(new Foo() === new Foo());
+```
+
+**Output**: `false` — `new` creates a fresh object each time.
+
+---
+
+### Q3
+
+```javascript
+const promise = new Promise((resolve) => {
+  console.log(1);
+  resolve(2);
+  console.log(3);
+});
+
+promise.then(console.log);
+console.log(4);
+```
+
+**Output**: `1, 3, 4, 2`
+
+The Promise executor runs **synchronously** (`1`, `3`). `resolve(2)` schedules `.then` as a microtask. `4` runs. Then microtask `2`.
+
+---
+
+### Q4
+
+```javascript
+var x = 1;
+{
+  var x = 2;
+}
+console.log(x);
+
+let y = 1;
+{
+  let y = 2;
+}
+console.log(y);
+```
+
+**Output**: `2`, `1` — `var` ignores block scope. `let` respects it.

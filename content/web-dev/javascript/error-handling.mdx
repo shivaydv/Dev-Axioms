@@ -1,0 +1,123 @@
+---
+title: Error Handling
+description: try/catch, custom errors, async error patterns, and building robust JavaScript applications
+---
+
+Errors happen — network failures, invalid input, unexpected data. Good error handling separates production-quality code from fragile scripts.
+
+## try / catch / finally
+
+```javascript
+try {
+  const data = JSON.parse(invalidJSON);
+} catch (error) {
+  console.error("Parse failed:", error.message);
+} finally {
+  console.log("Runs regardless of success or failure");
+}
+```
+
+## Error Types
+
+| Type | When |
+|------|------|
+| `TypeError` | Wrong type (`null.foo`, calling non-function) |
+| `ReferenceError` | Accessing undeclared variable |
+| `SyntaxError` | Invalid syntax (caught at parse time) |
+| `RangeError` | Value out of range (`new Array(-1)`) |
+| `URIError` | Invalid URI encoding |
+
+## Custom Error Classes
+
+```javascript
+class ValidationError extends Error {
+  constructor(field, message) {
+    super(message);
+    this.name = "ValidationError";
+    this.field = field;
+  }
+}
+
+class NotFoundError extends Error {
+  constructor(resource) {
+    super(`${resource} not found`);
+    this.name = "NotFoundError";
+    this.statusCode = 404;
+  }
+}
+
+// Usage
+function validateEmail(email) {
+  if (!email.includes("@")) {
+    throw new ValidationError("email", "Invalid email format");
+  }
+}
+
+try {
+  validateEmail("invalid");
+} catch (error) {
+  if (error instanceof ValidationError) {
+    console.error(`Field "${error.field}": ${error.message}`);
+  }
+}
+```
+
+## Error Handling in Async Code
+
+### With async/await
+
+```javascript
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch failed:", error.message);
+    return null; // fallback
+  }
+}
+```
+
+### With Promises
+
+```javascript
+fetch("/api/data")
+  .then(res => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  })
+  .catch(err => console.error(err));
+```
+
+## Global Error Handlers
+
+```javascript
+// Browser — catch unhandled errors
+window.addEventListener("error", (event) => {
+  console.error("Uncaught:", event.message);
+});
+
+// Catch unhandled promise rejections
+window.addEventListener("unhandledrejection", (event) => {
+  console.error("Unhandled rejection:", event.reason);
+  event.preventDefault(); // prevent default logging
+});
+```
+
+## Best Practices
+
+1. **Only catch what you can handle** — don't swallow errors silently
+2. **Use specific error types** — distinguish validation errors from network errors
+3. **Always handle async errors** — unhandled rejections crash Node.js
+4. **Log errors with context** — include what operation failed and with what data
+5. **Use `Error.cause`** (ES2022) — chain errors for better debugging:
+
+```javascript
+try {
+  await connectDatabase();
+} catch (dbError) {
+  throw new Error("App startup failed", { cause: dbError });
+}
+```
+

@@ -1,32 +1,248 @@
 ---
-title: JavaScript Machine Coding
-description: Practical Vanilla JS challenges
+title: Machine Coding Challenges
+description: Implement real components and utilities from scratch — the practical interview round
 ---
 
-Master Vanilla JavaScript by building real components and functions from scratch.
+Machine coding rounds test your ability to **write working code under time pressure**. These are the most commonly asked challenges.
 
 ## 1. Debounce Function
-Write a function that delays execution until after a specified wait time.
 
 ```javascript
-function debounce(func, wait) {
-  let timeout;
-  return function(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
+function debounce(fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+// Test
+const log = debounce(console.log, 300);
+log("a"); log("b"); log("c"); // only "c" prints after 300ms
+```
+
+## 2. Throttle Function
+
+```javascript
+function throttle(fn, limit) {
+  let inThrottle = false;
+  return function (...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => { inThrottle = false; }, limit);
+    }
   };
 }
 ```
 
-## 2. Deep Clone
-A function that creates a completely new copy of an object, including all nested objects.
+## 3. Deep Clone
 
-## 3. Flat Array
-Convert a multi-level nested array into a single-level array.
+```javascript
+function deepClone(obj) {
+  if (obj === null || typeof obj !== "object") return obj;
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+  if (Array.isArray(obj)) return obj.map(deepClone);
 
-## 4. Star Rating Component
-Build a UI component in Vanilla JS that allows a user to select a rating from 1 to 5.
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, val]) => [key, deepClone(val)])
+  );
+}
+```
 
----
+## 4. Flatten Array
 
-**Next Step**: Learn [Advanced React](/web-dev/react/basics).
+```javascript
+function flatten(arr, depth = Infinity) {
+  return arr.reduce((acc, item) => {
+    if (Array.isArray(item) && depth > 0) {
+      acc.push(...flatten(item, depth - 1));
+    } else {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+}
+
+flatten([1, [2, [3, [4]]]]); // [1, 2, 3, 4]
+```
+
+## 5. Curry Function
+
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) return fn(...args);
+    return (...more) => curried(...args, ...more);
+  };
+}
+
+const add = curry((a, b, c) => a + b + c);
+add(1)(2)(3); // 6
+add(1, 2)(3); // 6
+```
+
+## 6. Event Emitter
+
+```javascript
+class EventEmitter {
+  constructor() {
+    this.events = {};
+  }
+
+  on(event, callback) {
+    if (!this.events[event]) this.events[event] = [];
+    this.events[event].push(callback);
+    return this;
+  }
+
+  off(event, callback) {
+    this.events[event] = this.events[event]?.filter(cb => cb !== callback);
+    return this;
+  }
+
+  emit(event, ...args) {
+    this.events[event]?.forEach(cb => cb(...args));
+    return this;
+  }
+
+  once(event, callback) {
+    const wrapper = (...args) => {
+      callback(...args);
+      this.off(event, wrapper);
+    };
+    return this.on(event, wrapper);
+  }
+}
+```
+
+## 7. LRU Cache
+
+```javascript
+class LRUCache {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) return -1;
+    const value = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, value); // move to end (most recent)
+    return value;
+  }
+
+  put(key, value) {
+    if (this.cache.has(key)) this.cache.delete(key);
+    this.cache.set(key, value);
+
+    if (this.cache.size > this.capacity) {
+      const oldest = this.cache.keys().next().value;
+      this.cache.delete(oldest);
+    }
+  }
+}
+```
+
+## 8. Promise.all Implementation
+
+```javascript
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let completed = 0;
+
+    if (promises.length === 0) return resolve([]);
+
+    promises.forEach((p, i) => {
+      Promise.resolve(p).then(value => {
+        results[i] = value;
+        if (++completed === promises.length) resolve(results);
+      }, reject);
+    });
+  });
+}
+```
+
+## 9. Typeahead / Autocomplete
+
+```javascript
+function createTypeahead(input, fetchSuggestions) {
+  const dropdown = document.createElement("ul");
+  dropdown.className = "suggestions";
+  input.parentNode.appendChild(dropdown);
+
+  const search = debounce(async (query) => {
+    if (query.length < 2) {
+      dropdown.innerHTML = "";
+      return;
+    }
+
+    const suggestions = await fetchSuggestions(query);
+    dropdown.innerHTML = suggestions
+      .map(s => `<li data-value="${s}">${s}</li>`)
+      .join("");
+  }, 300);
+
+  input.addEventListener("input", (e) => search(e.target.value));
+
+  dropdown.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") {
+      input.value = e.target.dataset.value;
+      dropdown.innerHTML = "";
+    }
+  });
+}
+```
+
+## 10. Star Rating Component
+
+```javascript
+function createStarRating(container, maxStars = 5) {
+  let currentRating = 0;
+
+  function render() {
+    container.innerHTML = "";
+
+    for (let i = 1; i <= maxStars; i++) {
+      const star = document.createElement("span");
+      star.textContent = i <= currentRating ? "★" : "☆";
+      star.style.cursor = "pointer";
+      star.style.fontSize = "24px";
+      star.style.color = i <= currentRating ? "gold" : "gray";
+
+      star.addEventListener("click", () => {
+        currentRating = i;
+        render();
+      });
+
+      star.addEventListener("mouseenter", () => {
+        container.querySelectorAll("span").forEach((s, idx) => {
+          s.style.color = idx < i ? "gold" : "gray";
+        });
+      });
+
+      container.appendChild(star);
+    }
+
+    container.addEventListener("mouseleave", () => {
+      container.querySelectorAll("span").forEach((s, idx) => {
+        s.style.color = idx < currentRating ? "gold" : "gray";
+      });
+    });
+  }
+
+  render();
+  return { getRating: () => currentRating };
+}
+```
+
+## Interview Tips for Machine Coding
+
+1. **Clarify requirements** before coding — ask about edge cases
+2. **Start with the API/interface** — what functions/methods are needed?
+3. **Write working code first**, then optimize
+4. **Handle edge cases** — empty inputs, invalid data, boundary conditions
+5. **Explain your approach** as you code — interviewers evaluate your thinking

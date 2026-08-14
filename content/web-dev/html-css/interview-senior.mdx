@@ -1,0 +1,154 @@
+---
+title: "Interview Prep: Senior Level"
+description: Advanced HTML and CSS interview questions for 4+ year experience — performance, architecture, stacking contexts, and modern features
+---
+
+These questions test **architectural thinking, performance optimization, and deep technical knowledge** of browser rendering. Expect these at senior (4+ YOE) and lead-level interviews.
+
+---
+
+## CSS Architecture & Performance
+
+### 1. Explain the concept of a Stacking Context. What creates one?
+
+A Stacking Context is a three-dimensional conceptualization of HTML elements along the z-axis relative to the user. Elements within a stacking context are completely isolated from elements outside of it regarding z-index calculations.
+
+If Element A has `z-index: 10` and creates a stacking context, and Element B has `z-index: 5` and creates a stacking context, a child of Element B with `z-index: 9999` **will still appear behind Element A**.
+
+**What creates a stacking context?**
+- `position: absolute` or `relative` with a `z-index` other than `auto`
+- `position: fixed` or `sticky`
+- `opacity` less than 1
+- `transform`, `filter`, `perspective`, `clip-path` not equal to `none`
+- `isolation: isolate`
+
+📖 Deep dive: [Display & Position](/web-dev/html-css/display-position)
+
+---
+
+### 2. How do browsers parse CSS and how does CSS selector performance work?
+
+Browsers parse CSS selectors **from right to left**.
+
+In the rule `.nav ul li a`, the browser first finds all `<a>` tags in the DOM. Then it checks if they are inside an `<li>`, then inside a `<ul>`, then inside `.nav`.
+
+Because of this, **deeply nested selectors are bad for performance**. The most efficient selectors are single classes (`.nav-link`). This is one of the primary technical reasons why methodologies like BEM (Block Element Modifier) emphasize flat class structures.
+
+---
+
+### 3. What is BEM? Why use a naming convention?
+
+BEM stands for **Block, Element, Modifier**. It is a CSS naming convention that creates reusable, predictable, and flat components.
+
+```css
+.card { /* Block */ }
+.card__title { /* Element */ }
+.card--featured { /* Modifier */ }
+```
+
+**Why use it?**
+- **No Specificity Wars:** BEM keeps specificity low and flat, eliminating the need for `!important`.
+- **Encapsulation:** You immediately know what a class does and where it belongs.
+- **Performance:** Single-class selectors are the fastest for the browser to parse.
+
+📖 Deep dive: [Debugging & Best Practices](/web-dev/html-css/debugging-best-practices)
+
+---
+
+### 4. What causes CSS Layout/Reflow, and how do you optimize animations?
+
+**Reflow (or Layout)** happens when the browser has to recalculate the positions and geometries of elements. It is computationally expensive. Properties that trigger reflow include `width`, `height`, `margin`, `padding`, `top`, `left`, `display`.
+
+**Repaint** happens when visual styles change without affecting layout (e.g., `color`, `background`, `box-shadow`).
+
+**Optimization:**
+For smooth, 60fps animations, you should **only animate `transform` and `opacity`**. These properties are handled by the compositor thread and can be GPU-accelerated, completely bypassing the expensive layout and paint phases.
+
+---
+
+## Modern CSS Features
+
+### 5. What are Container Queries?
+
+Media queries style elements based on the **viewport** size. Container queries style elements based on the size of their **parent container**.
+
+This is revolutionary for component-driven development (like React). A Card component can change its own layout based on whether it is placed in a narrow sidebar or a wide main content area, without knowing anything about the screen size.
+
+```css
+.sidebar {
+  container-type: inline-size;
+}
+
+@container (max-width: 400px) {
+  .card { flex-direction: column; }
+}
+```
+
+---
+
+### 6. Explain the difference between `auto-fill` and `auto-fit` in CSS Grid.
+
+Both are used with the `repeat()` function to create responsive grids without media queries.
+
+- `auto-fill`: Will create as many columns as will fit into the container, **even if they are empty**. It reserves the space for them.
+- `auto-fit`: Will create columns for the existing items, and then **collapse any empty tracks to zero width**, allowing the existing items to stretch and fill the available space.
+
+```css
+/* Commonly used for responsive card grids */
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+```
+
+📖 Deep dive: [CSS Grid](/web-dev/html-css/css-grid)
+
+---
+
+### 7. What is the `clamp()` function?
+
+`clamp()` calculates a fluid value that scales between a defined minimum and maximum bound. It takes three arguments: `clamp(MIN, VAL, MAX)`.
+
+It is incredibly useful for fluid typography without media queries:
+
+```css
+h1 {
+  /* Min 24px, preferred 5vw, Max 48px */
+  font-size: clamp(1.5rem, 5vw, 3rem); 
+}
+```
+
+📖 Deep dive: [Responsive Design](/web-dev/html-css/responsive-design)
+
+---
+
+## Advanced HTML & Accessibility
+
+### 8. What is the difference between a `<script>`, `<script async>`, and `<script defer>`?
+
+When the HTML parser encounters a normal `<script>`, it pauses HTML parsing, downloads the script, executes it, and then resumes parsing. This blocks rendering.
+
+- **`async`**: The script downloads in the background while HTML continues parsing. Once downloaded, HTML parsing pauses to execute the script. Scripts are not guaranteed to execute in order. (Good for analytics).
+- **`defer`**: The script downloads in the background while HTML continues parsing. The script **only executes after HTML parsing is fully complete**. Scripts execute in the exact order they appear in the document. **(Best practice for your main app code).**
+
+---
+
+### 9. How do you handle accessibility for Custom UI components (like a custom dropdown)?
+
+When you build a custom dropdown using `<div>`s instead of a native `<select>`, you lose all built-in accessibility. To fix it, you must implement the ARIA specification:
+
+1. **Keyboard Support:** Must handle `Tab` to focus, `Enter`/`Space` to open/select, and `Arrow` keys to navigate options. Add `tabindex="0"`.
+2. **Roles:** Add `role="combobox"` or `role="listbox"`, and `role="option"` to the items.
+3. **States:** Dynamically update `aria-expanded="true/false"`, `aria-selected`, and `aria-activedescendant` via JavaScript so screen readers know what is happening.
+
+**Rule of thumb:** Always use native HTML elements if possible. Only build custom components if native styling limits make it impossible.
+
+📖 Deep dive: [Accessibility & SEO Basics](/web-dev/html-css/accessibility-seo-basics)
+
+---
+
+### 10. What is a "Flash of Unstyled Content" (FOUC) and how do you prevent it?
+
+FOUC occurs when a web page momentarily displays with the browser's default styles before the external CSS fully loads.
+
+**How to prevent it:**
+- Always put your CSS `<link>` tags inside the `<head>`. This ensures the browser downloads and processes the CSSOM before it renders the DOM.
+- Avoid placing CSS at the bottom of the body.
+- For heavily JavaScript-rendered apps (like React), ensure critical CSS is extracted and inlined or server-side rendered.

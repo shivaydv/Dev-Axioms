@@ -1,0 +1,237 @@
+---
+title: Numbers & Math
+description: The Number type, floating point traps, parseInt/parseFloat, and the Math object
+---
+
+JavaScript has a **single number type** — there's no separate integer, float, or double. All numbers are 64-bit IEEE 754 double-precision floating point.
+
+## Number Basics
+
+```javascript
+const integer = 42;
+const decimal = 3.14;
+const negative = -10;
+const exponential = 2.5e6;  // 2,500,000
+const binary = 0b1010;      // 10
+const octal = 0o17;         // 15
+const hex = 0xFF;            // 255
+
+// Numeric separators (ES2021) — for readability
+const billion = 1_000_000_000;
+const bytes = 0xFF_FF_FF;
+```
+
+## Special Numeric Values
+
+```javascript
+Infinity      // 1 / 0
+-Infinity     // -1 / 0
+NaN           // "Not a Number" — result of invalid math
+
+typeof Infinity  // "number"
+typeof NaN       // "number" (yes, NaN is a "number" 🤯)
+```
+
+### NaN — The Strangest Value
+
+```javascript
+NaN === NaN;        // false (the only value not equal to itself!)
+NaN !== NaN;        // true
+
+// Wrong way to check
+isNaN("hello");     // true (coerces "hello" to NaN first)
+isNaN(undefined);   // true
+
+// Right way to check
+Number.isNaN(NaN);         // true
+Number.isNaN("hello");     // false (no coercion)
+Number.isNaN(undefined);   // false
+```
+
+## Converting to Numbers
+
+```javascript
+// Number() — strict, full string must be valid
+Number("42");       // 42
+Number("42px");     // NaN ← fails on mixed content
+Number("");         // 0
+Number(" ");        // 0
+Number(true);       // 1
+Number(false);      // 0
+Number(null);       // 0
+Number(undefined);  // NaN
+
+// parseInt() — parses until it hits a non-numeric character
+parseInt("42px");     // 42
+parseInt("3.14");     // 3 (ignores decimal)
+parseInt("0xFF", 16); // 255 (supports radix)
+parseInt("abc");      // NaN
+
+// parseFloat() — like parseInt but handles decimals
+parseFloat("3.14px"); // 3.14
+parseFloat("42");     // 42
+
+// Unary + (shorthand for Number())
++"42"       // 42
++""         // 0
++true       // 1
++null       // 0
++undefined  // NaN
+```
+
+**Rule**: Use `Number()` for strict conversion. Use `parseInt`/`parseFloat` when parsing mixed strings (like "42px").
+
+## Number Methods
+
+```javascript
+const n = 3.14159;
+
+n.toFixed(2);       // "3.14" (returns a STRING)
+n.toPrecision(4);   // "3.142" (total significant digits)
+n.toString();       // "3.14159"
+n.toString(2);      // binary: "11.001001..."
+n.toString(16);     // hex: "3.243f6..."
+
+Number.isInteger(42);    // true
+Number.isInteger(42.0);  // true (same as 42)
+Number.isInteger(42.5);  // false
+Number.isFinite(42);     // true
+Number.isFinite(Infinity); // false
+```
+
+## Safe Integer Range
+
+```javascript
+Number.MAX_SAFE_INTEGER   // 9007199254740991 (2^53 - 1)
+Number.MIN_SAFE_INTEGER   // -9007199254740991
+
+// Beyond safe range, precision is lost
+9007199254740991 + 1      // 9007199254740992 ✅
+9007199254740991 + 2      // 9007199254740992 ❌ (should be ...93)
+
+Number.isSafeInteger(9007199254740991);  // true
+Number.isSafeInteger(9007199254740992);  // false
+```
+
+For larger numbers, use **BigInt**:
+
+```javascript
+const big = 9007199254740991n + 2n; // 9007199254740993n ✅
+```
+
+## The Math Object
+
+The `Math` object provides mathematical constants and functions. It is NOT a constructor.
+
+### Rounding
+
+```javascript
+Math.round(4.5);   // 5
+Math.round(4.4);   // 4
+Math.ceil(4.1);    // 5 (always rounds up)
+Math.floor(4.9);   // 4 (always rounds down)
+Math.trunc(4.9);   // 4 (removes decimal — ES6)
+Math.trunc(-4.9);  // -4 (different from floor!)
+
+// Note: Math.floor(-4.1) = -5, Math.trunc(-4.1) = -4
+```
+
+### Min / Max
+
+```javascript
+Math.max(1, 5, 3);     // 5
+Math.min(1, 5, 3);     // 1
+
+// With arrays — use spread
+const nums = [1, 5, 3];
+Math.max(...nums);      // 5
+```
+
+### Power and Roots
+
+```javascript
+Math.pow(2, 3);    // 8 (same as 2 ** 3)
+Math.sqrt(16);     // 4
+Math.cbrt(27);     // 3
+Math.abs(-42);     // 42
+```
+
+### Random Numbers
+
+```javascript
+Math.random();                    // 0 to 0.999...
+
+// Random integer between min (inclusive) and max (inclusive)
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+randomInt(1, 6);  // Random dice roll (1-6)
+randomInt(0, 255); // Random RGB value
+```
+
+### Other Useful Methods
+
+```javascript
+Math.PI;           // 3.141592653589793
+Math.E;            // 2.718281828459045
+Math.log(1);       // 0
+Math.log2(8);      // 3
+Math.log10(1000);  // 3
+Math.sign(-5);     // -1 (returns -1, 0, or 1)
+Math.sign(0);      // 0
+Math.sign(5);      // 1
+```
+
+## Real-World Patterns
+
+### Format Currency
+
+```javascript
+const formatCurrency = (amount, currency = "INR") => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency
+  }).format(amount);
+};
+
+formatCurrency(1234567.89); // "₹12,34,567.89"
+```
+
+### Percentage Calculation
+
+```javascript
+const percentage = (part, total) =>
+  ((part / total) * 100).toFixed(1) + "%";
+
+percentage(45, 200); // "22.5%"
+```
+
+### Clamp a Number to a Range
+
+```javascript
+const clamp = (num, min, max) =>
+  Math.min(Math.max(num, min), max);
+
+clamp(150, 0, 100); // 100
+clamp(-5, 0, 100);  // 0
+clamp(50, 0, 100);  // 50
+```
+
+## The Floating Point Trap
+
+```javascript
+0.1 + 0.2           // 0.30000000000000004
+0.1 + 0.2 === 0.3   // false
+
+// Solutions
+// 1. Use toFixed
++(0.1 + 0.2).toFixed(2) // 0.3
+
+// 2. Use epsilon comparison
+Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON // true
+
+// 3. Work in smallest units (cents, paise)
+const priceInPaise = 100 + 200; // 300 paise = ₹3.00
+```
+

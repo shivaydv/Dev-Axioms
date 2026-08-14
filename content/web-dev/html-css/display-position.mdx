@@ -1,0 +1,228 @@
+---
+title: Display & Position
+description: Controlling how elements are placed — display modes, positioning, z-index, and stacking
+---
+
+`display` controls **how an element flows** in the page. `position` controls **where it's placed** relative to its normal position.
+
+## Display Property
+
+### `block`
+
+Takes **full width**, starts on a **new line**:
+
+```css
+div, p, h1, section, form { display: block; } /* default for these */
+```
+
+### `inline`
+
+Takes only **needed width**, stays **in line** with surrounding content:
+
+```css
+span, a, strong, em, img { display: inline; } /* default for these */
+```
+
+**Cannot** set `width` or `height` on inline elements. Vertical `margin` and `padding` don't push other elements.
+
+### `inline-block`
+
+Best of both — flows inline but **respects width/height**:
+
+```css
+.badge {
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  padding: 4px 8px;
+}
+```
+
+### `none`
+
+Completely **removes** the element from the page (takes no space):
+
+```css
+.hidden { display: none; }
+```
+
+### `display: none` vs `visibility: hidden`
+
+| Property | Takes Space? | Visible? | Accessible? |
+|----------|-------------|----------|-------------|
+| `display: none` | No | No | No |
+| `visibility: hidden` | **Yes** | No | No |
+| `opacity: 0` | **Yes** | No | **Yes** (clickable!) |
+
+## Position Property
+
+### `static` (Default)
+
+Normal flow — ignores `top`, `right`, `bottom`, `left`:
+
+```css
+.normal { position: static; } /* default for all elements */
+```
+
+### `relative`
+
+Stays in normal flow but can be **offset** from its original position:
+
+```css
+.nudged {
+  position: relative;
+  top: 10px;      /* moves DOWN 10px from original spot */
+  left: 20px;     /* moves RIGHT 20px from original spot */
+}
+```
+
+**Original space is preserved** — other elements don't fill the gap.
+
+### `absolute`
+
+**Removed from flow** and positioned relative to the nearest **positioned ancestor** (an ancestor with `position: relative/absolute/fixed/sticky`):
+
+```css
+.parent {
+  position: relative; /* becomes the reference point */
+}
+
+.child {
+  position: absolute;
+  top: 0;
+  right: 0; /* pinned to top-right of .parent */
+}
+```
+
+If no positioned ancestor exists, it positions relative to the `<html>` element.
+
+### `fixed`
+
+**Removed from flow** and positioned relative to the **viewport**. Stays in place during scroll:
+
+```css
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+```
+
+### `sticky`
+
+Acts as `relative` until a scroll threshold, then becomes `fixed`:
+
+```css
+.sticky-header {
+  position: sticky;
+  top: 0; /* sticks when top edge reaches viewport top */
+  background: white;
+  z-index: 10;
+}
+```
+
+**Sticky requirements**:
+- Must have a `top`, `right`, `bottom`, or `left` value
+- Parent must have scrollable content
+- Parent must **not** have `overflow: hidden`
+
+## Position Comparison
+
+| Position | In Flow? | Relative To | Scrolls With Page? |
+|----------|----------|-------------|-------------------|
+| `static` | Yes | N/A | Yes |
+| `relative` | Yes | Its original position | Yes |
+| `absolute` | No | Nearest positioned ancestor | Yes |
+| `fixed` | No | Viewport | No |
+| `sticky` | Yes → No | Viewport (when stuck) | Partially |
+
+## z-index — Stacking Order
+
+Controls which elements appear **on top** when they overlap:
+
+```css
+.background { z-index: 1; }
+.content { z-index: 10; }
+.modal-overlay { z-index: 100; }
+.modal { z-index: 101; }
+.tooltip { z-index: 1000; }
+```
+
+**Rules**:
+- Only works on **positioned** elements (`relative`, `absolute`, `fixed`, `sticky`)
+- Higher number = on top
+- Creates a **stacking context** — children are stacked within their parent's context
+
+### Common z-index Scale
+
+```css
+/* Establish a consistent scale */
+:root {
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+}
+```
+
+## Real-World Examples
+
+### Centered Overlay Modal
+
+```css
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+```
+
+### Badge on Avatar
+
+```css
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background: red;
+  border-radius: 50%;
+}
+```
+
+### Sticky Sidebar
+
+```css
+.sidebar {
+  position: sticky;
+  top: 80px; /* below the navbar */
+  height: fit-content;
+}
+```
+
+## Interview Questions
+
+### Q: Difference between `relative` and `absolute`?
+
+`relative` stays in normal flow and is offset from its original position. `absolute` is removed from flow and positioned relative to the nearest positioned ancestor.
+
+### Q: How do you center a div?
+
+**Horizontally**: `margin: 0 auto` (for block), or Flexbox.
+**Both axes**: Flexbox with `justify-content: center; align-items: center;` — covered in detail in the Flexbox section.

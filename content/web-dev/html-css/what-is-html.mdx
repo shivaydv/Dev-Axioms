@@ -1,0 +1,178 @@
+---
+title: What is HTML?
+description: Understanding HTML — the backbone of every website, how browsers parse it, and the HTML-CSS-JS trinity
+---
+
+HTML (HyperText Markup Language) is the **standard language** for creating web pages. It defines the **structure and meaning** of content on the web.
+
+> HTML is **not** a programming language — it's a **markup language** that tells the browser what content to display and how to structure it.
+
+## The HTML-CSS-JS Trinity
+
+Every website is built with three technologies:
+
+```text
+HTML  → Structure (skeleton)   → "What is on the page?"
+CSS   → Presentation (skin)    → "How does it look?"
+JS    → Behavior (muscles)     → "What does it do?"
+```
+
+HTML provides the **content and structure**, CSS makes it **look good**, and JavaScript makes it **interactive**.
+
+## How the Browser Renders HTML
+
+When you visit a website, the browser:
+
+1. **Downloads** the HTML file
+2. **Parses** the HTML into a **DOM** (Document Object Model) — a tree structure
+3. **Discovers** linked CSS/JS files and downloads them
+4. **Builds** the CSSOM (CSS Object Model) from CSS
+5. **Combines** DOM + CSSOM into a **Render Tree**
+6. **Paints** pixels to the screen
+
+```text
+HTML → DOM
+              → Render Tree → Layout → Paint → Screen
+CSS  → CSSOM
+```
+
+You don't need to memorize the rendering pipeline — just know that **HTML comes first** and everything else builds on top of it.
+
+## The Basic HTML Document
+
+Every HTML page follows this structure:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Page</title>
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <p>This is my first web page.</p>
+  </body>
+</html>
+```
+
+### Line-by-Line Breakdown
+
+| Line | Purpose |
+|------|---------|
+| `<!DOCTYPE html>` | Tells the browser this is an HTML5 document (use **standards mode**) |
+| `<html lang="en">` | Root element. `lang` helps screen readers and search engines |
+| `<head>` | Metadata — not visible on the page (title, charset, links) |
+| `<meta charset="UTF-8">` | Character encoding — supports all languages and emoji |
+| `<meta name="viewport" ...>` | Makes the page responsive on mobile devices |
+| `<title>` | Browser tab title, also used by search engines |
+| `<body>` | All **visible content** goes here |
+
+## HTML Tags, Elements, and Attributes
+
+### Tag
+
+The opening and closing markers:
+
+```html
+<p>   ← opening tag
+</p>  ← closing tag
+```
+
+### Element
+
+A tag plus its content:
+
+```html
+<p>This is a paragraph element.</p>
+```
+
+### Self-Closing Tags
+
+Some tags don't have content:
+
+```html
+<img src="photo.jpg" alt="A photo" />
+<br />
+<hr />
+<input type="text" />
+<meta charset="UTF-8" />
+```
+
+### Attributes
+
+Extra information on tags:
+
+```html
+<a href="https://example.com" target="_blank" rel="noopener">Link</a>
+<img src="photo.jpg" alt="Description" width="300" />
+<input type="email" required placeholder="Your email" />
+```
+
+**Common attributes** that work on any element:
+
+| Attribute | Purpose |
+|-----------|---------|
+| `id` | Unique identifier (one per page) |
+| `class` | CSS class name (can be reused) |
+| `style` | Inline CSS (avoid when possible) |
+| `title` | Tooltip on hover |
+| `data-*` | Custom data attributes for JS |
+| `hidden` | Hides the element |
+
+## HTML Comments
+
+```html
+<!-- This is a comment — not visible on the page -->
+
+<!--
+  Multi-line comments
+  are also supported
+-->
+```
+
+## Block vs Inline Elements
+
+| Block | Inline |
+|-------|--------|
+| Takes **full width** | Takes only **needed width** |
+| Starts on a **new line** | Stays **in line** with surrounding text |
+| `<div>`, `<p>`, `<h1>`–`<h6>`, `<section>`, `<form>` | `<span>`, `<a>`, `<strong>`, `<em>`, `<img>`, `<input>` |
+
+```html
+<!-- Block: each on its own line -->
+<div>Block 1</div>
+<div>Block 2</div>
+
+<!-- Inline: sit next to each other -->
+<span>Inline 1</span>
+<span>Inline 2</span>
+```
+
+## HTML Entities
+
+Special characters that need to be escaped:
+
+| Character | Entity | Name |
+|-----------|--------|------|
+| `<` | `&lt;` | Less than |
+| `>` | `&gt;` | Greater than |
+| `&` | `&amp;` | Ampersand |
+| `"` | `&quot;` | Double quote |
+| `©` | `&copy;` | Copyright |
+| ` ` | `&nbsp;` | Non-breaking space |
+
+## Interview Questions
+
+### Q: Is HTML a programming language?
+
+**No.** HTML is a markup language. It describes structure, not logic. It has no variables, loops, conditionals, or functions.
+
+### Q: What does `<!DOCTYPE html>` do?
+
+It tells the browser to render the page in **standards mode** (modern). Without it, browsers fall back to **quirks mode** (legacy behavior with inconsistencies).
+
+### Q: What is the DOM?
+
+The DOM is the browser's **tree representation** of an HTML document. JavaScript uses the DOM API to read and modify the page dynamically.

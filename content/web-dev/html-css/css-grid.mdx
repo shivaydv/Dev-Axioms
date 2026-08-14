@@ -1,0 +1,232 @@
+---
+title: CSS Grid
+description: Two-dimensional layout — building page layouts, dashboards, and galleries with CSS Grid
+---
+
+CSS Grid is a **two-dimensional** layout system — it handles both rows AND columns simultaneously. Use Grid for **page-level layouts** and Flexbox for **component-level alignment**.
+
+## Enabling Grid
+
+```css
+.container {
+  display: grid;
+}
+```
+
+## Defining Columns and Rows
+
+```css
+.grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;  /* 3 columns */
+  grid-template-rows: 80px 1fr 60px;       /* 3 rows */
+  gap: 16px;
+}
+```
+
+### `fr` Unit — Fractional Unit
+
+`fr` divides available space proportionally:
+
+```css
+.grid {
+  grid-template-columns: 1fr 2fr 1fr;
+  /* 1st: 25% | 2nd: 50% | 3rd: 25% */
+}
+```
+
+### `repeat()` — Avoid Repetition
+
+```css
+/* Instead of: 1fr 1fr 1fr 1fr */
+grid-template-columns: repeat(4, 1fr);
+
+/* Mixed: */
+grid-template-columns: 200px repeat(3, 1fr);
+```
+
+### `minmax()` — Responsive Sizing
+
+```css
+grid-template-columns: repeat(3, minmax(250px, 1fr));
+/* Each column: at least 250px, at most 1fr */
+```
+
+### `auto-fit` and `auto-fill` — Auto Column Count
+
+```css
+/* Automatically create as many columns as fit */
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+```
+
+| | `auto-fill` | `auto-fit` |
+|---|------------|-----------|
+| **Behavior** | Creates empty tracks | Collapses empty tracks |
+| **Use when** | You want consistent track sizes | You want items to stretch to fill |
+
+**Use `auto-fit` most of the time** — items stretch to fill the container.
+
+## Gap
+
+```css
+.grid {
+  gap: 16px;            /* row and column gap */
+  gap: 16px 24px;       /* row-gap | column-gap */
+  row-gap: 16px;
+  column-gap: 24px;
+}
+```
+
+## Placing Items
+
+### Spanning Columns/Rows
+
+```css
+.header {
+  grid-column: 1 / -1;    /* span all columns (1 to last) */
+}
+
+.sidebar {
+  grid-row: 2 / 4;        /* span rows 2 and 3 */
+}
+
+.wide-card {
+  grid-column: span 2;    /* span 2 columns */
+}
+```
+
+### Grid Line Numbers
+
+```text
+Column lines:  1     2     3     4
+               |     |     |     |
+Row lines: 1 — ┌─────┬─────┬─────┐
+           2 — ├─────┼─────┼─────┤
+           3 — ├─────┼─────┼─────┤
+           4 — └─────┴─────┴─────┘
+```
+
+## Alignment
+
+### Align the Entire Grid (Container)
+
+```css
+.grid {
+  justify-content: center;   /* horizontal alignment of grid in container */
+  align-content: center;     /* vertical alignment of grid in container */
+}
+```
+
+### Align All Items (Within Their Cells)
+
+```css
+.grid {
+  justify-items: center;    /* horizontal alignment within cells */
+  align-items: center;      /* vertical alignment within cells */
+  place-items: center;      /* shorthand for both */
+}
+```
+
+### Align a Single Item
+
+```css
+.special-item {
+  justify-self: end;
+  align-self: center;
+}
+```
+
+## Common Layouts
+
+### Holy Grail Layout
+
+```css
+.page {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: 80px 1fr 60px;
+  min-height: 100vh;
+  gap: 16px;
+}
+
+.header { grid-column: 1 / -1; }
+.footer { grid-column: 1 / -1; }
+```
+
+```html
+<div class="page">
+  <header class="header">Header</header>
+  <aside>Sidebar</aside>
+  <main>Content</main>
+  <aside>Ads</aside>
+  <footer class="footer">Footer</footer>
+</div>
+```
+
+### Responsive Card Grid
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+```
+
+This creates a **fully responsive grid** — no media queries needed. Cards wrap automatically.
+
+### Dashboard Layout
+
+```css
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  gap: 16px;
+}
+
+.stat-card { /* normal 1×1 */ }
+.wide-chart { grid-column: span 2; }
+.tall-chart { grid-row: span 2; }
+.full-width { grid-column: 1 / -1; }
+```
+
+### Two-Column Content
+
+```css
+.article-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .article-layout {
+    grid-template-columns: 1fr; /* stack on mobile */
+  }
+}
+```
+
+## Flexbox vs Grid
+
+| | Flexbox | Grid |
+|---|---------|------|
+| **Dimension** | One (row OR column) | Two (rows AND columns) |
+| **Best for** | Component alignment | Page layout |
+| **Content-driven** | Yes (items size themselves) | No (grid defines sizes) |
+| **Examples** | Navbar, card row, centering | Page layout, dashboard, gallery |
+
+**Rule of thumb**: Use Flexbox for **components**, Grid for **layouts**. They work great together.
+
+## Interview Questions
+
+### Q: When would you use Grid over Flexbox?
+
+When you need **two-dimensional** control (rows and columns together), like page layouts, dashboards, or image galleries. Flexbox is better for one-dimensional alignment within a component.
+
+### Q: How do you make a responsive grid without media queries?
+
+```css
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+```
+This creates as many columns as fit, each at least 250px wide.

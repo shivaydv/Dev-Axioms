@@ -1,0 +1,186 @@
+---
+title: Accessibility & SEO Basics
+description: Making websites usable for everyone and discoverable by search engines
+---
+
+Accessibility (a11y) ensures your website is usable by **everyone**, including people with disabilities. SEO ensures search engines can **find and understand** your content. Both rely heavily on good HTML.
+
+## Accessibility Fundamentals
+
+### 1. Alternative Text for Images
+
+```html
+<!-- Informative image — describe it -->
+<img src="chart.png" alt="Sales growth of 40% from Q3 to Q4 2024" />
+
+<!-- Decorative image — empty alt -->
+<img src="divider.png" alt="" />
+
+<!-- Never skip alt entirely -->
+<img src="photo.jpg" /> <!-- ❌ screen reader says "photo.jpg" -->
+```
+
+### 2. Proper Heading Hierarchy
+
+```html
+<!-- ✅ Correct hierarchy -->
+<h1>Page Title</h1>
+  <h2>Section</h2>
+    <h3>Subsection</h3>
+  <h2>Another Section</h2>
+
+<!-- ❌ Skipping levels -->
+<h1>Title</h1>
+<h4>Subsection</h4>  <!-- skipped h2 and h3 -->
+```
+
+### 3. Form Labels (Critical)
+
+```html
+<!-- ✅ Every input has a label -->
+<label for="email">Email</label>
+<input type="email" id="email" name="email" />
+
+<!-- ❌ No label — screen reader can't identify the field -->
+<input type="email" placeholder="Email" />
+```
+
+### 4. Keyboard Navigation
+
+All interactive elements must be **reachable with Tab** and **activatable with Enter/Space**:
+
+```css
+/* Never remove focus outlines completely */
+/* ❌ */
+*:focus { outline: none; }
+
+/* ✅ Replace with a visible custom style */
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+```
+
+### 5. Semantic HTML = Free Accessibility
+
+Using `<nav>`, `<main>`, `<header>`, `<footer>` creates **landmarks** that screen readers use for navigation. This is the single biggest accessibility win.
+
+### 6. Color Contrast
+
+Text must have sufficient contrast against its background:
+
+| Level | Ratio | Use |
+|-------|-------|-----|
+| AA (minimum) | 4.5:1 for normal text | Required |
+| AA (large text) | 3:1 for 18px+ bold | Required |
+| AAA (enhanced) | 7:1 | Recommended |
+
+```css
+/* ❌ Low contrast (hard to read) */
+.bad { color: #999; background: #fff; } /* ratio ~2.8:1 */
+
+/* ✅ Good contrast */
+.good { color: #4b5563; background: #fff; } /* ratio ~7:1 */
+```
+
+### 7. ARIA Attributes (When Needed)
+
+Use ARIA only when HTML semantics aren't enough:
+
+```html
+<!-- Button that looks like a link -->
+<div role="button" tabindex="0" aria-label="Close dialog">×</div>
+
+<!-- Better: just use a real button -->
+<button aria-label="Close dialog">×</button>
+
+<!-- Loading state -->
+<div aria-live="polite" aria-busy="true">Loading...</div>
+
+<!-- Hidden from screen readers -->
+<span aria-hidden="true">🎨</span> Design
+```
+
+**Rule**: Use native HTML elements first. Only use ARIA when there's no semantic HTML equivalent.
+
+## SEO Basics
+
+### 1. Title Tag
+
+```html
+<title>Learn CSS Grid - DevAxioms</title>
+```
+
+- Appears in browser tabs and search results
+- Keep under 60 characters
+- Include primary keyword
+- Make it unique per page
+
+### 2. Meta Description
+
+```html
+<meta name="description" content="Learn CSS Grid with practical examples. Build responsive layouts, dashboards, and galleries using modern CSS." />
+```
+
+- Appears in search result snippets
+- Keep under 160 characters
+- Include primary keyword naturally
+- Write compelling copy (it's your ad text)
+
+### 3. Heading Structure
+
+```html
+<h1>CSS Grid Complete Guide</h1>          <!-- one per page, primary topic -->
+<h2>Defining Columns and Rows</h2>         <!-- main sections -->
+<h3>The fr Unit</h3>                        <!-- subsections -->
+```
+
+- One `<h1>` per page
+- Don't skip levels
+- Use headings for structure, not styling
+
+### 4. Semantic HTML for SEO
+
+```html
+<article>    <!-- tells Google "this is the main content" -->
+<nav>        <!-- "these are navigation links" -->
+<main>       <!-- "this is the primary content" -->
+```
+
+### 5. Open Graph Tags (Social Sharing)
+
+```html
+<meta property="og:title" content="Learn CSS Grid" />
+<meta property="og:description" content="Build responsive layouts with CSS Grid." />
+<meta property="og:image" content="https://example.com/og-image.jpg" />
+<meta property="og:url" content="https://example.com/css-grid" />
+<meta property="og:type" content="article" />
+```
+
+### 6. Other Important Meta Tags
+
+```html
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://example.com/css-grid" />
+<html lang="en">
+```
+
+## Quick Accessibility Checklist
+
+- [ ] All images have meaningful `alt` text
+- [ ] Heading hierarchy is logical (h1 → h2 → h3)
+- [ ] All form inputs have associated labels
+- [ ] Interactive elements are keyboard accessible
+- [ ] Focus indicators are visible
+- [ ] Color contrast meets WCAG AA (4.5:1)
+- [ ] Semantic HTML elements are used appropriately
+- [ ] Page has a single `<h1>`
+- [ ] Links have descriptive text (not "click here")
+
+## Interview Question
+
+### Q: Why is semantic HTML important for accessibility?
+
+Screen readers use semantic elements as **landmarks** to navigate the page. `<nav>` announces "navigation," `<main>` announces "main content." Without semantics, users must listen to the entire page linearly, which is extremely slow and frustrating.

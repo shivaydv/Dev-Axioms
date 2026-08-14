@@ -1,0 +1,248 @@
+---
+title: The Event Loop
+description: How JavaScript handles asynchronous code despite being single-threaded — the interview king topic
+---
+
+The Event Loop is **the #1 most asked topic** in senior JavaScript interviews. It explains how JavaScript can be single-threaded yet handle async operations like API calls, timers, and user interactions.
+
+> **"The Event Loop tells WHEN async code runs."**
+
+## The Big Picture
+
+```text
+┌─────────────────────────────────────────┐
+│           JavaScript Engine              │
+│  ┌──────────────┐  ┌─────────────────┐  │
+│  │  Call Stack   │  │   Memory Heap   │  │
+│  │  (execution)  │  │   (storage)     │  │
+│  └──────┬───────┘  └─────────────────┘  │
+└─────────┼───────────────────────────────┘
+          │ hands off async tasks
+          ↓
+┌─────────────────────────┐
+│      Web APIs            │
+│  (setTimeout, fetch,     │
+│   DOM events, etc.)      │
+└──────────┬──────────────┘
+           │ when done, callback enters queue
+           ↓
+┌──────────────────────────────────────────┐
+│  Microtask Queue (Promise.then, etc.)    │ ← higher priority
+├──────────────────────────────────────────┤
+│  Macrotask Queue (setTimeout, etc.)      │ ← lower priority
+└──────────────────────────────────────────┘
+           │
+     ┌─────┴─────┐
+     │ Event Loop │ → checks if Call Stack is empty
+     │            │ → moves tasks from queue to stack
+     └────────────┘
+```
+
+## The Event Loop Algorithm
+
+```text
+1. Execute all synchronous code (Call Stack)
+2. Call Stack empty? Check Microtask Queue
+3. Execute ALL microtasks (until queue is empty)
+4. Execute ONE macrotask
+5. Go back to step 2
+```
+
+**Key rule**: Microtasks ALWAYS run before the next macrotask.
+
+## Microtask vs Macrotask
+
+| Queue | Examples | Priority |
+|-------|----------|----------|
+| **Microtask** | `Promise.then`, `Promise.catch`, `Promise.finally`, `queueMicrotask`, `MutationObserver` | **Higher** (runs first) |
+| **Macrotask** | `setTimeout`, `setInterval`, `setImmediate` (Node), DOM events, I/O, `requestAnimationFrame` | **Lower** (runs after all microtasks) |
+
+## The Classic Output Question
+
+```javascript
+console.log("1");
+
+setTimeout(() => {
+  console.log("2");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("3");
+});
+
+console.log("4");
+```
+
+### Step-by-Step Walkthrough
+
+```text
+Step 1: console.log("1") → Call Stack → prints "1"
+Step 2: setTimeout callback → sent to Web APIs → after 0ms → Macrotask Queue
+Step 3: Promise.then callback → Microtask Queue
+Step 4: console.log("4") → Call Stack → prints "4"
+
+--- Call Stack is now empty ---
+
+Step 5: Event Loop checks Microtask Queue → runs Promise callback → prints "3"
+Step 6: Microtask Queue empty → Event Loop runs Macrotask → prints "2"
+```
+
+**Output**: `1, 4, 3, 2`
+
+## More Complex Example
+
+```javascript
+console.log("start");
+
+setTimeout(() => console.log("timeout 1"), 0);
+setTimeout(() => console.log("timeout 2"), 0);
+
+Promise.resolve()
+  .then(() => {
+    console.log("promise 1");
+    return Promise.resolve();
+  })
+  .then(() => console.log("promise 2"));
+
+Promise.resolve().then(() => console.log("promise 3"));
+
+console.log("end");
+```
+
+**Output**:
+```text
+start
+end
+promise 1
+promise 3
+promise 2
+timeout 1
+timeout 2
+```
+
+**Why**: All sync runs first → then all microtasks (promises) with nested promises queued after current batch → then macrotasks (timeouts).
+
+## setTimeout(fn, 0) Doesn't Mean "Run Immediately"
+
+```javascript
+console.log("before");
+
+setTimeout(() => {
+  console.log("timer"); // NOT immediate — waits for stack to clear
+}, 0);
+
+console.log("after");
+
+// Output: before, after, timer
+```
+
+`setTimeout(fn, 0)` means "run this callback as soon as the Call Stack is empty AND all microtasks are done." The `0` is a **minimum delay**, not a guarantee.
+
+## queueMicrotask
+
+Explicitly schedule a microtask:
+
+```javascript
+console.log("1");
+
+queueMicrotask(() => console.log("2"));
+
+console.log("3");
+
+// Output: 1, 3, 2
+```
+
+## requestAnimationFrame
+
+Runs before the next paint (between microtasks and macrotasks):
+
+```text
+Sync code → Microtasks → rAF → Paint → Macrotasks
+```
+
+```javascript
+requestAnimationFrame(() => {
+  console.log("rAF"); // runs before next paint
+});
+```
+
+## Async/Await and the Event Loop
+
+`async/await` is syntactic sugar over Promises, so the same rules apply:
+
+```javascript
+async function foo() {
+  console.log("foo start");
+  await bar();
+  console.log("foo end"); // this becomes a microtask
+}
+
+async function bar() {
+  console.log("bar");
+}
+
+console.log("script start");
+foo();
+console.log("script end");
+```
+
+**Output**:
+```text
+script start
+foo start
+bar
+script end
+foo end
+```
+
+Everything after `await` is wrapped in a `.then()` and scheduled as a microtask.
+
+## Interview Deep-Dive
+
+### Question: What's the output?
+
+```javascript
+async function async1() {
+  console.log("async1 start");
+  await async2();
+  console.log("async1 end");
+}
+
+async function async2() {
+  console.log("async2");
+}
+
+console.log("script start");
+
+setTimeout(() => console.log("setTimeout"), 0);
+
+async1();
+
+new Promise((resolve) => {
+  console.log("promise1");
+  resolve();
+}).then(() => console.log("promise2"));
+
+console.log("script end");
+```
+
+**Output**:
+```text
+script start
+async1 start
+async2
+promise1
+script end
+async1 end
+promise2
+setTimeout
+```
+
+### Mental Model for Solving These
+
+1. Run all **synchronous code** first (top to bottom)
+2. `await` pauses the async function — code after it becomes a microtask
+3. Promise constructors are **synchronous** — `.then` callbacks are microtasks
+4. Process **all microtasks** before any macrotask
+5. Process **one macrotask** at a time
+

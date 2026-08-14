@@ -1,0 +1,182 @@
+---
+title: DOM Manipulation
+description: Selecting, creating, modifying, and removing elements — mastering the Document Object Model
+---
+
+The DOM (Document Object Model) is the browser's **tree representation** of your HTML. JavaScript uses the DOM to make pages interactive.
+
+## Selecting Elements
+
+```javascript
+// Single element
+document.getElementById("header");           // by ID
+document.querySelector(".card");              // first match (CSS selector)
+document.querySelector("[data-id='123']");    // attribute selector
+
+// Multiple elements
+document.querySelectorAll(".card");           // NodeList (use forEach)
+document.getElementsByClassName("card");      // HTMLCollection (live)
+document.getElementsByTagName("p");           // by tag name
+```
+
+### querySelector vs getElementById
+
+| Feature | `querySelector` | `getElementById` |
+|---------|----------------|-------------------|
+| Accepts | Any CSS selector | Only IDs |
+| Returns | First match | By exact ID |
+| Performance | Slightly slower | Fastest |
+| Flexibility | **High** | Low |
+
+**Use `querySelector` / `querySelectorAll` for everything** — they're more flexible.
+
+## Creating & Inserting Elements
+
+```javascript
+// Create
+const card = document.createElement("div");
+card.className = "card";
+card.id = "card-1";
+card.textContent = "Hello World";
+
+// Insert
+document.body.appendChild(card);               // at end
+parent.insertBefore(card, referenceNode);       // before a node
+parent.prepend(card);                           // at start
+parent.append(card);                            // at end
+element.insertAdjacentHTML("beforeend", html);  // HTML string
+
+// Remove
+card.remove();                                  // modern
+parent.removeChild(card);                       // old way
+```
+
+### Building Complex Elements
+
+```javascript
+function createUserCard(user) {
+  const card = document.createElement("div");
+  card.className = "user-card";
+  card.innerHTML = `
+    <img src="${user.avatar}" alt="${user.name}" />
+    <h3>${user.name}</h3>
+    <p>${user.email}</p>
+  `;
+  return card;
+}
+
+const container = document.querySelector("#users");
+users.forEach(user => container.appendChild(createUserCard(user)));
+```
+
+## Modifying Elements
+
+### Text Content
+
+```javascript
+element.textContent = "Plain text (safe, escapes HTML)";
+element.innerHTML = "<strong>HTML (careful — XSS risk!)</strong>";
+element.innerText = "Visible text only (respects CSS display)";
+```
+
+**Rule**: Use `textContent` for plain text. Only use `innerHTML` with trusted content.
+
+### Attributes
+
+```javascript
+element.getAttribute("href");
+element.setAttribute("href", "https://example.com");
+element.removeAttribute("disabled");
+element.hasAttribute("disabled");
+
+// Dataset (data-* attributes)
+element.dataset.userId;   // reads data-user-id
+element.dataset.userId = "123"; // sets data-user-id="123"
+```
+
+### Classes
+
+```javascript
+element.classList.add("active", "highlight");
+element.classList.remove("active");
+element.classList.toggle("visible");     // add if absent, remove if present
+element.classList.contains("active");    // true/false
+element.classList.replace("old", "new");
+```
+
+### Styles
+
+```javascript
+// Inline styles
+element.style.color = "red";
+element.style.backgroundColor = "blue"; // camelCase
+element.style.cssText = "color: red; font-size: 16px;";
+
+// Read computed styles
+const styles = getComputedStyle(element);
+styles.color; // "rgb(255, 0, 0)"
+```
+
+## Document Fragments (Performance)
+
+When adding many elements, use a fragment to avoid multiple reflows:
+
+```javascript
+const fragment = document.createDocumentFragment();
+
+for (let i = 0; i < 1000; i++) {
+  const li = document.createElement("li");
+  li.textContent = `Item ${i}`;
+  fragment.appendChild(li);
+}
+
+// Single DOM update instead of 1000
+document.querySelector("ul").appendChild(fragment);
+```
+
+## DOM Traversal
+
+```javascript
+// Parent
+element.parentElement;
+element.closest(".container"); // nearest ancestor matching selector
+
+// Children
+element.children;          // HTMLCollection (elements only)
+element.childNodes;        // NodeList (includes text nodes)
+element.firstElementChild;
+element.lastElementChild;
+
+// Siblings
+element.nextElementSibling;
+element.previousElementSibling;
+```
+
+## Common Patterns
+
+### Toggle Visibility
+
+```javascript
+function toggleElement(selector) {
+  const el = document.querySelector(selector);
+  el.classList.toggle("hidden");
+}
+```
+
+### Dynamic List Rendering
+
+```javascript
+function renderList(items, container) {
+  container.innerHTML = ""; // clear
+  const fragment = document.createDocumentFragment();
+
+  items.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    fragment.appendChild(li);
+  });
+
+  container.appendChild(fragment);
+}
+```
+

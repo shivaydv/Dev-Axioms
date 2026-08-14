@@ -1,42 +1,302 @@
 ---
 title: Functions in JavaScript
-description: The power of JS functions
+description: Declarations, expressions, arrows, IIFE, first-class functions, pure functions, and everything in between
 ---
 
-Functions are the "first-class citizens" of JavaScript. They can be stored in variables, passed into other functions, and returned from functions.
+Functions are the **most important concept** in JavaScript. They are "first-class citizens" — meaning they can be stored in variables, passed as arguments, and returned from other functions.
 
-## 1. Function Declaration
-Traditional functions that are hoisted.
+## 4 Ways to Create Functions
+
+### 1. Function Declaration
 
 ```javascript
 function greet(name) {
-  return `Hello, ${name}`;
+  return `Hello, ${name}!`;
+}
+
+greet("Shiva"); // "Hello, Shiva!"
+```
+
+**Key trait**: Declarations are **hoisted** — you can call them before they're defined.
+
+```javascript
+sayHi(); // ✅ Works!
+
+function sayHi() {
+  console.log("Hi!");
 }
 ```
 
-## 2. Function Expression
-Assigning a function to a variable. These are not hoisted.
+### 2. Function Expression
 
 ```javascript
-const greet = function(name) {
-  return `Hello, ${name}`;
+const greet = function (name) {
+  return `Hello, ${name}!`;
+};
+
+greet("Shiva"); // "Hello, Shiva!"
+```
+
+**Key trait**: Expressions are **NOT hoisted** — you must define them before calling.
+
+```javascript
+sayHi(); // ❌ ReferenceError: Cannot access 'sayHi' before initialization
+
+const sayHi = function () {
+  console.log("Hi!");
 };
 ```
 
-## 3. Arrow Functions
-Modern shorthand that has a lexical `this` binding.
+### 3. Arrow Function (ES6)
 
 ```javascript
-const greet = (name) => `Hello, ${name}`;
+// Full form
+const greet = (name) => {
+  return `Hello, ${name}!`;
+};
+
+// Short form (implicit return for single expressions)
+const greet = (name) => `Hello, ${name}!`;
+
+// Single parameter — parens optional
+const double = n => n * 2;
+
+// No parameters
+const getTime = () => new Date().toISOString();
 ```
 
-## 4. Higher-Order Functions
-Functions that operate on other functions (either taking them as arguments or returning them).
--   **Examples**: `.map()`, `.filter()`, `.reduce()`.
+### 4. IIFE (Immediately Invoked Function Expression)
 
-## 5. Callback Functions
-A function passed into another function as an argument, to be executed later.
+A function that runs the moment it's defined:
 
----
+```javascript
+(function () {
+  const secret = "hidden";
+  console.log("I run immediately!");
+})();
 
-**Next Step**: Prepare for [Interview Questions](/web-dev/javascript/interview-questions).
+// Arrow version
+(() => {
+  console.log("Arrow IIFE!");
+})();
+
+// With parameters
+((name) => {
+  console.log(`Hello ${name}!`);
+})("Shiva");
+```
+
+**Use case**: Creating a private scope. Common in older code before ES modules.
+
+## Arrow vs Normal Function — The Key Differences
+
+| Feature | Normal Function | Arrow Function |
+|---------|----------------|----------------|
+| **`this` binding** | Own `this` (dynamic) | Inherits from parent (lexical) |
+| **`arguments` object** | Yes | No |
+| **Can be constructor** | Yes (`new Fn()`) | No |
+| **Hoisted** | Declarations: yes | No |
+| **Method in object** | ✅ Good | ❌ Avoid (wrong `this`) |
+
+### The `this` Difference (Critical)
+
+```javascript
+const obj = {
+  name: "Shiva",
+
+  // ✅ Normal function — `this` refers to obj
+  greetNormal() {
+    console.log(`Hi, I'm ${this.name}`);
+  },
+
+  // ❌ Arrow function — `this` refers to outer scope (window/undefined)
+  greetArrow: () => {
+    console.log(`Hi, I'm ${this.name}`); // undefined!
+  }
+};
+
+obj.greetNormal(); // "Hi, I'm Shiva"
+obj.greetArrow();  // "Hi, I'm undefined"
+```
+
+**Rule**: Don't use arrow functions as object methods.
+
+## Parameters
+
+### Default Parameters (ES6)
+
+```javascript
+function createUser(name, role = "viewer", active = true) {
+  return { name, role, active };
+}
+
+createUser("Shiva");              // { name: "Shiva", role: "viewer", active: true }
+createUser("Shiva", "admin");     // { name: "Shiva", role: "admin", active: true }
+```
+
+### Rest Parameters (`...`)
+
+Collects remaining arguments into an array:
+
+```javascript
+function sum(...numbers) {
+  return numbers.reduce((total, n) => total + n, 0);
+}
+
+sum(1, 2, 3);    // 6
+sum(10, 20);     // 30
+
+// Rest must be the LAST parameter
+function log(prefix, ...messages) {
+  messages.forEach(msg => console.log(`[${prefix}] ${msg}`));
+}
+```
+
+### The `arguments` Object (Legacy)
+
+```javascript
+function old() {
+  console.log(arguments);    // { 0: "a", 1: "b", 2: "c" }
+  console.log(arguments[0]); // "a"
+  // arguments is array-LIKE, not a real array
+}
+
+old("a", "b", "c");
+```
+
+**Modern alternative**: Always prefer rest parameters (`...args`) over `arguments`.
+
+## Return Values
+
+```javascript
+// Explicit return
+function add(a, b) {
+  return a + b;
+}
+
+// No return = undefined
+function doSomething() {
+  console.log("done");
+  // returns undefined
+}
+
+// Returning objects with arrow functions — wrap in parens
+const makeUser = (name) => ({ name, role: "user" });
+// Without parens, {} is treated as function body, not object
+```
+
+## First-Class Functions
+
+Functions can be used like any other value:
+
+```javascript
+// 1. Stored in variables
+const add = (a, b) => a + b;
+
+// 2. Stored in arrays
+const operations = [add, (a, b) => a - b, (a, b) => a * b];
+operations[0](2, 3); // 5
+
+// 3. Stored in objects
+const math = {
+  add: (a, b) => a + b,
+  subtract: (a, b) => a - b
+};
+
+// 4. Passed as arguments (callbacks)
+[1, 2, 3].map(n => n * 2); // [2, 4, 6]
+
+// 5. Returned from functions
+function multiplier(factor) {
+  return (n) => n * factor;
+}
+const double = multiplier(2);
+double(5); // 10
+```
+
+## Pure Functions
+
+A pure function:
+1. Always returns the **same output** for the same inputs
+2. Has **no side effects** (doesn't modify external state)
+
+```javascript
+// ✅ Pure
+function add(a, b) {
+  return a + b;
+}
+
+// ❌ Impure — depends on external state
+let tax = 0.18;
+function getPrice(price) {
+  return price + price * tax; // depends on `tax`
+}
+
+// ❌ Impure — modifies external state
+const cart = [];
+function addToCart(item) {
+  cart.push(item); // side effect!
+}
+```
+
+**Why it matters**: Pure functions are predictable, testable, and cacheable. They're the foundation of functional programming and Redux.
+
+## Function Composition
+
+Combining simple functions to build complex behavior:
+
+```javascript
+const trim = (str) => str.trim();
+const lower = (str) => str.toLowerCase();
+const slugify = (str) => str.replace(/\s+/g, "-");
+
+// Manual composition
+const makeSlug = (str) => slugify(lower(trim(str)));
+makeSlug("  Hello World  "); // "hello-world"
+
+// Pipe utility (left to right)
+const pipe = (...fns) => (input) =>
+  fns.reduce((result, fn) => fn(result), input);
+
+const makeSlug = pipe(trim, lower, slugify);
+makeSlug("  Hello World  "); // "hello-world"
+```
+
+## Common Mistakes
+
+### 1. Missing `return` in Multiline Arrow
+
+```javascript
+// ❌ No return — gives undefined
+const getUser = (name) => {
+  { name, role: "user" }; // treated as a label, not an object!
+};
+
+// ✅ Explicit return
+const getUser = (name) => {
+  return { name, role: "user" };
+};
+
+// ✅ Or wrap in parens for implicit return
+const getUser = (name) => ({ name, role: "user" });
+```
+
+### 2. Using Arrow Functions as Methods
+
+```javascript
+// ❌ Arrow function doesn't bind `this` to the object
+const counter = {
+  count: 0,
+  increment: () => {
+    this.count++; // `this` is NOT the counter object
+  }
+};
+
+// ✅ Use normal method
+const counter = {
+  count: 0,
+  increment() {
+    this.count++;
+  }
+};
+```

@@ -1,0 +1,294 @@
+---
+title: Closures
+description: The most important concept in JavaScript — how functions remember their outer scope
+---
+
+Closures are the **#1 most asked topic** in JavaScript interviews. Once you understand closures, you understand half of JavaScript.
+
+> **"A closure is a function that remembers the variables from its outer scope, even after the outer function has finished executing."**
+
+## The Simplest Closure
+
+```javascript
+function outer() {
+  const message = "Hello"; // this variable lives in outer's scope
+
+  function inner() {
+    console.log(message); // inner "closes over" message
+  }
+
+  return inner;
+}
+
+const fn = outer(); // outer() finishes executing
+fn(); // "Hello" ← but inner still remembers `message`!
+```
+
+**What happened?** When `outer()` finished, normally its variables would be garbage collected. But `inner` still references `message`, so JavaScript **keeps it alive**. This retained reference is a closure.
+
+## How Closures Work — Mental Model
+
+```text
+outer() creates:
+┌───────────────────────────┐
+│ message = "Hello"         │
+│                           │
+│ inner() ─── closure ───►  │ (inner holds a reference)
+│                           │
+└───────────────────────────┘
+         ↑
+         │
+    Even after outer() returns,
+    this environment stays alive
+    because inner() still uses it
+```
+
+## Real-World Use Cases
+
+### 1. Data Privacy (Private Variables)
+
+```javascript
+function createBankAccount(initialBalance) {
+  let balance = initialBalance; // private — no direct access
+
+  return {
+    deposit(amount) {
+      if (amount <= 0) throw new Error("Invalid amount");
+      balance += amount;
+      return balance;
+    },
+    withdraw(amount) {
+      if (amount > balance) throw new Error("Insufficient funds");
+      balance -= amount;
+      return balance;
+    },
+    getBalance() {
+      return balance;
+    }
+  };
+}
+
+const account = createBankAccount(1000);
+account.deposit(500);    // 1500
+account.withdraw(200);   // 1300
+account.getBalance();    // 1300
+account.balance;         // undefined ← truly private!
+```
+
+### 2. Function Factories
+
+```javascript
+function createMultiplier(factor) {
+  return (number) => number * factor;
+}
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+const toPercent = createMultiplier(100);
+
+double(5);     // 10
+triple(5);     // 15
+toPercent(0.5); // 50
+```
+
+Each function "remembers" its own `factor`.
+
+### 3. Memoization (Caching Expensive Results)
+
+```javascript
+function memoize(fn) {
+  const cache = {}; // closed over — persists between calls
+
+  return function (...args) {
+    const key = JSON.stringify(args);
+
+    if (cache[key] !== undefined) {
+      console.log("From cache");
+      return cache[key];
+    }
+
+    console.log("Computing...");
+    const result = fn(...args);
+    cache[key] = result;
+    return result;
+  };
+}
+
+const expensiveAdd = memoize((a, b) => {
+  // simulate heavy computation
+  return a + b;
+});
+
+expensiveAdd(1, 2); // "Computing..." → 3
+expensiveAdd(1, 2); // "From cache" → 3
+```
+
+### 4. Event Handlers
+
+```javascript
+function setupButton(buttonId, message) {
+  const button = document.getElementById(buttonId);
+
+  button.addEventListener("click", () => {
+    // This callback closes over `message`
+    alert(message);
+  });
+}
+
+setupButton("btn1", "Welcome!");
+setupButton("btn2", "Goodbye!");
+// Each button has its own `message` in its closure
+```
+
+### 5. React Hooks (useState)
+
+Simplified version of how React's `useState` works under the hood:
+
+```javascript
+function useState(initialValue) {
+  let state = initialValue; // closed over
+
+  function getState() {
+    return state;
+  }
+
+  function setState(newValue) {
+    state = newValue;
+    // trigger re-render...
+  }
+
+  return [getState, setState];
+}
+
+const [getCount, setCount] = useState(0);
+getCount();    // 0
+setCount(5);
+getCount();    // 5
+```
+
+## The Famous Loop Problem
+
+### The Bug
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+// Output: 3, 3, 3
+```
+
+**Why?** `var` is function-scoped, so there's only ONE `i`. All three callbacks close over the SAME `i`, which is `3` after the loop ends.
+
+### Fix 1: Use `let` (Block Scope)
+
+```javascript
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+// Output: 0, 1, 2
+```
+
+Each iteration gets its own `i`.
+
+### Fix 2: IIFE (Create New Scope)
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  ((j) => {
+    setTimeout(() => {
+      console.log(j);
+    }, 1000);
+  })(i); // pass current i as j
+}
+// Output: 0, 1, 2
+```
+
+### Fix 3: Closure via Function Factory
+
+```javascript
+function createPrinter(value) {
+  return () => console.log(value);
+}
+
+for (var i = 0; i < 3; i++) {
+  setTimeout(createPrinter(i), 1000);
+}
+// Output: 0, 1, 2
+```
+
+## Closures and Memory
+
+Closures keep variables alive in memory. This is usually fine, but can cause memory leaks if closures persist longer than needed.
+
+### Potential Memory Leak
+
+```javascript
+function createHandler() {
+  const hugeData = new Array(1000000).fill("x"); // 1M elements
+
+  return function () {
+    console.log(hugeData.length); // closure keeps hugeData alive
+  };
+}
+
+const handler = createHandler();
+// hugeData stays in memory as long as `handler` exists
+```
+
+**Fix**: Set references to `null` when done, or restructure to avoid retaining large data.
+
+## Interview Deep-Dive Questions
+
+### Q1: What will this output?
+
+```javascript
+function createFunctions() {
+  const result = [];
+
+  for (var i = 0; i < 5; i++) {
+    result.push(function () {
+      return i;
+    });
+  }
+
+  return result;
+}
+
+const fns = createFunctions();
+console.log(fns[0]()); // ?
+console.log(fns[2]()); // ?
+console.log(fns[4]()); // ?
+```
+
+**Answer**: `5, 5, 5` — all functions close over the same `i`, which is `5` after the loop.
+
+### Q2: Counter with Closure
+
+```javascript
+function counter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getCount: () => count
+  };
+}
+
+const c = counter();
+c.increment();
+c.increment();
+c.increment();
+c.decrement();
+console.log(c.getCount()); // ?
+```
+
+**Answer**: `2`.
+
+### Q3: Can You Explain What a Closure Is in One Sentence?
+
+**Best answer**: "A closure is a function that has access to its outer function's variables even after the outer function has returned, because the inner function maintains a reference to the outer function's scope."
+

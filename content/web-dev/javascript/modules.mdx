@@ -1,0 +1,141 @@
+---
+title: JavaScript Modules
+description: From script tags to ES Modules — organizing code across files for maintainable applications
+---
+
+Modules let you **split code into separate files** and share functionality between them. Modern JavaScript uses ES Modules (ESM).
+
+## The Evolution
+
+```text
+Script tags (global scope) → IIFE pattern → CommonJS (Node) → ES Modules (standard)
+```
+
+## ES Modules (The Standard)
+
+### Named Exports
+
+```javascript
+// math.js
+export function add(a, b) {
+  return a + b;
+}
+
+export function subtract(a, b) {
+  return a - b;
+}
+
+export const PI = 3.14159;
+```
+
+```javascript
+// app.js
+import { add, subtract, PI } from "./math.js";
+
+add(2, 3);    // 5
+subtract(5, 3); // 2
+```
+
+### Default Export
+
+One per file — the "main" thing:
+
+```javascript
+// Logger.js
+export default class Logger {
+  log(msg) { console.log(msg); }
+}
+
+// app.js
+import Logger from "./Logger.js"; // name can be anything
+const logger = new Logger();
+```
+
+### Renaming Imports
+
+```javascript
+import { add as sum } from "./math.js";
+sum(1, 2); // 3
+```
+
+### Re-exports (Barrel Files)
+
+```javascript
+// utils/index.js
+export { add, subtract } from "./math.js";
+export { formatDate } from "./date.js";
+export { default as Logger } from "./Logger.js";
+
+// app.js — import everything from one place
+import { add, formatDate, Logger } from "./utils/index.js";
+```
+
+### Dynamic Import (Code Splitting)
+
+```javascript
+// Load module only when needed
+const button = document.querySelector("#heavy-feature");
+
+button.addEventListener("click", async () => {
+  const { heavyFunction } = await import("./heavy-module.js");
+  heavyFunction();
+});
+```
+
+## CommonJS (Node.js)
+
+```javascript
+// math.js
+function add(a, b) { return a + b; }
+module.exports = { add };
+
+// app.js
+const { add } = require("./math");
+add(2, 3); // 5
+```
+
+## ESM vs CommonJS
+
+| Feature | ES Modules | CommonJS |
+|---------|-----------|----------|
+| Syntax | `import`/`export` | `require`/`module.exports` |
+| Loading | Static (can be analyzed) | Dynamic (runtime) |
+| Async | Top-level await ✅ | No |
+| Tree shaking | Yes | No |
+| Browser | Yes (native) | No (needs bundler) |
+| Node.js | `.mjs` or `"type": "module"` | Default |
+
+### Using ESM in Node.js
+
+```json
+// package.json
+{
+  "type": "module"
+}
+```
+
+## Module Scope
+
+Variables in modules are scoped to the file — NOT global:
+
+```javascript
+// config.js
+const SECRET = "abc123"; // not accessible from other files
+export const PUBLIC_KEY = "xyz"; // accessible via import
+```
+
+## Circular Dependencies
+
+```javascript
+// a.js
+import { b } from "./b.js";
+export const a = "A";
+
+// b.js
+import { a } from "./a.js";
+export const b = "B";
+// Works in ESM (evaluates partially), but avoid when possible
+```
+
+**Best practice**: Restructure to avoid circular imports.
+

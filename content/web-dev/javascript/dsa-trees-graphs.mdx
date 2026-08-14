@@ -1,0 +1,234 @@
+---
+title: DSA — Trees & Graphs
+description: Binary trees, BSTs, DFS, BFS, graph traversal, and essential tree/graph algorithms in JavaScript
+---
+
+Trees and graphs appear in **most mid-to-senior level interviews**. JavaScript's objects and Maps make implementing them intuitive.
+
+## Binary Tree Node
+
+```javascript
+class TreeNode {
+  constructor(val, left = null, right = null) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+  }
+}
+```
+
+## Tree Traversals — DFS
+
+### Inorder (Left → Root → Right)
+
+```javascript
+function inorder(root, result = []) {
+  if (!root) return result;
+  inorder(root.left, result);
+  result.push(root.val);
+  inorder(root.right, result);
+  return result;
+}
+// BST inorder gives sorted order!
+```
+
+### Preorder (Root → Left → Right)
+
+```javascript
+function preorder(root, result = []) {
+  if (!root) return result;
+  result.push(root.val);
+  preorder(root.left, result);
+  preorder(root.right, result);
+  return result;
+}
+```
+
+### Postorder (Left → Right → Root)
+
+```javascript
+function postorder(root, result = []) {
+  if (!root) return result;
+  postorder(root.left, result);
+  postorder(root.right, result);
+  result.push(root.val);
+  return result;
+}
+```
+
+## Tree Traversal — BFS (Level Order)
+
+```javascript
+function levelOrder(root) {
+  if (!root) return [];
+  const result = [];
+  const queue = [root];
+
+  while (queue.length) {
+    const level = [];
+    const size = queue.length;
+
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift();
+      level.push(node.val);
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+
+    result.push(level);
+  }
+
+  return result;
+}
+// [[1], [2, 3], [4, 5, 6, 7]]
+```
+
+## Common Tree Problems
+
+### Height of Tree
+
+```javascript
+function maxDepth(root) {
+  if (!root) return 0;
+  return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+}
+```
+
+### Diameter of Tree
+
+```javascript
+function diameterOfBinaryTree(root) {
+  let diameter = 0;
+
+  function height(node) {
+    if (!node) return 0;
+    const left = height(node.left);
+    const right = height(node.right);
+    diameter = Math.max(diameter, left + right);
+    return 1 + Math.max(left, right);
+  }
+
+  height(root);
+  return diameter;
+}
+```
+
+### Lowest Common Ancestor
+
+```javascript
+function lowestCommonAncestor(root, p, q) {
+  if (!root || root === p || root === q) return root;
+
+  const left = lowestCommonAncestor(root.left, p, q);
+  const right = lowestCommonAncestor(root.right, p, q);
+
+  if (left && right) return root; // p and q are on different sides
+  return left || right;
+}
+```
+
+### Invert Binary Tree
+
+```javascript
+function invertTree(root) {
+  if (!root) return null;
+  [root.left, root.right] = [invertTree(root.right), invertTree(root.left)];
+  return root;
+}
+```
+
+## Graph Representation
+
+```javascript
+// Adjacency List using Map
+class Graph {
+  constructor() {
+    this.adjacencyList = new Map();
+  }
+
+  addVertex(v) {
+    if (!this.adjacencyList.has(v)) {
+      this.adjacencyList.set(v, []);
+    }
+  }
+
+  addEdge(v1, v2) {
+    this.adjacencyList.get(v1).push(v2);
+    this.adjacencyList.get(v2).push(v1); // undirected
+  }
+}
+```
+
+## Graph BFS
+
+```javascript
+function bfs(graph, start) {
+  const visited = new Set();
+  const queue = [start];
+  visited.add(start);
+  const result = [];
+
+  while (queue.length) {
+    const vertex = queue.shift();
+    result.push(vertex);
+
+    for (const neighbor of graph.get(vertex) || []) {
+      if (!visited.has(neighbor)) {
+        visited.add(neighbor);
+        queue.push(neighbor);
+      }
+    }
+  }
+
+  return result;
+}
+```
+
+## Graph DFS
+
+```javascript
+function dfs(graph, start, visited = new Set()) {
+  visited.add(start);
+  const result = [start];
+
+  for (const neighbor of graph.get(start) || []) {
+    if (!visited.has(neighbor)) {
+      result.push(...dfs(graph, neighbor, visited));
+    }
+  }
+
+  return result;
+}
+```
+
+## Topological Sort (DAG)
+
+```javascript
+function topologicalSort(graph) {
+  const visited = new Set();
+  const stack = [];
+
+  function dfs(node) {
+    visited.add(node);
+    for (const neighbor of graph.get(node) || []) {
+      if (!visited.has(neighbor)) dfs(neighbor);
+    }
+    stack.push(node);
+  }
+
+  for (const node of graph.keys()) {
+    if (!visited.has(node)) dfs(node);
+  }
+
+  return stack.reverse();
+}
+```
+
+## Key Takeaways
+
+| Algorithm | Time | Space | Use Case |
+|-----------|------|-------|----------|
+| DFS | O(V+E) | O(V) | Path finding, cycle detection |
+| BFS | O(V+E) | O(V) | Shortest path (unweighted), level order |
+| Topological Sort | O(V+E) | O(V) | Task scheduling, dependency resolution |
+

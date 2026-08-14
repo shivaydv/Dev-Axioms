@@ -1,0 +1,285 @@
+---
+title: Polyfills
+description: Implement built-in JavaScript methods from scratch — the ultimate interview coding challenge
+---
+
+A polyfill is a piece of code that **implements a feature** that the browser/environment doesn't natively support. Writing polyfills demonstrates deep understanding and is a **top interview coding task**.
+
+## Array.prototype.map
+
+```javascript
+Array.prototype.myMap = function (callback) {
+  const result = [];
+  for (let i = 0; i < this.length; i++) {
+    if (i in this) { // handle sparse arrays
+      result.push(callback(this[i], i, this));
+    }
+  }
+  return result;
+};
+
+// Test
+[1, 2, 3].myMap(n => n * 2); // [2, 4, 6]
+```
+
+## Array.prototype.filter
+
+```javascript
+Array.prototype.myFilter = function (callback) {
+  const result = [];
+  for (let i = 0; i < this.length; i++) {
+    if (i in this && callback(this[i], i, this)) {
+      result.push(this[i]);
+    }
+  }
+  return result;
+};
+
+// Test
+[1, 2, 3, 4, 5].myFilter(n => n > 3); // [4, 5]
+```
+
+## Array.prototype.reduce
+
+```javascript
+Array.prototype.myReduce = function (callback, initialValue) {
+  let accumulator;
+  let startIndex;
+
+  if (initialValue !== undefined) {
+    accumulator = initialValue;
+    startIndex = 0;
+  } else {
+    if (this.length === 0) throw new TypeError("Reduce of empty array with no initial value");
+    accumulator = this[0];
+    startIndex = 1;
+  }
+
+  for (let i = startIndex; i < this.length; i++) {
+    if (i in this) {
+      accumulator = callback(accumulator, this[i], i, this);
+    }
+  }
+
+  return accumulator;
+};
+
+// Test
+[1, 2, 3, 4].myReduce((sum, n) => sum + n, 0); // 10
+```
+
+## Array.prototype.flat
+
+```javascript
+Array.prototype.myFlat = function (depth = 1) {
+  const result = [];
+
+  function flatten(arr, currentDepth) {
+    for (const item of arr) {
+      if (Array.isArray(item) && currentDepth < depth) {
+        flatten(item, currentDepth + 1);
+      } else {
+        result.push(item);
+      }
+    }
+  }
+
+  flatten(this, 0);
+  return result;
+};
+
+// Test
+[1, [2, [3, [4]]]].myFlat(2); // [1, 2, 3, [4]]
+[1, [2, [3, [4]]]].myFlat(Infinity); // [1, 2, 3, 4]
+```
+
+## Function.prototype.bind
+
+```javascript
+Function.prototype.myBind = function (context, ...bindArgs) {
+  const fn = this;
+
+  return function (...callArgs) {
+    return fn.apply(context, [...bindArgs, ...callArgs]);
+  };
+};
+
+// Test
+function greet(greeting, punct) {
+  return `${greeting}, ${this.name}${punct}`;
+}
+
+const boundGreet = greet.myBind({ name: "Shiva" }, "Hello");
+boundGreet("!"); // "Hello, Shiva!"
+```
+
+## Function.prototype.call
+
+```javascript
+Function.prototype.myCall = function (context = globalThis, ...args) {
+  const key = Symbol("fn");
+  context[key] = this;
+  const result = context[key](...args);
+  delete context[key];
+  return result;
+};
+```
+
+## Function.prototype.apply
+
+```javascript
+Function.prototype.myApply = function (context = globalThis, args = []) {
+  const key = Symbol("fn");
+  context[key] = this;
+  const result = context[key](...args);
+  delete context[key];
+  return result;
+};
+```
+
+## Promise (Simplified)
+
+```javascript
+class MyPromise {
+  #state = "pending";
+  #value = undefined;
+  #callbacks = [];
+
+  constructor(executor) {
+    const resolve = (value) => {
+      if (this.#state !== "pending") return;
+      this.#state = "fulfilled";
+      this.#value = value;
+      this.#callbacks.forEach(cb => cb.onFulfilled(value));
+    };
+
+    const reject = (reason) => {
+      if (this.#state !== "pending") return;
+      this.#state = "rejected";
+      this.#value = reason;
+      this.#callbacks.forEach(cb => cb.onRejected(reason));
+    };
+
+    try {
+      executor(resolve, reject);
+    } catch (error) {
+      reject(error);
+    }
+  }
+
+  then(onFulfilled, onRejected) {
+    return new MyPromise((resolve, reject) => {
+      const handle = () => {
+        try {
+          if (this.#state === "fulfilled") {
+            const result = onFulfilled ? onFulfilled(this.#value) : this.#value;
+            resolve(result);
+          } else if (this.#state === "rejected") {
+            if (onRejected) {
+              const result = onRejected(this.#value);
+              resolve(result);
+            } else {
+              reject(this.#value);
+            }
+          }
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      if (this.#state === "pending") {
+        this.#callbacks.push({
+          onFulfilled: () => handle(),
+          onRejected: () => handle()
+        });
+      } else {
+        queueMicrotask(handle);
+      }
+    });
+  }
+
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+}
+```
+
+## Debounce
+
+```javascript
+function debounce(fn, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+```
+
+## Throttle
+
+```javascript
+function throttle(fn, limit) {
+  let inThrottle = false;
+  return function (...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => { inThrottle = false; }, limit);
+    }
+  };
+}
+```
+
+## Deep Clone
+
+```javascript
+function deepClone(obj) {
+  if (obj === null || typeof obj !== "object") return obj;
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+  if (Array.isArray(obj)) return obj.map(item => deepClone(item));
+
+  const clone = {};
+  for (const key in obj) {
+    if (Object.hasOwn(obj, key)) {
+      clone[key] = deepClone(obj[key]);
+    }
+  }
+  return clone;
+}
+```
+
+## Promise.all
+
+```javascript
+function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    const results = [];
+    let completed = 0;
+
+    if (promises.length === 0) return resolve([]);
+
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise).then(
+        (value) => {
+          results[index] = value;
+          completed++;
+          if (completed === promises.length) resolve(results);
+        },
+        (reason) => reject(reason)
+      );
+    });
+  });
+}
+```
+
+## Interview Tip
+
+When implementing polyfills in interviews:
+1. Start with the **function signature**
+2. Handle **edge cases** (empty arrays, no initial value)
+3. Use `this` correctly (the array the method is called on)
+4. Test with a simple example
+5. Discuss time/space complexity
+

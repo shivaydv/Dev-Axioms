@@ -1,0 +1,253 @@
+---
+title: OOP in JavaScript
+description: Constructor functions, ES6 classes, inheritance, encapsulation, and when to use classes vs factory functions
+---
+
+JavaScript supports Object-Oriented Programming, but it works differently from languages like Java or C++. Under the hood, it's all **prototypes** — the `class` keyword is syntactic sugar.
+
+## Constructor Functions (Pre-ES6)
+
+```javascript
+function User(name, email) {
+  this.name = name;
+  this.email = email;
+}
+
+User.prototype.greet = function () {
+  return `Hi, I'm ${this.name}`;
+};
+
+const user = new User("Shiva", "shiva@example.com");
+user.greet(); // "Hi, I'm Shiva"
+```
+
+### What `new` Does
+
+When you call `new User()`, JavaScript:
+1. Creates a new empty object `{}`
+2. Sets its `__proto__` to `User.prototype`
+3. Calls `User()` with `this` = the new object
+4. Returns the object (unless the function returns a different object)
+
+## ES6 Classes — The Modern Way
+
+```javascript
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+
+  greet() {
+    return `Hi, I'm ${this.name}`;
+  }
+
+  static fromJSON(json) {
+    const data = JSON.parse(json);
+    return new User(data.name, data.email);
+  }
+}
+
+const user = new User("Shiva", "shiva@example.com");
+user.greet(); // "Hi, I'm Shiva"
+
+const user2 = User.fromJSON('{"name":"Alex","email":"alex@example.com"}');
+```
+
+## The Four Pillars of OOP
+
+### 1. Encapsulation — Hide Internal State
+
+```javascript
+class BankAccount {
+  #balance; // private field (ES2022)
+
+  constructor(initialBalance) {
+    this.#balance = initialBalance;
+  }
+
+  deposit(amount) {
+    if (amount <= 0) throw new Error("Invalid amount");
+    this.#balance += amount;
+  }
+
+  withdraw(amount) {
+    if (amount > this.#balance) throw new Error("Insufficient funds");
+    this.#balance -= amount;
+  }
+
+  get balance() {
+    return this.#balance;
+  }
+}
+
+const account = new BankAccount(1000);
+account.deposit(500);
+account.balance;    // 1500 (getter)
+account.#balance;   // ❌ SyntaxError — truly private!
+```
+
+### 2. Inheritance — Share Behavior
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  eat() {
+    return `${this.name} is eating`;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name); // MUST call super() before using this
+    this.breed = breed;
+  }
+
+  bark() {
+    return "Woof!";
+  }
+}
+
+const rex = new Dog("Rex", "Labrador");
+rex.eat();   // "Rex is eating" (inherited)
+rex.bark();  // "Woof!" (own method)
+rex instanceof Dog;    // true
+rex instanceof Animal; // true
+```
+
+### 3. Polymorphism — Override Behavior
+
+```javascript
+class Shape {
+  area() {
+    throw new Error("area() must be implemented");
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius) {
+    super();
+    this.radius = radius;
+  }
+  area() {
+    return Math.PI * this.radius ** 2;
+  }
+}
+
+class Rectangle extends Shape {
+  constructor(width, height) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+  area() {
+    return this.width * this.height;
+  }
+}
+
+// Same method name, different behavior
+const shapes = [new Circle(5), new Rectangle(4, 6)];
+shapes.map(s => s.area()); // [78.54, 24]
+```
+
+### 4. Abstraction — Expose Only What's Necessary
+
+```javascript
+class EmailService {
+  #apiKey;
+
+  constructor(apiKey) {
+    this.#apiKey = apiKey;
+  }
+
+  // Public API — simple interface
+  async send(to, subject, body) {
+    const headers = this.#buildHeaders();
+    const payload = this.#buildPayload(to, subject, body);
+    return this.#makeRequest(headers, payload);
+  }
+
+  // Private implementation details
+  #buildHeaders() {
+    return { Authorization: `Bearer ${this.#apiKey}` };
+  }
+
+  #buildPayload(to, subject, body) {
+    return { to, subject, body };
+  }
+
+  #makeRequest(headers, payload) {
+    // actual HTTP call...
+  }
+}
+
+// Users only see .send() — the complexity is hidden
+const mailer = new EmailService("key123");
+mailer.send("user@example.com", "Hello", "Welcome!");
+```
+
+## Getters and Setters
+
+```javascript
+class Temperature {
+  #celsius;
+
+  constructor(celsius) {
+    this.#celsius = celsius;
+  }
+
+  get fahrenheit() {
+    return this.#celsius * 9 / 5 + 32;
+  }
+
+  set fahrenheit(f) {
+    this.#celsius = (f - 32) * 5 / 9;
+  }
+
+  get celsius() {
+    return this.#celsius;
+  }
+}
+
+const temp = new Temperature(100);
+temp.fahrenheit;     // 212
+temp.fahrenheit = 32;
+temp.celsius;        // 0
+```
+
+## Class vs Factory Function
+
+| Feature | Class | Factory Function |
+|---------|-------|-----------------|
+| `new` keyword | Required | Not needed |
+| `this` issues | Yes | No |
+| `instanceof` | Works | Doesn't work |
+| Private fields | `#field` | Closures |
+| Inheritance | `extends` | Composition |
+
+```javascript
+// Factory function alternative
+function createUser(name, email) {
+  let loginCount = 0; // private via closure
+
+  return {
+    getName() { return name; },
+    getEmail() { return email; },
+    login() {
+      loginCount++;
+      return `${name} logged in (${loginCount} times)`;
+    }
+  };
+}
+
+const user = createUser("Shiva", "shiva@example.com");
+user.login(); // "Shiva logged in (1 times)"
+```
+
+**When to use which?**
+- Use **classes** for complex hierarchies, when you need `instanceof`, or in frameworks (React class components)
+- Use **factory functions** for simpler objects, when you want true privacy, or prefer composition over inheritance
+

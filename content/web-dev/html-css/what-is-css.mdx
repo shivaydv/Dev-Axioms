@@ -1,0 +1,186 @@
+---
+title: What is CSS?
+description: Introduction to CSS — syntax, the cascade, how to add styles, and how CSS connects to HTML
+---
+
+CSS (Cascading Style Sheets) controls **how HTML elements look** — colors, fonts, spacing, layout, animations, and everything visual.
+
+## CSS Syntax
+
+Every CSS rule has the same structure:
+
+```css
+selector {
+  property: value;
+  property: value;
+}
+```
+
+```css
+h1 {
+  color: #2563eb;
+  font-size: 2rem;
+  font-weight: bold;
+}
+```
+
+- **Selector** — which elements to style
+- **Property** — what to change
+- **Value** — the new value
+- **Declaration** — a property-value pair
+- **Rule** — selector + all its declarations
+
+## Three Ways to Add CSS
+
+### 1. External CSS (Best Practice)
+
+```html
+<head>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+```
+
+```css
+/* css/style.css */
+body {
+  font-family: "Inter", sans-serif;
+  margin: 0;
+}
+```
+
+**Pros**: Separate concerns, reusable across pages, cacheable by browser.
+
+### 2. Internal CSS
+
+```html
+<head>
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+</head>
+```
+
+**When to use**: Single-page experiments, critical CSS for performance.
+
+### 3. Inline CSS (Avoid)
+
+```html
+<p style="color: red; font-size: 18px;">Red text</p>
+```
+
+**Problems**: Can't reuse, highest specificity (hard to override), mixes concerns.
+
+## The Cascade
+
+CSS stands for **Cascading** Style Sheets. When multiple rules target the same element, the cascade determines which wins:
+
+```text
+1. Importance  → !important overrides everything
+2. Specificity → more specific selectors win
+3. Source Order → later rules override earlier ones
+```
+
+```css
+p { color: blue; }
+p { color: red; }
+/* Result: red (source order — red comes later) */
+
+.text { color: green; }
+p { color: red; }
+/* Result: green (specificity — class > element) */
+```
+
+## Inheritance
+
+Some CSS properties are **inherited** from parent elements:
+
+```css
+body {
+  font-family: "Inter", sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* All text inside body inherits these — no need to repeat */
+```
+
+### What Inherits?
+
+| Inherits ✅ | Doesn't Inherit ❌ |
+|------------|-------------------|
+| `color` | `margin` |
+| `font-family` | `padding` |
+| `font-size` | `border` |
+| `line-height` | `background` |
+| `text-align` | `width` / `height` |
+| `visibility` | `display` |
+
+### Force Inheritance
+
+```css
+.child {
+  border: inherit;    /* force inherit from parent */
+  margin: initial;    /* reset to browser default */
+  color: unset;       /* inherit if inheritable, initial if not */
+}
+```
+
+## CSS Reset / Normalize
+
+Browsers apply **default styles** that differ between browsers. A reset removes them:
+
+### Simple Reset
+
+```css
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+```
+
+### Or Use a Normalize Library
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css" />
+```
+
+Normalize makes defaults **consistent** across browsers without removing everything.
+
+## CSS Comments
+
+```css
+/* This is a single-line comment */
+
+/*
+  This is a
+  multi-line comment
+*/
+
+/* TODO: fix mobile layout */
+```
+
+## Units Quick Reference
+
+| Unit | Type | Description |
+|------|------|-------------|
+| `px` | Absolute | Fixed pixels |
+| `rem` | Relative | Relative to root font-size (usually 16px) |
+| `em` | Relative | Relative to parent font-size |
+| `%` | Relative | Relative to parent element |
+| `vw` | Relative | 1% of viewport width |
+| `vh` | Relative | 1% of viewport height |
+
+```css
+/* 1rem = 16px (default) */
+h1 { font-size: 2rem; }     /* 32px */
+p { font-size: 1rem; }      /* 16px */
+.container { width: 90%; }  /* 90% of parent */
+.hero { height: 100vh; }    /* full viewport height */
+```
+
+**Best practice**: Use `rem` for font sizes, `px` for borders/shadows, `%`/`vw` for layout widths.

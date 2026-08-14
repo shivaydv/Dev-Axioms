@@ -1,0 +1,273 @@
+---
+title: Debugging & Best Practices
+description: Using DevTools effectively, common CSS bugs, naming conventions, and writing maintainable CSS
+---
+
+Knowing how to **debug CSS** and write **clean, maintainable** code is what separates beginners from professional developers.
+
+## Chrome DevTools for CSS
+
+### Inspecting Elements
+
+1. **Right-click → Inspect** on any element
+2. **Elements panel** shows the HTML and applied CSS
+3. **Computed tab** shows the final resolved values
+4. **Box model diagram** shows exact padding, margin, border values
+
+### Live CSS Editing
+
+- Click any CSS value to edit it live
+- Toggle properties on/off with the checkbox
+- Add new properties at the bottom of a rule
+- **Changes are temporary** — they don't save to your file
+
+### Key Tricks
+
+| Action | How |
+|--------|-----|
+| Find which rule applies | Check "Computed" tab → click the arrow to see source |
+| See why a rule is overridden | Look for ~~strikethrough~~ styles in Styles panel |
+| Test responsive | `Ctrl+Shift+M` to toggle device toolbar |
+| Force a state | Right-click element → "Force state" → :hover, :focus |
+| Check accessibility | Lighthouse tab → run accessibility audit |
+
+## Common CSS Bugs
+
+### 1. Overflow / Horizontal Scrollbar
+
+```css
+/* ❌ Something is wider than the viewport */
+/* Debug: add a red border to everything */
+* { outline: 1px solid red; }
+
+/* Common fixes */
+img { max-width: 100%; }
+.container { overflow-x: hidden; } /* last resort */
+```
+
+### 2. Element Not Appearing
+
+Check in this order:
+1. `display: none` on the element or a parent?
+2. `opacity: 0`?
+3. `visibility: hidden`?
+4. `height: 0` or `width: 0`?
+5. Element is positioned off-screen?
+6. `z-index` — is something covering it?
+7. `overflow: hidden` on parent clipping it?
+
+### 3. `z-index` Not Working
+
+`z-index` only works on **positioned** elements:
+
+```css
+/* ❌ Doesn't work */
+.box {
+  z-index: 999;
+}
+
+/* ✅ Add position */
+.box {
+  position: relative;
+  z-index: 999;
+}
+```
+
+### 4. Margin Collapse
+
+```css
+/* ❌ Two adjacent margins collapse */
+.box1 { margin-bottom: 20px; }
+.box2 { margin-top: 30px; }
+/* Gap is 30px, not 50px */
+
+/* Fixes: */
+/* 1. Use padding instead of margin on one */
+/* 2. Add border or padding on parent */
+/* 3. Use flexbox/grid (prevents collapse) */
+```
+
+### 5. Flex Items Not Wrapping
+
+```css
+/* ❌ Items overflow */
+.flex { display: flex; }
+
+/* ✅ Add wrap */
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+```
+
+### 6. Image Distortion
+
+```css
+/* ❌ Image stretches */
+img { width: 300px; height: 200px; }
+
+/* ✅ Maintain aspect ratio */
+img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover; /* or contain */
+}
+```
+
+## The Universal Reset
+
+Add this to **every project**:
+
+```css
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+img, video, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+```
+
+## CSS Naming Conventions
+
+### BEM (Block Element Modifier)
+
+```css
+/* Block */
+.card { }
+
+/* Element (part of block) */
+.card__title { }
+.card__body { }
+.card__image { }
+
+/* Modifier (variation) */
+.card--featured { }
+.card--dark { }
+.card__title--large { }
+```
+
+```html
+<div class="card card--featured">
+  <img class="card__image" src="..." alt="..." />
+  <h3 class="card__title">Title</h3>
+  <p class="card__body">Content</p>
+</div>
+```
+
+**BEM keeps CSS flat and predictable** — no deep nesting, no specificity wars.
+
+### Other Naming Tips
+
+- Use **lowercase** with hyphens: `.nav-link`, not `.NavLink` or `.nav_link`
+- Be **descriptive**: `.btn-primary`, not `.bp` or `.blue-button`
+- Avoid naming by appearance: `.text-red` is fragile (what if it changes to blue?)
+- Prefer naming by purpose: `.error-message`, `.success-badge`
+
+## CSS Organization
+
+### File Structure for Larger Projects
+
+```text
+css/
+├── base/
+│   ├── reset.css         /* resets and normalization */
+│   └── typography.css    /* font definitions */
+├── components/
+│   ├── buttons.css
+│   ├── cards.css
+│   └── navbar.css
+├── layout/
+│   ├── grid.css
+│   └── sidebar.css
+├── utilities/
+│   └── helpers.css       /* utility classes */
+└── main.css              /* imports everything */
+```
+
+### Property Ordering
+
+Keep CSS properties in a consistent order:
+
+```css
+.element {
+  /* 1. Layout */
+  display: flex;
+  position: relative;
+
+  /* 2. Box model */
+  width: 300px;
+  padding: 16px;
+  margin: 24px 0;
+  border: 1px solid #ccc;
+
+  /* 3. Typography */
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+
+  /* 4. Visual */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* 5. Animation */
+  transition: transform 0.2s ease;
+}
+```
+
+## Common Anti-Patterns
+
+### ❌ Avoid
+
+```css
+/* Too specific */
+div.container > ul.nav-list > li.nav-item > a.nav-link { }
+
+/* Using IDs for styling */
+#header { background: blue; }
+
+/* !important everywhere */
+.text { color: red !important; }
+
+/* Magic numbers */
+.box { margin-top: 37px; }
+
+/* Styling HTML tags globally */
+div { padding: 10px; }
+```
+
+### ✅ Prefer
+
+```css
+/* Flat, class-based selectors */
+.nav-link { }
+
+/* Low specificity */
+.header { background: blue; }
+
+/* Design tokens */
+.box { margin-top: var(--space-8); }
+
+/* Scoped element styles */
+.card p { color: #666; }
+```

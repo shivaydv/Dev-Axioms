@@ -1,0 +1,345 @@
+---
+title: Arrays in JavaScript
+description: Every array method you need — mutating, non-mutating, functional, and real-world data manipulation patterns
+---
+
+Arrays are the **most used data structure** in JavaScript. Mastering array methods is essential for daily coding and interviews.
+
+## Creating Arrays
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+const numbers = [1, 2, 3, 4, 5];
+const mixed = [1, "hello", true, null, { name: "Shiva" }];
+const empty = [];
+
+// Array constructor (less common)
+const arr = new Array(5);      // [empty × 5] — 5 empty slots
+const arr2 = Array.of(1, 2, 3); // [1, 2, 3]
+
+// Array.from — convert iterable to array
+Array.from("hello");           // ["h", "e", "l", "l", "o"]
+Array.from({ length: 5 }, (_, i) => i); // [0, 1, 2, 3, 4]
+```
+
+## Checking if Something is an Array
+
+```javascript
+typeof [];              // "object" — not helpful!
+Array.isArray([]);      // true ✅ — always use this
+Array.isArray("hello"); // false
+Array.isArray({ 0: "a", length: 1 }); // false
+```
+
+## Mutating Methods (Change the Original Array)
+
+### Adding Elements
+
+```javascript
+const arr = [1, 2, 3];
+
+arr.push(4);           // [1, 2, 3, 4] — add to END
+arr.unshift(0);        // [0, 1, 2, 3, 4] — add to START
+```
+
+### Removing Elements
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+arr.pop();             // removes 5, returns 5 — from END
+arr.shift();           // removes 1, returns 1 — from START
+```
+
+### splice — The Swiss Army Knife
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+// Remove: splice(startIndex, deleteCount)
+arr.splice(1, 2);      // removes [2, 3], arr = [1, 4, 5]
+
+// Insert: splice(startIndex, 0, ...items)
+arr.splice(1, 0, 2, 3); // arr = [1, 2, 3, 4, 5]
+
+// Replace: splice(startIndex, deleteCount, ...items)
+arr.splice(1, 2, 20, 30); // arr = [1, 20, 30, 4, 5]
+```
+
+### sort — Sorts in Place
+
+```javascript
+// ⚠️ Default sort converts to strings!
+[10, 9, 2, 1].sort();        // [1, 10, 2, 9] — WRONG!
+
+// ✅ Always pass a compare function
+[10, 9, 2, 1].sort((a, b) => a - b); // [1, 2, 9, 10] — ascending
+[10, 9, 2, 1].sort((a, b) => b - a); // [10, 9, 2, 1] — descending
+
+// Sort strings
+["banana", "apple", "cherry"].sort(); // ["apple", "banana", "cherry"]
+
+// Sort objects
+const users = [
+  { name: "Charlie", age: 30 },
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 28 }
+];
+
+users.sort((a, b) => a.age - b.age); // sorted by age ascending
+```
+
+### reverse — Reverses in Place
+
+```javascript
+[1, 2, 3].reverse(); // [3, 2, 1]
+
+// Non-mutating reverse (ES2023)
+[1, 2, 3].toReversed(); // [3, 2, 1] — original unchanged
+```
+
+## Non-Mutating Methods (Return New Array)
+
+### slice — Extract a Portion
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+arr.slice(1, 3);   // [2, 3] — start inclusive, end exclusive
+arr.slice(2);      // [3, 4, 5] — from index 2 to end
+arr.slice(-2);     // [4, 5] — last 2 elements
+arr.slice();       // [1, 2, 3, 4, 5] — shallow copy
+```
+
+### concat — Merge Arrays
+
+```javascript
+const a = [1, 2];
+const b = [3, 4];
+const c = a.concat(b);    // [1, 2, 3, 4]
+const d = [...a, ...b];   // [1, 2, 3, 4] — modern spread
+```
+
+### flat — Flatten Nested Arrays
+
+```javascript
+[1, [2, [3, [4]]]].flat();    // [1, 2, [3, [4]]] — 1 level
+[1, [2, [3, [4]]]].flat(2);   // [1, 2, 3, [4]] — 2 levels
+[1, [2, [3, [4]]]].flat(Infinity); // [1, 2, 3, 4] — all levels
+```
+
+### at — Access by Index (ES2022)
+
+```javascript
+const arr = [1, 2, 3, 4, 5];
+
+arr.at(0);    // 1
+arr.at(-1);   // 5 — last element (can't do this with arr[-1])
+arr.at(-2);   // 4 — second to last
+```
+
+## Functional (Iteration) Methods — The Big 6
+
+### map — Transform Each Element
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+const doubled = numbers.map(n => n * 2);
+// [2, 4, 6, 8, 10]
+
+// Real-world: format data for display
+const users = [{ name: "Shiva" }, { name: "Alex" }];
+const names = users.map(u => u.name);
+// ["Shiva", "Alex"]
+```
+
+### filter — Keep Elements That Pass a Test
+
+```javascript
+const numbers = [1, 2, 3, 4, 5, 6];
+
+const evens = numbers.filter(n => n % 2 === 0);
+// [2, 4, 6]
+
+// Real-world: filter active users
+const activeUsers = users.filter(u => u.isActive);
+
+// Remove falsy values
+const clean = [0, 1, "", "hello", null, true].filter(Boolean);
+// [1, "hello", true]
+```
+
+### reduce — Accumulate to Single Value
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+// Sum
+const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+// 15
+
+// Max value
+const max = numbers.reduce((a, b) => Math.max(a, b));
+// 5
+
+// Group by category
+const items = [
+  { name: "Apple", type: "fruit" },
+  { name: "Carrot", type: "vegetable" },
+  { name: "Banana", type: "fruit" }
+];
+
+const grouped = items.reduce((acc, item) => {
+  const key = item.type;
+  if (!acc[key]) acc[key] = [];
+  acc[key].push(item);
+  return acc;
+}, {});
+// { fruit: [...], vegetable: [...] }
+
+// Or use Object.groupBy (ES2024)
+const grouped = Object.groupBy(items, item => item.type);
+```
+
+### find — First Element That Matches
+
+```javascript
+const users = [
+  { id: 1, name: "Shiva" },
+  { id: 2, name: "Alex" },
+  { id: 3, name: "Sam" }
+];
+
+const user = users.find(u => u.id === 2);
+// { id: 2, name: "Alex" }
+
+const index = users.findIndex(u => u.id === 2);
+// 1
+
+// ES2023: find from the end
+const last = [1, 2, 3, 2, 1].findLast(n => n === 2);       // 2 (last match)
+const lastIdx = [1, 2, 3, 2, 1].findLastIndex(n => n === 2); // 3
+```
+
+### some — Does ANY Element Match?
+
+```javascript
+const ages = [15, 18, 21, 25];
+
+ages.some(age => age >= 18); // true — at least one is >= 18
+ages.some(age => age >= 30); // false — none are >= 30
+```
+
+### every — Do ALL Elements Match?
+
+```javascript
+const ages = [18, 21, 25, 30];
+
+ages.every(age => age >= 18); // true — all are >= 18
+ages.every(age => age >= 21); // false — 18 fails
+```
+
+## Other Useful Methods
+
+```javascript
+const arr = [1, 2, 3, 2, 1];
+
+arr.includes(2);        // true
+arr.indexOf(2);         // 1 (first occurrence)
+arr.lastIndexOf(2);     // 3 (last occurrence)
+
+// forEach — iterate (no return value)
+arr.forEach((val, idx) => {
+  console.log(`${idx}: ${val}`);
+});
+
+// join — convert to string
+["a", "b", "c"].join("-"); // "a-b-c"
+["a", "b", "c"].join("");  // "abc"
+
+// fill — fill with a value
+new Array(5).fill(0);     // [0, 0, 0, 0, 0]
+```
+
+## Real-World Array Patterns
+
+### Remove Duplicates
+
+```javascript
+const arr = [1, 2, 2, 3, 3, 4];
+const unique = [...new Set(arr)]; // [1, 2, 3, 4]
+```
+
+### Chunk Array
+
+```javascript
+function chunk(arr, size) {
+  const result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+chunk([1, 2, 3, 4, 5], 2); // [[1, 2], [3, 4], [5]]
+```
+
+### Frequency Counter
+
+```javascript
+const words = ["apple", "banana", "apple", "cherry", "banana", "apple"];
+
+const freq = words.reduce((acc, word) => {
+  acc[word] = (acc[word] || 0) + 1;
+  return acc;
+}, {});
+// { apple: 3, banana: 2, cherry: 1 }
+```
+
+### Flatten and Map (flatMap)
+
+```javascript
+const sentences = ["Hello world", "Goodbye world"];
+
+// map then flat
+const words = sentences.map(s => s.split(" ")).flat();
+// ["Hello", "world", "Goodbye", "world"]
+
+// flatMap (combines both)
+const words = sentences.flatMap(s => s.split(" "));
+// ["Hello", "world", "Goodbye", "world"]
+```
+
+## Common Mistakes
+
+### 1. Forgetting sort() Converts to Strings
+
+```javascript
+[10, 9, 2].sort(); // [10, 2, 9] ← WRONG — sorted as strings
+```
+
+### 2. Using forEach When You Need Return Values
+
+```javascript
+// ❌ forEach returns undefined
+const doubled = [1, 2, 3].forEach(n => n * 2); // undefined
+
+// ✅ Use map
+const doubled = [1, 2, 3].map(n => n * 2); // [2, 4, 6]
+```
+
+### 3. Mutating When You Shouldn't
+
+```javascript
+// ❌ sort() mutates the original
+const original = [3, 1, 2];
+const sorted = original.sort();
+console.log(original); // [1, 2, 3] — also sorted!
+
+// ✅ Copy first
+const sorted = [...original].sort();
+// or use toSorted() (ES2023)
+const sorted = original.toSorted();
+```
+

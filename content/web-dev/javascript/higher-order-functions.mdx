@@ -1,0 +1,108 @@
+---
+title: Higher-Order Functions
+description: Functions that accept or return functions — the foundation of functional JavaScript
+---
+
+A Higher-Order Function (HOF) is a function that either **takes a function as an argument** or **returns a function**. They're the basis of functional programming in JavaScript.
+
+## Functions as Arguments
+
+```javascript
+// map, filter, reduce are all HOFs
+const numbers = [1, 2, 3, 4, 5];
+
+numbers.map(n => n * 2);           // [2, 4, 6, 8, 10]
+numbers.filter(n => n > 3);        // [4, 5]
+numbers.reduce((sum, n) => sum + n, 0); // 15
+
+// Custom HOF
+function repeat(fn, times) {
+  for (let i = 0; i < times; i++) {
+    fn(i);
+  }
+}
+
+repeat(console.log, 3); // 0, 1, 2
+```
+
+## Functions Returning Functions
+
+```javascript
+function createGreeter(greeting) {
+  return function (name) {
+    return `${greeting}, ${name}!`;
+  };
+}
+
+const hello = createGreeter("Hello");
+const bye = createGreeter("Goodbye");
+
+hello("Shiva"); // "Hello, Shiva!"
+bye("Shiva");   // "Goodbye, Shiva!"
+```
+
+## Real-World HOF Patterns
+
+### Validator Factory
+
+```javascript
+function createValidator(rules) {
+  return function (value) {
+    return rules.every(rule => rule(value));
+  };
+}
+
+const isValidPassword = createValidator([
+  (v) => v.length >= 8,
+  (v) => /[A-Z]/.test(v),
+  (v) => /[0-9]/.test(v),
+]);
+
+isValidPassword("MyPass123"); // true
+isValidPassword("weak");      // false
+```
+
+### Middleware Pattern (Express.js style)
+
+```javascript
+function withAuth(handler) {
+  return function (req, res) {
+    if (!req.headers.authorization) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    return handler(req, res);
+  };
+}
+
+const getProfile = withAuth((req, res) => {
+  res.json({ name: "Shiva" });
+});
+```
+
+### Pipe and Compose
+
+```javascript
+// Pipe: left to right
+const pipe = (...fns) => (input) =>
+  fns.reduce((result, fn) => fn(result), input);
+
+// Compose: right to left
+const compose = (...fns) => (input) =>
+  fns.reduceRight((result, fn) => fn(result), input);
+
+const processName = pipe(
+  (s) => s.trim(),
+  (s) => s.toLowerCase(),
+  (s) => s.replace(/\s+/g, "-")
+);
+
+processName("  Hello World  "); // "hello-world"
+```
+
+## Why HOFs Matter
+
+1. **Code reuse** — write logic once, apply everywhere
+2. **Abstraction** — hide implementation details
+3. **Composition** — build complex behavior from simple pieces
+4. **Declarative code** — say what, not how
+

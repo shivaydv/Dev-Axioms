@@ -1,0 +1,178 @@
+---
+title: Debounce & Throttle
+description: Essential performance patterns for controlling how often functions execute — interview favorites
+---
+
+Debounce and throttle control **how frequently** a function can execute. They're essential for performance and are **top interview questions**.
+
+## Debounce — Wait Until User Stops
+
+Debounce delays execution until the user **stops triggering** the event for a specified time.
+
+```text
+User types:  H  e  l  l  o
+Debounce:    ×  ×  ×  ×  ──(300ms wait)── execute!
+```
+
+### Implementation
+
+```javascript
+function debounce(fn, delay) {
+  let timeoutId;
+
+  return function (...args) {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      fn.apply(this, args);
+    }, delay);
+  };
+}
+```
+
+### Real-World Use Cases
+
+```javascript
+// Search input — don't call API on every keystroke
+const searchInput = document.querySelector("#search");
+
+const handleSearch = debounce((event) => {
+  const query = event.target.value;
+  fetch(`/api/search?q=${query}`)
+    .then(res => res.json())
+    .then(results => renderResults(results));
+}, 300);
+
+searchInput.addEventListener("input", handleSearch);
+
+// Window resize handler
+const handleResize = debounce(() => {
+  console.log("Recalculating layout...");
+}, 200);
+
+window.addEventListener("resize", handleResize);
+```
+
+## Throttle — Execute at Most Once Per Interval
+
+Throttle ensures the function executes **at most once** per specified time period.
+
+```text
+Scroll events: ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+Throttle:      ✓ × × × ✓ × × × ✓ ×
+               (every 200ms)
+```
+
+### Implementation
+
+```javascript
+function throttle(fn, limit) {
+  let inThrottle = false;
+
+  return function (...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
+    }
+  };
+}
+```
+
+### Real-World Use Cases
+
+```javascript
+// Scroll position tracking
+const handleScroll = throttle(() => {
+  const scrollY = window.scrollY;
+  updateScrollIndicator(scrollY);
+}, 100);
+
+window.addEventListener("scroll", handleScroll);
+
+// Button click — prevent double-submit
+const handleSubmit = throttle(async () => {
+  await submitForm(formData);
+}, 2000);
+
+submitButton.addEventListener("click", handleSubmit);
+
+// Game loop — limit input processing
+const handleMouseMove = throttle((event) => {
+  updatePlayerPosition(event.clientX, event.clientY);
+}, 16); // ~60fps
+```
+
+## Debounce vs Throttle — When to Use Which
+
+| Scenario | Use | Why |
+|----------|-----|-----|
+| Search input | **Debounce** | Wait until user finishes typing |
+| Form validation | **Debounce** | Validate after user stops input |
+| Window resize | **Debounce** | Recalculate once, not continuously |
+| Scroll position | **Throttle** | Need periodic updates while scrolling |
+| Button clicks | **Throttle** | Prevent rapid double-clicks |
+| API rate limiting | **Throttle** | Max N requests per second |
+| Mouse move tracking | **Throttle** | Update position periodically |
+
+### Simple Rule
+
+- **Debounce**: "Wait until they're done, then execute once"
+- **Throttle**: "Execute periodically while they're doing it"
+
+## Advanced: Leading vs Trailing Edge
+
+### Leading Debounce (Execute Immediately, Then Wait)
+
+```javascript
+function debounce(fn, delay, immediate = false) {
+  let timeoutId;
+
+  return function (...args) {
+    const callNow = immediate && !timeoutId;
+
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      if (!immediate) fn.apply(this, args);
+    }, delay);
+
+    if (callNow) fn.apply(this, args);
+  };
+}
+```
+
+### Throttle with Trailing Call
+
+```javascript
+function throttle(fn, limit) {
+  let lastCall = 0;
+  let lastArgs = null;
+  let timeoutId = null;
+
+  return function (...args) {
+    const now = Date.now();
+
+    if (now - lastCall >= limit) {
+      fn.apply(this, args);
+      lastCall = now;
+    } else {
+      lastArgs = args;
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        fn.apply(this, lastArgs);
+        lastCall = Date.now();
+      }, limit - (now - lastCall));
+    }
+  };
+}
+```
+
+## Interview: Implement Both
+
+This is one of the **most commonly asked coding questions** in frontend interviews. Be able to implement both from memory.
+

@@ -1,0 +1,237 @@
+---
+title: Forms & Inputs
+description: Building interactive forms — input types, validation, labels, accessibility, and real-world patterns
+---
+
+Forms are the **primary way users interact** with web applications — login, signup, search, checkout, settings. Mastering forms is essential.
+
+## Basic Form Structure
+
+```html
+<form action="/submit" method="POST">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required />
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required />
+
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Key Attributes
+
+| Attribute | Purpose |
+|-----------|---------|
+| `action` | URL where form data is sent |
+| `method` | `GET` (URL params) or `POST` (request body) |
+| `name` | Key used when data is submitted |
+| `id` | Links `<label>` to input via `for` attribute |
+| `required` | Makes the field mandatory |
+| `placeholder` | Hint text inside the input |
+
+## The `<label>` Element (Critical)
+
+**Always use labels.** They improve accessibility and usability.
+
+```html
+<!-- Method 1: for/id linking (preferred) -->
+<label for="email">Email:</label>
+<input type="email" id="email" name="email" />
+
+<!-- Method 2: wrapping -->
+<label>
+  Email:
+  <input type="email" name="email" />
+</label>
+```
+
+**Why labels matter**:
+- Screen readers announce the label when the input is focused
+- Clicking the label focuses/checks the input (bigger click target)
+- Required for WCAG accessibility compliance
+
+## Input Types
+
+```html
+<!-- Text inputs -->
+<input type="text" />          <!-- generic text -->
+<input type="email" />         <!-- validates email format -->
+<input type="password" />      <!-- masks characters -->
+<input type="number" />        <!-- numeric input with arrows -->
+<input type="tel" />           <!-- phone number (mobile keyboard) -->
+<input type="url" />           <!-- validates URL format -->
+<input type="search" />        <!-- search field with clear button -->
+
+<!-- Date and time -->
+<input type="date" />          <!-- date picker -->
+<input type="time" />          <!-- time picker -->
+<input type="datetime-local" /> <!-- date + time -->
+
+<!-- Selection -->
+<input type="checkbox" />      <!-- true/false toggle -->
+<input type="radio" />         <!-- one choice from a group -->
+<input type="range" />         <!-- slider -->
+<input type="color" />         <!-- color picker -->
+
+<!-- Files -->
+<input type="file" />          <!-- file upload -->
+<input type="file" accept="image/*" /> <!-- only images -->
+<input type="file" multiple />  <!-- multiple files -->
+
+<!-- Hidden -->
+<input type="hidden" name="csrf" value="token123" />
+```
+
+### Mobile Optimization
+
+Using the right `type` gives users the **correct keyboard** on mobile:
+
+| Type | Mobile Keyboard |
+|------|----------------|
+| `text` | Standard |
+| `email` | Shows `@` key |
+| `tel` | Number pad |
+| `number` | Number pad with decimals |
+| `url` | Shows `.com`, `/` keys |
+| `search` | Shows "Search" button |
+
+## Other Form Elements
+
+### `<textarea>` — Multi-Line Text
+
+```html
+<label for="message">Message:</label>
+<textarea id="message" name="message" rows="5" cols="40" placeholder="Type your message..."></textarea>
+```
+
+### `<select>` — Dropdown Menu
+
+```html
+<label for="country">Country:</label>
+<select id="country" name="country">
+  <option value="">-- Select --</option>
+  <option value="in">India</option>
+  <option value="us">United States</option>
+  <option value="uk">United Kingdom</option>
+</select>
+```
+
+### Radio Buttons — One Choice
+
+```html
+<fieldset>
+  <legend>Gender</legend>
+  <label><input type="radio" name="gender" value="male" /> Male</label>
+  <label><input type="radio" name="gender" value="female" /> Female</label>
+  <label><input type="radio" name="gender" value="other" /> Other</label>
+</fieldset>
+```
+
+**Same `name`** = same group (only one can be selected).
+
+### Checkboxes — Multiple Choices
+
+```html
+<fieldset>
+  <legend>Skills</legend>
+  <label><input type="checkbox" name="skills" value="html" /> HTML</label>
+  <label><input type="checkbox" name="skills" value="css" /> CSS</label>
+  <label><input type="checkbox" name="skills" value="js" /> JavaScript</label>
+</fieldset>
+```
+
+## HTML5 Validation
+
+Built-in validation without JavaScript:
+
+```html
+<!-- Required field -->
+<input type="text" required />
+
+<!-- Min/max for numbers -->
+<input type="number" min="1" max="100" />
+
+<!-- Min/max length for text -->
+<input type="text" minlength="3" maxlength="50" />
+
+<!-- Pattern (regex) -->
+<input type="text" pattern="[A-Za-z]{3,}" title="At least 3 letters" />
+
+<!-- Custom validation message -->
+<input type="email" required oninvalid="this.setCustomValidity('Please enter a valid email')" oninput="this.setCustomValidity('')" />
+```
+
+### `novalidate`
+
+Disables HTML validation (when you want JS-only validation):
+
+```html
+<form novalidate>...</form>
+```
+
+## Real-World Form Examples
+
+### Login Form
+
+```html
+<form action="/login" method="POST">
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required autocomplete="email" />
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required minlength="8" autocomplete="current-password" />
+  </div>
+  <button type="submit">Log In</button>
+</form>
+```
+
+### Search Form
+
+```html
+<form action="/search" method="GET" role="search">
+  <label for="q" class="sr-only">Search</label>
+  <input type="search" id="q" name="q" placeholder="Search..." />
+  <button type="submit">Search</button>
+</form>
+```
+
+## `<fieldset>` and `<legend>`
+
+Group related inputs and provide a label for the group:
+
+```html
+<fieldset>
+  <legend>Shipping Address</legend>
+  <label for="street">Street:</label>
+  <input type="text" id="street" name="street" />
+  <label for="city">City:</label>
+  <input type="text" id="city" name="city" />
+</fieldset>
+```
+
+## Interview Questions
+
+### Q: Difference between `id` and `name`?
+
+`id` is for **CSS/JS targeting** and label linking (unique on page). `name` is the **key sent with form data** to the server (can repeat for radio/checkbox groups).
+
+### Q: Why use `<label for="...">`?
+
+Accessibility — screen readers announce the label. Usability — clicking the label focuses/toggles the input.
+
+### Q: Difference between `<button>` and `<input type="submit">`?
+
+`<button>` can contain HTML (icons, text), is more flexible for styling. `<input type="submit">` only accepts a text value. **Prefer `<button>`** in modern code.
+
+### Q: GET vs POST?
+
+| | GET | POST |
+|---|-----|------|
+| Data in | URL query string | Request body |
+| Bookmarkable | Yes | No |
+| Size limit | ~2KB (URL limit) | No practical limit |
+| Use for | Search, filters | Login, signup, file upload |
+| Cached | Yes | No |

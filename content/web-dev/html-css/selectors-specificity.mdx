@@ -1,0 +1,228 @@
+---
+title: Selectors & Specificity
+description: Target HTML elements with CSS selectors and understand how specificity determines which styles win
+---
+
+Selectors are how CSS **targets** HTML elements. Specificity determines which rule wins when multiple selectors match the same element.
+
+## Basic Selectors
+
+```css
+/* Element selector */
+p { color: gray; }
+
+/* Class selector (.) */
+.card { padding: 16px; }
+
+/* ID selector (#) */
+#header { background: navy; }
+
+/* Universal selector */
+* { margin: 0; }
+```
+
+## Grouping
+
+Apply the same styles to multiple selectors:
+
+```css
+h1, h2, h3 {
+  font-family: "Inter", sans-serif;
+  color: #1a1a1a;
+}
+```
+
+## Combinator Selectors
+
+### Descendant (space) — Any Nested Element
+
+```css
+/* Any <a> inside .nav, at any depth */
+.nav a { color: white; }
+```
+
+### Child (`>`) — Direct Children Only
+
+```css
+/* Only <li> that are direct children of .menu */
+.menu > li { list-style: none; }
+```
+
+### Adjacent Sibling (`+`) — Immediately After
+
+```css
+/* The <p> directly after an <h2> */
+h2 + p { font-size: 1.2rem; }
+```
+
+### General Sibling (`~`) — Any After
+
+```css
+/* All <p> tags that come after an <h2> */
+h2 ~ p { color: gray; }
+```
+
+## Attribute Selectors
+
+```css
+/* Has the attribute */
+[required] { border-color: red; }
+
+/* Exact match */
+[type="email"] { border-color: blue; }
+
+/* Starts with */
+[href^="https"] { color: green; }
+
+/* Ends with */
+[href$=".pdf"] { color: red; }
+
+/* Contains */
+[class*="btn"] { cursor: pointer; }
+```
+
+## Pseudo-Classes
+
+Target elements based on **state** or **position**:
+
+### State-Based
+
+```css
+a:hover { color: blue; }          /* mouse over */
+a:active { color: red; }          /* being clicked */
+input:focus { outline: 2px solid blue; }  /* focused */
+input:disabled { opacity: 0.5; }  /* disabled input */
+a:visited { color: purple; }      /* visited link */
+input:checked { accent-color: blue; }     /* checked checkbox/radio */
+```
+
+### Position-Based
+
+```css
+li:first-child { font-weight: bold; }
+li:last-child { border-bottom: none; }
+li:nth-child(2) { color: red; }          /* 2nd child */
+li:nth-child(odd) { background: #f5f5f5; } /* zebra stripe */
+li:nth-child(even) { background: white; }
+li:nth-child(3n) { color: blue; }        /* every 3rd */
+p:first-of-type { font-size: 1.2em; }    /* first <p> among siblings */
+```
+
+### Negation
+
+```css
+/* All inputs except submit buttons */
+input:not([type="submit"]) {
+  border: 1px solid #ccc;
+}
+```
+
+## Pseudo-Elements
+
+Target **parts** of elements (use `::` double colon):
+
+```css
+/* First line of a paragraph */
+p::first-line { font-weight: bold; }
+
+/* First letter */
+p::first-letter {
+  font-size: 2em;
+  float: left;
+}
+
+/* Add content before/after */
+.required::after {
+  content: " *";
+  color: red;
+}
+
+.icon::before {
+  content: "→ ";
+}
+
+/* Style placeholder text */
+input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Style selected text */
+::selection {
+  background: #2563eb;
+  color: white;
+}
+```
+
+## Specificity — How Browsers Decide
+
+When multiple rules target the same element, the one with **higher specificity** wins.
+
+### The Specificity Score
+
+```text
+Inline styles  →  1,0,0,0
+ID selectors   →  0,1,0,0
+Classes, pseudo-classes, attributes → 0,0,1,0
+Elements, pseudo-elements  →  0,0,0,1
+```
+
+### Examples
+
+| Selector | Specificity | Score |
+|----------|-------------|-------|
+| `p` | 0,0,0,1 | 1 |
+| `.card` | 0,0,1,0 | 10 |
+| `p.card` | 0,0,1,1 | 11 |
+| `#header` | 0,1,0,0 | 100 |
+| `#header .nav a` | 0,1,1,1 | 111 |
+| `style="..."` | 1,0,0,0 | 1000 |
+
+### Specificity Battles
+
+```css
+/* Specificity: 0,0,0,1 */
+p { color: blue; }
+
+/* Specificity: 0,0,1,0 — wins! */
+.text { color: red; }
+
+/* Specificity: 0,1,0,0 — wins over class! */
+#main { color: green; }
+```
+
+### `!important` — The Nuclear Option
+
+```css
+p {
+  color: red !important; /* overrides EVERYTHING */
+}
+```
+
+**Avoid `!important`** — it makes styles extremely hard to debug and override. Only use it as a last resort (e.g., overriding third-party library styles).
+
+### Specificity Rules to Remember
+
+1. **Inline styles** beat everything (except `!important`)
+2. **IDs** beat classes
+3. **Classes** beat elements
+4. More selectors = higher specificity
+5. **Source order** breaks ties (later wins)
+6. `!important` overrides all specificity (avoid it)
+
+## Best Practices
+
+1. **Prefer classes over IDs** for styling — lower specificity, more reusable
+2. **Keep specificity flat** — avoid deeply nested selectors
+3. **Never use `!important`** unless overriding third-party CSS
+4. **Use meaningful class names** — `.card-title` not `.ct`
+
+## Interview Questions
+
+### Q: Why does `#header` override `.header`?
+
+Because ID selectors have a specificity of `0,1,0,0` (100) while class selectors have `0,0,1,0` (10). Higher specificity always wins.
+
+### Q: What is specificity?
+
+The algorithm browsers use to determine which CSS rule applies when multiple rules target the same element. It's calculated based on the types of selectors used: inline > ID > class > element.

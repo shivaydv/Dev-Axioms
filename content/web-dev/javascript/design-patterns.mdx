@@ -1,0 +1,208 @@
+---
+title: Design Patterns in JavaScript
+description: Proven solutions to common coding problems — Module, Singleton, Factory, Observer, and more
+---
+
+Design patterns are **reusable solutions** to common problems in software design. Knowing them makes you a better architect.
+
+## Module Pattern
+
+Encapsulates private state using closures:
+
+```javascript
+const Counter = (() => {
+  let count = 0; // private
+
+  return {
+    increment() { return ++count; },
+    decrement() { return --count; },
+    getCount() { return count; }
+  };
+})();
+
+Counter.increment(); // 1
+Counter.increment(); // 2
+Counter.getCount();  // 2
+Counter.count;       // undefined — private!
+```
+
+**Use when**: You need private state without classes. Now largely replaced by ES modules.
+
+## Singleton Pattern
+
+Ensures only ONE instance exists:
+
+```javascript
+class Database {
+  static #instance = null;
+
+  constructor() {
+    if (Database.#instance) {
+      return Database.#instance;
+    }
+    this.connection = "connected";
+    Database.#instance = this;
+  }
+
+  query(sql) {
+    return `Executing: ${sql}`;
+  }
+}
+
+const db1 = new Database();
+const db2 = new Database();
+db1 === db2; // true — same instance
+```
+
+**Use when**: Database connections, config managers, logging services.
+
+## Factory Pattern
+
+Creates objects without specifying exact class:
+
+```javascript
+function createNotification(type, message) {
+  const base = { message, timestamp: Date.now() };
+
+  switch (type) {
+    case "success":
+      return { ...base, icon: "✅", color: "green" };
+    case "error":
+      return { ...base, icon: "❌", color: "red" };
+    case "warning":
+      return { ...base, icon: "⚠️", color: "yellow" };
+    default:
+      return { ...base, icon: "ℹ️", color: "blue" };
+  }
+}
+
+const toast = createNotification("success", "Saved!");
+```
+
+**Use when**: Creating objects with different configurations based on input.
+
+## Observer / Pub-Sub Pattern
+
+One-to-many relationship — when one thing changes, notify all subscribers:
+
+```javascript
+class EventEmitter {
+  #events = {};
+
+  on(event, callback) {
+    if (!this.#events[event]) this.#events[event] = [];
+    this.#events[event].push(callback);
+    return () => this.off(event, callback); // return unsubscribe function
+  }
+
+  off(event, callback) {
+    this.#events[event] = this.#events[event]?.filter(cb => cb !== callback);
+  }
+
+  emit(event, ...args) {
+    this.#events[event]?.forEach(cb => cb(...args));
+  }
+}
+
+// Usage
+const bus = new EventEmitter();
+
+const unsub = bus.on("userLogin", (user) => {
+  console.log(`${user.name} logged in`);
+});
+
+bus.emit("userLogin", { name: "Shiva" }); // "Shiva logged in"
+unsub(); // unsubscribe
+```
+
+**Use when**: Decoupled communication between components. React state management, Node.js EventEmitter, DOM events all use this.
+
+## Strategy Pattern
+
+Define a family of algorithms and make them interchangeable:
+
+```javascript
+const strategies = {
+  credit: (amount) => amount * 1.02,  // 2% fee
+  debit: (amount) => amount * 1.01,   // 1% fee
+  crypto: (amount) => amount * 1.005, // 0.5% fee
+};
+
+function processPayment(method, amount) {
+  const strategy = strategies[method];
+  if (!strategy) throw new Error(`Unknown method: ${method}`);
+  return strategy(amount);
+}
+
+processPayment("credit", 100);  // 102
+processPayment("crypto", 100);  // 100.5
+```
+
+**Use when**: Multiple ways to perform the same operation (sorting, validation, payment processing).
+
+## Decorator Pattern
+
+Add functionality to an object without modifying its structure:
+
+```javascript
+function withLogging(fn) {
+  return function (...args) {
+    console.log(`Calling ${fn.name} with`, args);
+    const result = fn(...args);
+    console.log(`Result:`, result);
+    return result;
+  };
+}
+
+function add(a, b) { return a + b; }
+
+const loggedAdd = withLogging(add);
+loggedAdd(2, 3);
+// "Calling add with [2, 3]"
+// "Result: 5"
+```
+
+**Use when**: Adding cross-cutting concerns (logging, caching, auth) without modifying original code.
+
+## Proxy Pattern
+
+Control access to an object:
+
+```javascript
+const user = { name: "Shiva", age: 25, _password: "secret" };
+
+const safeUser = new Proxy(user, {
+  get(target, prop) {
+    if (prop.startsWith("_")) {
+      throw new Error(`Access denied to ${prop}`);
+    }
+    return target[prop];
+  },
+  set(target, prop, value) {
+    if (prop === "age" && typeof value !== "number") {
+      throw new TypeError("Age must be a number");
+    }
+    target[prop] = value;
+    return true;
+  }
+});
+
+safeUser.name;       // "Shiva"
+safeUser._password;  // ❌ Error: Access denied
+safeUser.age = "25"; // ❌ TypeError: Age must be a number
+```
+
+**Use when**: Validation, logging, lazy initialization, access control. Vue.js 3 uses Proxy for reactivity.
+
+## Which Pattern When?
+
+| Problem | Pattern |
+|---------|---------|
+| Need private state | Module |
+| Only one instance | Singleton |
+| Create varied objects | Factory |
+| Notify on changes | Observer |
+| Multiple algorithms | Strategy |
+| Add features without modifying | Decorator |
+| Control access | Proxy |
+

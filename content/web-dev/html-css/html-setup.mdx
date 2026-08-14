@@ -1,0 +1,150 @@
+---
+title: HTML & CSS Setup
+description: Setting up your development environment — VS Code, Live Server, DevTools, and project structure
+---
+
+Before writing any code, set up a proper development environment. This takes 5 minutes and saves hours.
+
+## 1. Install VS Code
+
+[Download VS Code](https://code.visualstudio.com/) — it's the industry-standard editor for web development.
+
+### Essential Extensions
+
+| Extension | Purpose |
+|-----------|---------|
+| **Live Server** | Auto-refresh browser when you save |
+| **Prettier** | Auto-format your code on save |
+| **Auto Rename Tag** | Rename closing tag when you edit opening tag |
+| **HTML CSS Support** | CSS class autocomplete in HTML |
+
+### Useful Settings
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "emmet.includeLanguages": { "html": "html" }
+}
+```
+
+## 2. Emmet — Write HTML Fast
+
+VS Code has **Emmet** built in. Type shorthand and press `Tab`:
+
+| Shorthand | Expands To |
+|-----------|-----------|
+| `!` | Full HTML5 boilerplate |
+| `div.container` | `<div class="container"></div>` |
+| `ul>li*5` | `<ul>` with 5 `<li>` children |
+| `h1+p` | `<h1>` followed by `<p>` |
+| `input:email` | `<input type="email">` |
+| `.card>h3+p+a` | Nested card structure |
+
+## 3. Project Structure
+
+A basic HTML/CSS project:
+
+```text
+my-project/
+├── index.html       ← main page
+├── about.html       ← additional pages
+├── css/
+│   └── style.css    ← main stylesheet
+├── js/
+│   └── script.js    ← JavaScript (optional)
+└── images/
+    └── logo.png     ← image assets
+```
+
+## 4. Starter Template
+
+Every project begins with this:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Project</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <script src="js/script.js"></script>
+  </body>
+</html>
+```
+
+### Key Points
+
+- **CSS in `<head>`** — loads before content renders (prevents flash of unstyled content)
+- **JS before `</body>`** — loads after HTML is parsed (doesn't block rendering)
+- **Or use `defer`**: `<script src="app.js" defer></script>` in the `<head>`
+
+## 5. Linking CSS
+
+Three ways to add CSS (in order of preference):
+
+### External CSS (Best)
+
+```html
+<link rel="stylesheet" href="css/style.css" />
+```
+
+Separate file, reusable, cacheable.
+
+### Internal CSS
+
+```html
+<style>
+  body { font-family: sans-serif; }
+</style>
+```
+
+In the `<head>`. Useful for single-page experiments.
+
+### Inline CSS (Avoid)
+
+```html
+<p style="color: red; font-size: 18px;">Text</p>
+```
+
+Hard to maintain, can't reuse, high specificity.
+
+## 6. Browser DevTools
+
+Press `F12` or `Ctrl+Shift+I` to open DevTools.
+
+### Elements Tab
+
+- Inspect and edit HTML live
+- See computed styles
+- Toggle CSS properties on/off
+- Edit element attributes
+
+### Key Shortcuts
+
+| Action | Shortcut |
+|--------|----------|
+| Open DevTools | `F12` or `Ctrl+Shift+I` |
+| Inspect element | `Ctrl+Shift+C` |
+| Toggle device toolbar | `Ctrl+Shift+M` |
+| Quick CSS edit | Click any style value |
+
+### Tips
+
+- **Right-click → Inspect** on any element to jump directly to it
+- **Edit CSS in real-time** — changes are live but not saved to file
+- **Device toolbar** — test responsive layouts at different screen sizes
+- **Computed tab** — see the final, resolved CSS values
+
+## 7. Using Live Server
+
+1. Install the **Live Server** extension in VS Code
+2. Right-click `index.html` → **Open with Live Server**
+3. Browser opens at `http://127.0.0.1:5500`
+4. Every time you save, the page **auto-refreshes**
+
+This is the fastest workflow for learning HTML/CSS.

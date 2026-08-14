@@ -1,0 +1,301 @@
+---
+title: Type Coercion & Equality
+description: How JavaScript converts types behind your back — the source of its weirdest behavior
+---
+
+Type coercion is JavaScript **automatically converting** one data type to another. It's the reason `"5" + 3` gives `"53"` but `"5" - 3` gives `2`. Understanding coercion is what separates juniors from seniors.
+
+## Two Types of Coercion
+
+### Explicit Coercion (You do it on purpose)
+
+```javascript
+String(42);        // "42"
+Number("42");      // 42
+Boolean(0);        // false
+parseInt("42px");  // 42
+parseFloat("3.14"); // 3.14
+```
+
+### Implicit Coercion (JavaScript does it for you)
+
+```javascript
+"5" + 3;     // "53"  (number → string)
+"5" - 3;     // 2     (string → number)
+true + 1;    // 2     (boolean → number)
+null + 5;    // 5     (null → 0)
+undefined+5; // NaN   (undefined → NaN)
+```
+
+## The `+` Operator — The Biggest Trap
+
+The `+` operator does **two things**: addition and string concatenation. If **either** operand is a string, JavaScript concatenates.
+
+```javascript
+// If one side is a string → concatenation
+"5" + 3       // "53"
+3 + "5"       // "35"
+"" + 42       // "42"
+"5" + true    // "5true"
+
+// If no strings → numeric addition
+5 + 3         // 8
+true + true   // 2
+null + 5      // 5
+true + null   // 1
+```
+
+### Other Operators Always Convert to Number
+
+```javascript
+"5" - 3     // 2
+"5" * 2     // 10
+"5" / 2     // 2.5
+"5" % 2     // 1
+"abc" - 1   // NaN
+```
+
+**Rule**: `+` is the weird one. `-`, `*`, `/`, `%` always try to convert to numbers.
+
+## `==` vs `===` — The Equality Battle
+
+### `===` Strict Equality (Always Use This)
+
+No coercion. Both value AND type must match.
+
+```javascript
+5 === 5       // true
+5 === "5"     // false (different types)
+null === undefined // false
+NaN === NaN   // false (by design)
+```
+
+### `==` Abstract Equality (Avoid — Except `null` Check)
+
+Performs type coercion before comparing, following a complex algorithm:
+
+```javascript
+5 == "5"        // true  (string → number → 5 == 5)
+0 == false      // true  (false → 0 → 0 == 0)
+"" == false     // true  (both → 0)
+null == undefined // true (special case!)
+null == 0       // false (null only equals undefined)
+NaN == NaN      // false
+```
+
+### The One Good Use of `==`
+
+```javascript
+// Check for null OR undefined in one shot
+if (value == null) {
+  // true for both null and undefined
+  // false for 0, "", false, NaN
+}
+
+// Without ==, you'd need:
+if (value === null || value === undefined) { ... }
+```
+
+## The Abstract Equality Algorithm (How `==` Works)
+
+When you use `==`, JavaScript follows these rules in order:
+
+```text
+1. Same type? → Compare directly
+2. null == undefined? → true
+3. Number == String? → Convert string to number
+4. Boolean == anything? → Convert boolean to number first
+5. Object == primitive? → Call .valueOf() or .toString() on object
+```
+
+### Walking Through an Example
+
+```javascript
+[] == false
+```
+
+**Step by step:**
+```text
+[] == false
+→ [] == 0        (Rule 4: boolean → number, false → 0)
+→ "" == 0        (Rule 5: array → string, [].toString() → "")
+→ 0 == 0         (Rule 3: string → number, "" → 0)
+→ true
+```
+
+## The Infamous Weird Examples
+
+### Array + Array
+
+```javascript
+[] + []    // ""
+// [].toString() + [].toString() → "" + "" → ""
+```
+
+### Array + Object
+
+```javascript
+[] + {}    // "[object Object]"
+// "" + ({}).toString() → "" + "[object Object]"
+```
+
+### Object + Array (depends on context)
+
+```javascript
+{} + []    // 0 (in console — {} is treated as empty block)
+({}) + []  // "[object Object]" (wrapped in parens, it's an object)
+```
+
+### The `![]` Trick
+
+```javascript
+![]        // false (arrays are truthy, so !truthy = false)
+[] == ![]  // true  (explained below)
+```
+
+Walk-through:
+```text
+[] == ![]
+→ [] == false      (![] → false because [] is truthy)
+→ [] == 0          (boolean → number)
+→ "" == 0          (array → string)
+→ 0 == 0           (string → number)
+→ true
+```
+
+## Boolean Coercion
+
+### Using `Boolean()` or `!!`
+
+```javascript
+Boolean(0);          // false
+Boolean("");         // false
+Boolean(null);       // false
+Boolean(undefined);  // false
+Boolean(NaN);        // false
+
+Boolean(1);          // true
+Boolean("hello");    // true
+Boolean([]);         // true  ← empty array is truthy!
+Boolean({});         // true  ← empty object is truthy!
+
+// Shorthand with double NOT
+!!0       // false
+!!"hello" // true
+!![]      // true
+```
+
+## Number Coercion
+
+```javascript
+Number(true);      // 1
+Number(false);     // 0
+Number(null);      // 0
+Number(undefined); // NaN
+Number("");        // 0
+Number(" ");       // 0
+Number("42");      // 42
+Number("42px");    // NaN (use parseInt for this)
+Number([]);        // 0  ([] → "" → 0)
+Number([5]);       // 5  ([5] → "5" → 5)
+Number([1,2]);     // NaN ([1,2] → "1,2" → NaN)
+```
+
+## String Coercion
+
+```javascript
+String(42);        // "42"
+String(true);      // "true"
+String(null);      // "null"
+String(undefined); // "undefined"
+String([1,2,3]);   // "1,2,3"
+String({});        // "[object Object]"
+```
+
+## The Floating Point Problem
+
+```javascript
+0.1 + 0.2 === 0.3  // false 🤯
+0.1 + 0.2          // 0.30000000000000004
+```
+
+**Why?** JavaScript uses IEEE 754 double-precision floating point. Some decimals can't be represented exactly in binary.
+
+**Solutions:**
+
+```javascript
+// 1. Round the result
+Math.round((0.1 + 0.2) * 100) / 100; // 0.3
+
+// 2. Use a tolerance (epsilon)
+Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON; // true
+
+// 3. Work with integers (cents instead of dollars)
+const price = 199; // $1.99 in cents
+```
+
+## Real-World Coercion Patterns
+
+### Input Handling
+
+```javascript
+// User input is always a string
+const input = document.querySelector("input").value; // "42"
+
+// Convert to number
+const age = Number(input);    // 42
+const age2 = +input;          // 42 (unary + shorthand)
+const age3 = parseInt(input); // 42
+```
+
+### Conditional Checks
+
+```javascript
+// Using truthy/falsy to check for empty values
+const name = userInput || "Anonymous";
+
+// Problem: this also replaces 0 and ""
+const count = userCount || 10; // if userCount is 0, gives 10 (wrong!)
+
+// Fix: nullish coalescing
+const count = userCount ?? 10; // if userCount is 0, gives 0 (correct!)
+```
+
+## Interview Output Questions
+
+### Question 1
+
+```javascript
+console.log(1 + "2" + 3);
+```
+
+**Answer**: `"123"` — `1 + "2"` = `"12"`, then `"12" + 3` = `"123"`.
+
+### Question 2
+
+```javascript
+console.log(+"");
+console.log(+true);
+console.log(+null);
+console.log(+undefined);
+```
+
+**Answer**: `0`, `1`, `0`, `NaN`.
+
+### Question 3
+
+```javascript
+console.log("2" > "12");
+```
+
+**Answer**: `true` — string comparison uses character codes. `"2"` (code 50) > `"1"` (code 49).
+
+### Question 4
+
+```javascript
+console.log(null == undefined);
+console.log(null === undefined);
+```
+
+**Answer**: `true`, `false` — `==` considers them equal (special rule), `===` checks type too.
+

@@ -1,0 +1,292 @@
+---
+title: Async JavaScript
+description: Callbacks, Promises, async/await — handling asynchronous operations from basics to advanced patterns
+---
+
+JavaScript is single-threaded, but most real-world operations (API calls, file reads, timers) are asynchronous. Understanding async patterns is **essential for every JS developer**.
+
+## The Evolution of Async JS
+
+```text
+Callbacks (1995) → Promises (ES6/2015) → async/await (ES2017)
+```
+
+## 1. Callbacks
+
+A callback is a function passed to another function, to be executed later:
+
+```javascript
+function fetchData(callback) {
+  setTimeout(() => {
+    callback({ id: 1, name: "Shiva" });
+  }, 1000);
+}
+
+fetchData((data) => {
+  console.log(data.name); // "Shiva" (after 1 second)
+});
+```
+
+### Callback Hell (The Problem)
+
+Nested callbacks become unreadable:
+
+```javascript
+getUser(userId, (user) => {
+  getPosts(user.id, (posts) => {
+    getComments(posts[0].id, (comments) => {
+      getAuthor(comments[0].authorId, (author) => {
+        console.log(author.name);
+        // Welcome to pyramid of doom 🔺
+      });
+    });
+  });
+});
+```
+
+## 2. Promises — The Solution
+
+A Promise represents a value that will be available **in the future**.
+
+### Three States
+
+```text
+Pending → Fulfilled (resolved with a value)
+       → Rejected (rejected with an error)
+```
+
+### Creating a Promise
+
+```javascript
+const promise = new Promise((resolve, reject) => {
+  const success = true;
+
+  if (success) {
+    resolve("Data loaded!");
+  } else {
+    reject(new Error("Something went wrong"));
+  }
+});
+```
+
+### Consuming with .then / .catch / .finally
+
+```javascript
+fetch("https://api.example.com/users")
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error("Failed:", error.message);
+  })
+  .finally(() => {
+    console.log("Request completed"); // runs regardless
+  });
+```
+
+### Chaining Promises
+
+```javascript
+getUser(userId)
+  .then(user => getPosts(user.id))
+  .then(posts => getComments(posts[0].id))
+  .then(comments => console.log(comments))
+  .catch(error => console.error(error));
+// Flat chain — much better than nested callbacks!
+```
+
+## 3. async / await — The Best Way
+
+`async/await` is syntactic sugar over Promises. It makes async code **look synchronous**.
+
+```javascript
+async function loadUserData(userId) {
+  try {
+    const user = await getUser(userId);
+    const posts = await getPosts(user.id);
+    const comments = await getComments(posts[0].id);
+    console.log(comments);
+  } catch (error) {
+    console.error("Failed:", error.message);
+  }
+}
+```
+
+### Key Rules
+
+1. `await` can only be used inside `async` functions (or at top level in ES modules)
+2. `await` pauses execution until the Promise settles
+3. `async` functions always return a Promise
+
+```javascript
+async function getNumber() {
+  return 42; // automatically wrapped in Promise.resolve(42)
+}
+
+getNumber().then(n => console.log(n)); // 42
+```
+
+## Error Handling in Async Code
+
+### try/catch with async/await
+
+```javascript
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Fetch failed:", error.message);
+    return null;
+  }
+}
+```
+
+### .catch with Promises
+
+```javascript
+fetch("/api/data")
+  .then(res => res.json())
+  .catch(err => {
+    console.error(err);
+    return { fallback: true };
+  });
+```
+
+## Promise Static Methods
+
+### Promise.all — All Must Succeed
+
+Runs promises in **parallel**, resolves when ALL succeed, rejects if ANY fails:
+
+```javascript
+const [users, posts, comments] = await Promise.all([
+  fetch("/api/users").then(r => r.json()),
+  fetch("/api/posts").then(r => r.json()),
+  fetch("/api/comments").then(r => r.json())
+]);
+// All three requests run simultaneously — much faster than sequential!
+```
+
+### Promise.allSettled — Get All Results
+
+Waits for all to complete, never rejects:
+
+```javascript
+const results = await Promise.allSettled([
+  fetch("/api/users"),
+  fetch("/api/failing-endpoint"),
+  fetch("/api/posts")
+]);
+
+results.forEach(result => {
+  if (result.status === "fulfilled") {
+    console.log("Success:", result.value);
+  } else {
+    console.log("Failed:", result.reason);
+  }
+});
+```
+
+### Promise.race — First to Finish Wins
+
+```javascript
+const result = await Promise.race([
+  fetch("/api/primary"),
+  new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Timeout")), 5000)
+  )
+]);
+// Either the fetch succeeds or it times out after 5s
+```
+
+### Promise.any — First Success Wins
+
+```javascript
+const fastest = await Promise.any([
+  fetch("https://cdn1.example.com/data"),
+  fetch("https://cdn2.example.com/data"),
+  fetch("https://cdn3.example.com/data")
+]);
+// Returns whichever CDN responds first successfully
+```
+
+## Sequential vs Parallel Execution
+
+### Sequential (One at a Time)
+
+```javascript
+// Each waits for the previous one — SLOW
+const user = await getUser(1);      // 500ms
+const posts = await getPosts(1);    // 500ms
+const comments = await getComments(1); // 500ms
+// Total: ~1500ms
+```
+
+### Parallel (All at Once)
+
+```javascript
+// All start at the same time — FAST
+const [user, posts, comments] = await Promise.all([
+  getUser(1),      // 500ms ─┐
+  getPosts(1),     // 500ms ─┤ all run simultaneously
+  getComments(1)   // 500ms ─┘
+]);
+// Total: ~500ms
+```
+
+**Rule**: Use `Promise.all` when tasks are independent. Use sequential `await` when each task depends on the previous one.
+
+## Converting Callbacks to Promises
+
+```javascript
+// Callback-based function
+function readFile(path, callback) {
+  // ... calls callback(err, data)
+}
+
+// Promisified version
+function readFileAsync(path) {
+  return new Promise((resolve, reject) => {
+    readFile(path, (err, data) => {
+      if (err) reject(err);
+      else resolve(data);
+    });
+  });
+}
+
+// Usage
+const data = await readFileAsync("./file.txt");
+```
+
+Node.js has a built-in utility:
+
+```javascript
+const { promisify } = require("util");
+const readFileAsync = promisify(fs.readFile);
+```
+
+## Real-World Pattern: Retry Logic
+
+```javascript
+async function fetchWithRetry(url, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return await response.json();
+      throw new Error(`HTTP ${response.status}`);
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      console.log(`Retry ${i + 1}/${retries}...`);
+      await new Promise(r => setTimeout(r, 1000 * (i + 1))); // exponential backoff
+    }
+  }
+}
+```
+

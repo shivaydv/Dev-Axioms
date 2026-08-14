@@ -1,0 +1,186 @@
+---
+title: DSA — Dynamic Programming
+description: Memoization, tabulation, and the most important DP problems solved in JavaScript
+---
+
+Dynamic Programming (DP) solves complex problems by **breaking them into overlapping subproblems** and caching results. It's the hardest DSA topic but follows clear patterns.
+
+## Two Approaches
+
+### Top-Down (Memoization)
+
+Start from the big problem, recurse down, cache results:
+
+```javascript
+function fib(n, memo = {}) {
+  if (n <= 1) return n;
+  if (memo[n]) return memo[n];
+  memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
+  return memo[n];
+}
+```
+
+### Bottom-Up (Tabulation)
+
+Start from the smallest subproblem, build up:
+
+```javascript
+function fib(n) {
+  if (n <= 1) return n;
+  const dp = [0, 1];
+  for (let i = 2; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2];
+  }
+  return dp[n];
+}
+
+// Space optimized — only need last 2 values
+function fib(n) {
+  if (n <= 1) return n;
+  let prev2 = 0, prev1 = 1;
+  for (let i = 2; i <= n; i++) {
+    [prev2, prev1] = [prev1, prev2 + prev1];
+  }
+  return prev1;
+}
+```
+
+## Climbing Stairs
+
+You can climb 1 or 2 steps. How many ways to reach step `n`?
+
+```javascript
+function climbStairs(n) {
+  if (n <= 2) return n;
+  let prev2 = 1, prev1 = 2;
+  for (let i = 3; i <= n; i++) {
+    [prev2, prev1] = [prev1, prev2 + prev1];
+  }
+  return prev1;
+}
+
+// climbStairs(5) → 8
+// Time: O(n), Space: O(1)
+```
+
+## Coin Change
+
+Minimum coins to make an amount:
+
+```javascript
+function coinChange(coins, amount) {
+  const dp = new Array(amount + 1).fill(Infinity);
+  dp[0] = 0;
+
+  for (let i = 1; i <= amount; i++) {
+    for (const coin of coins) {
+      if (coin <= i && dp[i - coin] + 1 < dp[i]) {
+        dp[i] = dp[i - coin] + 1;
+      }
+    }
+  }
+
+  return dp[amount] === Infinity ? -1 : dp[amount];
+}
+
+// coinChange([1, 5, 10, 25], 30) → 2 (25 + 5)
+// Time: O(amount × coins), Space: O(amount)
+```
+
+## Longest Increasing Subsequence
+
+```javascript
+function lengthOfLIS(nums) {
+  const dp = new Array(nums.length).fill(1);
+
+  for (let i = 1; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[j] < nums[i]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+      }
+    }
+  }
+
+  return Math.max(...dp);
+}
+
+// [10, 9, 2, 5, 3, 7, 101, 18] → 4 ([2, 5, 7, 101])
+// Time: O(n²), Space: O(n)
+```
+
+## 0/1 Knapsack
+
+```javascript
+function knapsack(weights, values, capacity) {
+  const n = weights.length;
+  const dp = Array.from({ length: n + 1 }, () =>
+    new Array(capacity + 1).fill(0)
+  );
+
+  for (let i = 1; i <= n; i++) {
+    for (let w = 1; w <= capacity; w++) {
+      if (weights[i - 1] <= w) {
+        dp[i][w] = Math.max(
+          dp[i - 1][w],
+          dp[i - 1][w - weights[i - 1]] + values[i - 1]
+        );
+      } else {
+        dp[i][w] = dp[i - 1][w];
+      }
+    }
+  }
+
+  return dp[n][capacity];
+}
+```
+
+## Longest Common Subsequence
+
+```javascript
+function longestCommonSubsequence(text1, text2) {
+  const m = text1.length, n = text2.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (text1[i - 1] === text2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+
+  return dp[m][n];
+}
+
+// LCS("abcde", "ace") → 3 ("ace")
+```
+
+## House Robber
+
+Can't rob adjacent houses:
+
+```javascript
+function rob(nums) {
+  if (nums.length === 0) return 0;
+  if (nums.length === 1) return nums[0];
+
+  let prev2 = 0, prev1 = 0;
+  for (const num of nums) {
+    const current = Math.max(prev1, prev2 + num);
+    prev2 = prev1;
+    prev1 = current;
+  }
+  return prev1;
+}
+```
+
+## DP Problem-Solving Framework
+
+1. **Define the state** — What does `dp[i]` represent?
+2. **Find the recurrence** — How does `dp[i]` relate to smaller subproblems?
+3. **Set base cases** — What are the trivial answers?
+4. **Determine iteration order** — Bottom-up or top-down?
+5. **Optimize space** — Can you use O(1) or O(n) instead of O(n²)?
+

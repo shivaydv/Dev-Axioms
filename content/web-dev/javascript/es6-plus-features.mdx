@@ -1,0 +1,201 @@
+---
+title: ES6+ Features
+description: Every modern JavaScript feature from ES6 to ES2024 — the complete reference
+---
+
+ES6 (2015) was the biggest update to JavaScript. Since then, new features are added yearly. Here's everything important, grouped by category.
+
+## Variables & Scope (ES6)
+
+```javascript
+let x = 1;      // block-scoped, reassignable
+const y = 2;    // block-scoped, not reassignable
+// var is legacy — avoid
+```
+
+## Template Literals (ES6)
+
+```javascript
+const name = "Shiva";
+const msg = `Hello ${name}! 2 + 2 = ${2 + 2}`;
+
+// Multi-line strings
+const html = `
+  <div>
+    <p>${msg}</p>
+  </div>
+`;
+
+// Tagged templates
+function highlight(strings, ...values) {
+  return strings.reduce((result, str, i) =>
+    result + str + (values[i] ? `<b>${values[i]}</b>` : ""), "");
+}
+```
+
+## Arrow Functions (ES6)
+
+```javascript
+const add = (a, b) => a + b;
+const greet = name => `Hello ${name}`;
+const getObj = () => ({ key: "value" }); // wrap object in parens
+```
+
+## Destructuring (ES6)
+
+```javascript
+const { name, age } = user;          // object
+const [first, ...rest] = [1, 2, 3];  // array
+const { a: renamed = "default" } = obj; // rename + default
+```
+
+## Spread & Rest (ES6 / ES9)
+
+```javascript
+const merged = [...arr1, ...arr2];      // array spread (ES6)
+const cloned = { ...obj1, ...obj2 };    // object spread (ES9/2018)
+function sum(...nums) { }               // rest parameter
+```
+
+## Promises (ES6) & async/await (ES2017)
+
+```javascript
+// Promise
+fetch(url).then(r => r.json()).catch(console.error);
+
+// async/await
+const data = await fetch(url).then(r => r.json());
+```
+
+## Classes (ES6+)
+
+```javascript
+class Animal {
+  #name; // private field (ES2022)
+
+  constructor(name) {
+    this.#name = name;
+  }
+
+  static create(name) {   // static method
+    return new Animal(name);
+  }
+
+  get name() { return this.#name; }
+}
+
+class Dog extends Animal {
+  bark() { return "Woof!"; }
+}
+```
+
+## Symbol (ES6)
+
+```javascript
+const id = Symbol("unique");
+const obj = { [id]: "hidden" };
+Object.keys(obj); // [] — symbols are hidden from iteration
+```
+
+## Map & Set (ES6)
+
+```javascript
+// Map — any type as key
+const map = new Map();
+map.set("key", "value");
+map.set(42, "number key");
+map.get("key"); // "value"
+map.size;       // 2
+
+// Set — unique values only
+const set = new Set([1, 2, 2, 3]);
+set.size; // 3 — duplicates removed
+set.has(2); // true
+```
+
+## WeakMap & WeakSet (ES6)
+
+Keys are weakly referenced — garbage collected when no other references exist:
+
+```javascript
+const cache = new WeakMap();
+let obj = { data: "expensive" };
+cache.set(obj, "cached result");
+
+obj = null; // obj can be garbage collected, cache entry removed
+```
+
+## Optional Chaining (ES2020)
+
+```javascript
+user?.address?.city;
+arr?.[0];
+obj?.method?.();
+```
+
+## Nullish Coalescing (ES2020)
+
+```javascript
+const val = input ?? "default"; // only for null/undefined
+```
+
+## Logical Assignment (ES2021)
+
+```javascript
+a ||= "default";  // assign if falsy
+a &&= "new";      // assign if truthy
+a ??= "fallback"; // assign if null/undefined
+```
+
+## String & Array Additions
+
+```javascript
+// String
+"hello".replaceAll("l", "r");  // "herro" (ES2021)
+"hello".at(-1);                // "o" (ES2022)
+
+// Array
+[1, [2, [3]]].flat(Infinity);  // [1, 2, 3] (ES2019)
+[1, 2, 3].at(-1);              // 3 (ES2022)
+[1, 2, 3].findLast(n => n < 3); // 2 (ES2023)
+[3, 1, 2].toSorted();          // [1, 2, 3] (ES2023, non-mutating)
+[1, 2, 3].toReversed();        // [3, 2, 1] (ES2023, non-mutating)
+[1, 2, 3].with(1, 99);         // [1, 99, 3] (ES2023, non-mutating)
+```
+
+## Object Additions
+
+```javascript
+Object.entries({ a: 1 });           // [["a", 1]] (ES2017)
+Object.fromEntries([["a", 1]]);     // { a: 1 } (ES2019)
+Object.hasOwn(obj, "key");          // true/false (ES2022)
+Object.groupBy(arr, item => item.type); // grouped object (ES2024)
+```
+
+## Promise Additions
+
+```javascript
+Promise.allSettled(promises);   // ES2020 — never rejects
+Promise.any(promises);          // ES2021 — first success
+Promise.withResolvers();        // ES2024 — returns { promise, resolve, reject }
+```
+
+## Other Modern Features
+
+```javascript
+// structuredClone (ES2022/Web API)
+const deep = structuredClone(obj);
+
+// Top-level await (ES2022, in modules)
+const data = await fetch("/api/data").then(r => r.json());
+
+// Error.cause (ES2022)
+throw new Error("Failed", { cause: originalError });
+
+// Numeric separators (ES2021)
+const million = 1_000_000;
+
+// BigInt (ES2020)
+const big = 9007199254740991n + 1n;
+```
+

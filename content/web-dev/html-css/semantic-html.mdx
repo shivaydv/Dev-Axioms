@@ -1,0 +1,230 @@
+---
+title: Semantic HTML
+description: Using meaningful tags for better accessibility, SEO, and cleaner code structure
+---
+
+Semantic HTML means using tags that **describe their purpose** rather than just their appearance. It's one of the most asked topics in frontend interviews.
+
+## Why Semantic HTML Matters
+
+| Benefit | Explanation |
+|---------|-------------|
+| **Accessibility** | Screen readers navigate by headings, landmarks, and regions |
+| **SEO** | Search engines understand page structure and content hierarchy |
+| **Maintainability** | Code is self-documenting — easier to read and modify |
+| **Standards** | Modern HTML5 was designed around semantic meaning |
+
+## Non-Semantic vs Semantic
+
+```html
+<!-- ❌ Non-semantic — what does this mean? -->
+<div class="header">
+  <div class="nav">
+    <div class="nav-item">Home</div>
+  </div>
+</div>
+<div class="content">
+  <div class="post">
+    <div class="post-title">My Blog Post</div>
+  </div>
+</div>
+<div class="footer">Copyright 2025</div>
+
+<!-- ✅ Semantic — clear meaning -->
+<header>
+  <nav>
+    <a href="/">Home</a>
+  </nav>
+</header>
+<main>
+  <article>
+    <h2>My Blog Post</h2>
+  </article>
+</main>
+<footer>Copyright 2025</footer>
+```
+
+## The Essential Semantic Tags
+
+### `<header>` — Introductory Content
+
+```html
+<header>
+  <h1>DevAxioms</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+  </nav>
+</header>
+```
+
+Contains the logo, site title, navigation. **Can be used multiple times** (page header, article header).
+
+### `<nav>` — Navigation Links
+
+```html
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+Only for **major navigation blocks** — not every group of links.
+
+### `<main>` — Primary Content
+
+```html
+<main>
+  <h1>Welcome to My Site</h1>
+  <p>This is the primary content.</p>
+</main>
+```
+
+**Only ONE `<main>` per page.** It should not include headers, footers, or sidebars.
+
+### `<section>` — Thematic Grouping
+
+```html
+<section>
+  <h2>Our Services</h2>
+  <p>We offer web development, design, and consulting.</p>
+</section>
+
+<section>
+  <h2>Testimonials</h2>
+  <p>What our clients say about us.</p>
+</section>
+```
+
+Each `<section>` should have a **heading** (`<h2>`–`<h6>`).
+
+### `<article>` — Self-Contained Content
+
+```html
+<article>
+  <h2>How to Learn CSS Grid</h2>
+  <p>Published on August 14, 2025</p>
+  <p>CSS Grid is a two-dimensional layout system...</p>
+</article>
+```
+
+Content that **makes sense on its own** — blog posts, news articles, product cards, comments.
+
+### `<aside>` — Sidebar Content
+
+```html
+<aside>
+  <h3>Related Posts</h3>
+  <ul>
+    <li><a href="/post-1">Flexbox Guide</a></li>
+    <li><a href="/post-2">CSS Variables</a></li>
+  </ul>
+</aside>
+```
+
+Content **indirectly related** to the main content — sidebars, callouts, ads.
+
+### `<footer>` — Closing Content
+
+```html
+<footer>
+  <p>&copy; 2025 DevAxioms. All rights reserved.</p>
+  <nav>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms of Service</a>
+  </nav>
+</footer>
+```
+
+## Full Page Structure
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blog - DevAxioms</title>
+  </head>
+  <body>
+    <header>
+      <h1>DevAxioms</h1>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+
+    <main>
+      <article>
+        <h2>Understanding Semantic HTML</h2>
+        <p>Semantic HTML uses meaningful tags...</p>
+
+        <section>
+          <h3>Why It Matters</h3>
+          <p>Accessibility, SEO, maintainability.</p>
+        </section>
+      </article>
+
+      <aside>
+        <h3>Popular Tags</h3>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+        </ul>
+      </aside>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 DevAxioms</p>
+    </footer>
+  </body>
+</html>
+```
+
+## Other Useful Semantic Tags
+
+| Tag | Purpose |
+|-----|---------|
+| `<figure>` | Self-contained content like images with captions |
+| `<figcaption>` | Caption for a `<figure>` |
+| `<time>` | Dates and times (machine-readable) |
+| `<address>` | Contact information |
+| `<details>` | Expandable/collapsible content |
+| `<summary>` | Visible heading for `<details>` |
+
+```html
+<figure>
+  <img src="chart.png" alt="Sales growth chart" />
+  <figcaption>Sales grew 40% in Q4 2024</figcaption>
+</figure>
+
+<time datetime="2025-08-14">August 14, 2025</time>
+
+<details>
+  <summary>Click to expand</summary>
+  <p>Hidden content that appears when clicked.</p>
+</details>
+```
+
+## `<section>` vs `<article>` vs `<div>`
+
+| Tag | Use When |
+|-----|----------|
+| `<article>` | Content makes sense **on its own** (syndication-ready) |
+| `<section>` | Thematic grouping that **needs a heading** |
+| `<div>` | **No semantic meaning** — only for styling/layout purposes |
+
+**Rule of thumb**: Can you put it in an RSS feed? → `<article>`. Does it need a heading? → `<section>`. Just need a wrapper? → `<div>`.
+
+## Interview Questions
+
+### Q: Why is semantic HTML important for accessibility?
+
+Screen readers use semantic tags as **landmarks** to navigate. A `<nav>` tells the user "this is navigation," `<main>` says "this is the primary content." Without semantics, screen reader users have to listen to every element linearly.
+
+### Q: Can you use multiple `<header>` and `<footer>` tags?
+
+Yes. Each `<article>` or `<section>` can have its own `<header>` and `<footer>`. But there should be only **one `<main>`** per page.

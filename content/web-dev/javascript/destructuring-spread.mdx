@@ -1,0 +1,176 @@
+---
+title: Destructuring & Spread
+description: Extract values from arrays and objects with clean, modern syntax
+---
+
+Destructuring lets you **unpack values** from arrays and objects into individual variables. Combined with the spread operator, it's one of the most used ES6 features.
+
+## Array Destructuring
+
+```javascript
+const colors = ["red", "green", "blue"];
+
+const [first, second, third] = colors;
+console.log(first);  // "red"
+console.log(second); // "green"
+console.log(third);  // "blue"
+
+// Skip elements
+const [, , blue] = colors; // "blue"
+
+// Default values
+const [a, b, c, d = "yellow"] = colors;
+console.log(d); // "yellow" (not in array, uses default)
+
+// Swap variables (no temp needed!)
+let x = 1, y = 2;
+[x, y] = [y, x];
+console.log(x, y); // 2, 1
+```
+
+## Object Destructuring
+
+```javascript
+const user = { name: "Shiva", age: 25, role: "admin" };
+
+const { name, age, role } = user;
+console.log(name); // "Shiva"
+
+// Rename variables
+const { name: userName, age: userAge } = user;
+console.log(userName); // "Shiva"
+
+// Default values
+const { name, country = "India" } = user;
+console.log(country); // "India" (not in object, uses default)
+
+// Nested destructuring
+const order = {
+  id: 1,
+  customer: { name: "Shiva", address: { city: "Mumbai" } }
+};
+
+const { customer: { address: { city } } } = order;
+console.log(city); // "Mumbai"
+```
+
+## Rest Element (`...`)
+
+Collects the remaining elements:
+
+```javascript
+// Array rest
+const [first, ...rest] = [1, 2, 3, 4, 5];
+console.log(first); // 1
+console.log(rest);  // [2, 3, 4, 5]
+
+// Object rest
+const { name, ...otherProps } = { name: "Shiva", age: 25, role: "admin" };
+console.log(name);       // "Shiva"
+console.log(otherProps); // { age: 25, role: "admin" }
+
+// Great for removing properties
+const { password, ...safeUser } = userWithPassword;
+```
+
+## Spread Operator (`...`)
+
+Expands an iterable into individual elements:
+
+```javascript
+// Array spread
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
+
+// Object spread
+const defaults = { theme: "dark", lang: "en" };
+const custom = { ...defaults, theme: "light" };
+// { theme: "light", lang: "en" } — later values override
+
+// Function arguments
+const nums = [1, 5, 3, 9, 2];
+Math.max(...nums); // 9
+
+// Copy arrays/objects (shallow)
+const arrCopy = [...arr1];
+const objCopy = { ...defaults };
+```
+
+## Function Parameter Destructuring
+
+```javascript
+// Object parameter
+function createUser({ name, age, role = "viewer" }) {
+  return { name, age, role };
+}
+
+createUser({ name: "Shiva", age: 25 });
+
+// Array parameter
+function getFirstAndLast([first, ...rest]) {
+  return { first, last: rest[rest.length - 1] };
+}
+
+getFirstAndLast([1, 2, 3, 4, 5]); // { first: 1, last: 5 }
+```
+
+## Real-World Patterns
+
+### API Response Handling
+
+```javascript
+const response = {
+  data: { users: [{ id: 1, name: "Shiva" }] },
+  status: 200,
+  headers: {}
+};
+
+const { data: { users }, status } = response;
+```
+
+### React Props
+
+```javascript
+function UserCard({ name, age, avatar = "/default.png" }) {
+  // use name, age, avatar directly
+}
+```
+
+### Config Merging
+
+```javascript
+function initApp(userConfig = {}) {
+  const config = {
+    port: 3000,
+    debug: false,
+    db: "mongodb://localhost",
+    ...userConfig
+  };
+  return config;
+}
+```
+
+## Common Mistakes
+
+### 1. Destructuring `undefined`
+
+```javascript
+const { name } = undefined; // ❌ TypeError
+
+// Fix: default to empty object
+const { name } = data || {};
+const { name } = data ?? {};
+```
+
+### 2. Shallow Spread
+
+```javascript
+const obj = { a: 1, nested: { b: 2 } };
+const copy = { ...obj };
+copy.nested.b = 99;
+console.log(obj.nested.b); // 99 — shared reference!
+```
+
+Use `structuredClone()` for deep copies.
+

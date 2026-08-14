@@ -1,0 +1,296 @@
+---
+title: Scope in JavaScript
+description: Global, function, block, lexical scope — understanding where variables live and how the scope chain works
+---
+
+Scope determines **where a variable can be accessed**. It's one of the Big 5 concepts that makes JavaScript predictable.
+
+> **"Scope tells WHERE variables live."**
+
+## 4 Types of Scope
+
+### 1. Global Scope
+
+Variables declared outside any function or block:
+
+```javascript
+const appName = "DevAxioms"; // global
+
+function greet() {
+  console.log(appName); // ✅ accessible everywhere
+}
+```
+
+**In the browser**: Global variables become properties of `window`.
+
+```javascript
+var x = 10;
+console.log(window.x); // 10
+
+let y = 20;
+console.log(window.y); // undefined — let/const don't attach to window
+```
+
+### 2. Function Scope
+
+Variables declared inside a function are **only accessible within that function**:
+
+```javascript
+function process() {
+  const secret = "abc123";
+  console.log(secret); // ✅
+}
+
+console.log(secret); // ❌ ReferenceError
+```
+
+**`var` is function-scoped** (not block-scoped):
+
+```javascript
+function example() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x); // 10 ← var leaked out of the if block
+}
+```
+
+### 3. Block Scope (ES6)
+
+Variables declared with `let` and `const` are scoped to the nearest `{ }` block:
+
+```javascript
+if (true) {
+  let x = 10;
+  const y = 20;
+}
+
+console.log(x); // ❌ ReferenceError
+console.log(y); // ❌ ReferenceError
+```
+
+Blocks include: `if`, `for`, `while`, `switch`, and standalone `{ }`.
+
+```javascript
+{
+  const isolated = "can't touch this";
+}
+console.log(isolated); // ❌ ReferenceError
+```
+
+### 4. Module Scope
+
+In ES modules, top-level variables are scoped to the module (file), NOT global:
+
+```javascript
+// utils.js
+const SECRET = "abc"; // NOT global — only accessible in this file
+
+export function getSecret() {
+  return SECRET;
+}
+```
+
+## Lexical Scope (Static Scope)
+
+JavaScript uses **lexical scoping** — the scope of a variable is determined by **where it's written in the code**, not where it's called.
+
+```javascript
+const name = "Global";
+
+function outer() {
+  const name = "Outer";
+
+  function inner() {
+    console.log(name); // "Outer" — looks at where inner() is WRITTEN
+  }
+
+  inner();
+}
+
+outer();
+```
+
+`inner()` sees `name = "Outer"` because it's **lexically** (physically) inside `outer()`.
+
+## The Scope Chain
+
+When JavaScript looks for a variable, it walks up the scope chain:
+
+```javascript
+const a = "global";
+
+function first() {
+  const b = "first";
+
+  function second() {
+    const c = "second";
+
+    function third() {
+      console.log(c); // found in second's scope
+      console.log(b); // found in first's scope
+      console.log(a); // found in global scope
+      console.log(d); // ❌ ReferenceError — not found anywhere
+    }
+
+    third();
+  }
+
+  second();
+}
+
+first();
+```
+
+```text
+Scope Chain for third():
+third scope → second scope → first scope → global scope
+```
+
+**Key rule**: The chain goes **outward only** — inner can access outer, but outer **cannot** access inner.
+
+## Scope vs Context
+
+These are often confused:
+
+| | Scope | Context |
+|---|---|---|
+| **What** | Where variables are accessible | What `this` refers to |
+| **Determined by** | Where code is written (lexical) | How a function is called |
+| **Related to** | Variables | `this` keyword |
+
+```javascript
+const user = {
+  name: "Shiva",
+  greet() {
+    // Context: `this` = user (because called as user.greet())
+    // Scope: can access `user` from outer scope
+    console.log(this.name);
+  }
+};
+```
+
+## Variable Shadowing
+
+When an inner scope declares a variable with the same name as an outer scope:
+
+```javascript
+const x = "outer";
+
+function example() {
+  const x = "inner"; // shadows the outer x
+  console.log(x);    // "inner"
+}
+
+example();
+console.log(x); // "outer" — unchanged
+```
+
+**Warning**: Shadowing can make code confusing. Avoid reusing variable names across scopes.
+
+## Real-World Scope Patterns
+
+### Pattern 1: Data Privacy with Function Scope
+
+```javascript
+function createCounter() {
+  let count = 0; // private — can't be accessed from outside
+
+  return {
+    increment() { count++; },
+    decrement() { count--; },
+    getCount() { return count; }
+  };
+}
+
+const counter = createCounter();
+counter.increment();
+counter.increment();
+counter.getCount(); // 2
+// counter.count → undefined — it's private!
+```
+
+### Pattern 2: Avoiding Global Pollution
+
+```javascript
+// ❌ Pollutes global scope
+var userName = "Shiva";
+var userAge = 25;
+
+// ✅ Wrap in a module or IIFE
+(() => {
+  const userName = "Shiva";
+  const userAge = 25;
+  // These are scoped to this IIFE
+})();
+```
+
+## Common Scope Bugs
+
+### Bug 1: `var` in Loops
+
+```javascript
+// All callbacks share the same `i`
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 0);
+}
+// Output: 3, 3, 3
+
+// Fix: use let (creates new scope each iteration)
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 0);
+}
+// Output: 0, 1, 2
+```
+
+### Bug 2: Accidental Global Variable
+
+```javascript
+function buggy() {
+  name = "oops"; // no let/const/var → creates a GLOBAL variable!
+}
+
+buggy();
+console.log(name); // "oops" — leaked to global
+```
+
+**Fix**: Always use `"use strict"` or ES modules (which are strict by default):
+
+```javascript
+"use strict";
+
+function safe() {
+  name = "oops"; // ❌ ReferenceError: name is not defined
+}
+```
+
+## Interview Questions
+
+### Q: What is the Temporal Dead Zone?
+
+The TDZ is the period between the start of a scope and the line where a `let`/`const` variable is declared. Accessing the variable during this period throws a `ReferenceError`.
+
+```javascript
+{
+  // TDZ starts for `x`
+  console.log(x); // ❌ ReferenceError
+  // TDZ continues...
+  let x = 10;     // TDZ ends
+  console.log(x); // ✅ 10
+}
+```
+
+### Q: Can you access variables from a sibling function?
+
+No — functions can only access their own scope and parent scopes, not sibling scopes:
+
+```javascript
+function a() {
+  const x = 10;
+}
+
+function b() {
+  console.log(x); // ❌ ReferenceError
+}
+```
+

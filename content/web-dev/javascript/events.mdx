@@ -1,0 +1,230 @@
+---
+title: Events in JavaScript
+description: Event handling, propagation, delegation, and building interactive web applications
+---
+
+Events are how JavaScript responds to user actions — clicks, keyboard input, scrolling, form submissions, and more.
+
+## Adding Event Listeners
+
+```javascript
+const button = document.querySelector("#submit");
+
+// Modern way (preferred)
+button.addEventListener("click", (event) => {
+  console.log("Clicked!", event.target);
+});
+
+// Remove listener (must use named function)
+function handleClick(event) {
+  console.log("Clicked!");
+}
+button.addEventListener("click", handleClick);
+button.removeEventListener("click", handleClick);
+```
+
+### Options
+
+```javascript
+// Run only once
+button.addEventListener("click", handler, { once: true });
+
+// Passive (improves scroll performance)
+window.addEventListener("scroll", handler, { passive: true });
+
+// Capture phase instead of bubbling
+element.addEventListener("click", handler, { capture: true });
+```
+
+## Common Event Types
+
+| Category | Events |
+|----------|--------|
+| **Mouse** | `click`, `dblclick`, `mousedown`, `mouseup`, `mousemove`, `mouseenter`, `mouseleave` |
+| **Keyboard** | `keydown`, `keyup`, `keypress` (deprecated) |
+| **Form** | `submit`, `input`, `change`, `focus`, `blur` |
+| **Window** | `load`, `DOMContentLoaded`, `resize`, `scroll`, `beforeunload` |
+| **Touch** | `touchstart`, `touchmove`, `touchend` |
+
+## The Event Object
+
+```javascript
+element.addEventListener("click", (event) => {
+  event.target;          // element that was clicked
+  event.currentTarget;   // element the listener is on
+  event.type;            // "click"
+  event.preventDefault();  // stop default behavior
+  event.stopPropagation(); // stop bubbling
+  event.clientX;         // mouse X position
+  event.clientY;         // mouse Y position
+});
+
+// Keyboard events
+input.addEventListener("keydown", (event) => {
+  event.key;    // "Enter", "a", "ArrowUp"
+  event.code;   // "Enter", "KeyA", "ArrowUp"
+  event.ctrlKey; // true if Ctrl held
+  event.shiftKey;
+  event.altKey;
+});
+```
+
+## Event Propagation
+
+When an event occurs, it travels through the DOM in three phases:
+
+```text
+                    Document
+                       │
+Phase 1: CAPTURING  ───┼─── clicks travel DOWN
+                       │
+                    Target     ← Phase 2: TARGET
+                       │
+Phase 3: BUBBLING   ───┼─── events travel UP
+                       │
+                    Document
+```
+
+```javascript
+// By default, listeners fire during BUBBLING (phase 3)
+parent.addEventListener("click", () => console.log("Parent"));
+child.addEventListener("click", () => console.log("Child"));
+
+// Click on child → "Child", then "Parent" (bubbles up)
+
+// To listen during CAPTURE phase
+parent.addEventListener("click", () => console.log("Parent (capture)"), true);
+// Now: "Parent (capture)" → "Child" → "Parent (bubble)"
+```
+
+### Stop Propagation
+
+```javascript
+child.addEventListener("click", (event) => {
+  event.stopPropagation(); // parent won't fire
+  console.log("Child only");
+});
+```
+
+### preventDefault
+
+```javascript
+// Stop form submission (page reload)
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  // handle form with JavaScript instead
+});
+
+// Stop link navigation
+link.addEventListener("click", (event) => {
+  event.preventDefault();
+  // custom navigation
+});
+```
+
+## Event Delegation (Important Pattern)
+
+Instead of adding listeners to each element, add ONE to the parent:
+
+```javascript
+// ❌ Adding listener to each button (expensive)
+document.querySelectorAll(".delete-btn").forEach(btn => {
+  btn.addEventListener("click", handleDelete);
+});
+
+// ✅ Event delegation — one listener on parent
+document.querySelector("#todo-list").addEventListener("click", (event) => {
+  if (event.target.matches(".delete-btn")) {
+    const todoId = event.target.dataset.id;
+    deleteTodo(todoId);
+  }
+
+  if (event.target.matches(".edit-btn")) {
+    const todoId = event.target.dataset.id;
+    editTodo(todoId);
+  }
+});
+```
+
+### Why Delegation?
+
+1. **Performance** — one listener vs hundreds
+2. **Dynamic elements** — works for elements added later
+3. **Memory** — fewer listener objects in memory
+
+## Custom Events
+
+```javascript
+// Create custom event
+const event = new CustomEvent("userLoggedIn", {
+  detail: { userId: 123, name: "Shiva" },
+  bubbles: true
+});
+
+// Listen for it
+document.addEventListener("userLoggedIn", (event) => {
+  console.log("User:", event.detail.name);
+});
+
+// Dispatch it
+document.dispatchEvent(event);
+```
+
+## Real-World Patterns
+
+### Form Handling
+
+```javascript
+const form = document.querySelector("#signup-form");
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  try {
+    const response = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      showSuccess("Account created!");
+    }
+  } catch (error) {
+    showError(error.message);
+  }
+});
+```
+
+### Keyboard Shortcuts
+
+```javascript
+document.addEventListener("keydown", (event) => {
+  // Ctrl+S to save
+  if (event.ctrlKey && event.key === "s") {
+    event.preventDefault();
+    saveDocument();
+  }
+
+  // Escape to close modal
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+```
+
+### Infinite Scroll
+
+```javascript
+window.addEventListener("scroll", throttle(() => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+    loadMoreItems();
+  }
+}, 200));
+```
+

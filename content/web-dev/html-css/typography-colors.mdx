@@ -1,0 +1,182 @@
+---
+title: Typography & Colors
+description: Font properties, Google Fonts, color formats, and building a professional type system
+---
+
+Good typography and colors are what separate amateur designs from professional ones. These CSS properties control the visual identity of your site.
+
+## Font Properties
+
+```css
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;        /* base size (1rem) */
+  font-weight: 400;       /* normal (100-900 scale) */
+  line-height: 1.6;       /* 1.6× the font size — good for readability */
+  letter-spacing: -0.01em; /* slight tightening for headings */
+  color: #1a1a1a;
+}
+
+h1 {
+  font-size: 2.5rem;      /* 40px */
+  font-weight: 700;       /* bold */
+  line-height: 1.2;       /* tighter for headings */
+  letter-spacing: -0.02em;
+}
+
+.small {
+  font-size: 0.875rem;    /* 14px */
+}
+```
+
+### Font Weight Scale
+
+| Value | Name |
+|-------|------|
+| 100 | Thin |
+| 300 | Light |
+| 400 | Normal/Regular |
+| 500 | Medium |
+| 600 | Semi-bold |
+| 700 | Bold |
+| 900 | Black |
+
+### Using Google Fonts
+
+```html
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+```
+
+```css
+body {
+  font-family: "Inter", sans-serif;
+}
+```
+
+### Font Stack (Fallbacks)
+
+```css
+/* System font stack (no download needed) */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Monospace for code */
+code {
+  font-family: "Fira Code", "JetBrains Mono", "Consolas", monospace;
+}
+```
+
+## Text Properties
+
+```css
+.text {
+  text-align: left;           /* left, center, right, justify */
+  text-decoration: none;       /* none, underline, line-through */
+  text-transform: uppercase;   /* uppercase, lowercase, capitalize */
+  text-indent: 2em;           /* first-line indent */
+  word-break: break-word;     /* break long words */
+  overflow-wrap: break-word;  /* same as above (modern) */
+  white-space: nowrap;        /* prevent wrapping */
+  text-overflow: ellipsis;    /* show "..." for overflow */
+}
+
+/* Truncate with ellipsis (single line) */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Truncate after N lines */
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+```
+
+## Color Formats
+
+### Hex
+
+```css
+color: #ff0000;    /* red */
+color: #f00;       /* shorthand (same as #ff0000) */
+color: #1a1a1a;    /* near-black */
+color: #ffffff80;  /* white with 50% opacity (8-digit hex) */
+```
+
+### RGB / RGBA
+
+```css
+color: rgb(255, 0, 0);         /* red */
+color: rgba(0, 0, 0, 0.5);     /* black at 50% opacity */
+color: rgb(26 26 26 / 0.8);    /* modern syntax */
+```
+
+### HSL / HSLA (Most Intuitive)
+
+```css
+color: hsl(220, 90%, 56%);       /* blue */
+color: hsla(220, 90%, 56%, 0.5); /* blue at 50% opacity */
+color: hsl(220 90% 56% / 0.5);   /* modern syntax */
+```
+
+**HSL is the best** for creating harmonious color palettes:
+- **H** (Hue): 0-360 (color wheel degree)
+- **S** (Saturation): 0%-100% (gray to vivid)
+- **L** (Lightness): 0%-100% (black to white)
+
+```css
+/* Easy shade variations with HSL */
+--blue-50:  hsl(220, 90%, 96%);  /* lightest */
+--blue-100: hsl(220, 90%, 90%);
+--blue-500: hsl(220, 90%, 56%);  /* primary */
+--blue-700: hsl(220, 90%, 40%);
+--blue-900: hsl(220, 90%, 20%);  /* darkest */
+```
+
+### Named Colors
+
+```css
+color: red;
+color: dodgerblue;
+color: transparent;
+color: currentColor;  /* inherits the element's color */
+```
+
+## Building a Type Scale
+
+A consistent system of sizes:
+
+```css
+:root {
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+p { font-size: var(--text-base); }
+```
+
+## Opacity
+
+```css
+.faded { opacity: 0.5; }      /* entire element (including children) */
+.semi { color: rgba(0, 0, 0, 0.7); } /* just the color */
+```

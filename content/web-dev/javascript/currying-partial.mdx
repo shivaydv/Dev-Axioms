@@ -1,0 +1,151 @@
+---
+title: Currying & Partial Application
+description: Transforming functions to accept arguments one at a time — a powerful pattern for code reuse
+---
+
+Currying and partial application are techniques for creating **specialized versions** of general functions. They're frequently asked in interviews.
+
+## What is Currying?
+
+Currying transforms a function that takes multiple arguments into a sequence of functions that each take **one argument**.
+
+```javascript
+// Normal function
+function add(a, b, c) {
+  return a + b + c;
+}
+add(1, 2, 3); // 6
+
+// Curried version
+function curriedAdd(a) {
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
+  };
+}
+curriedAdd(1)(2)(3); // 6
+
+// Arrow function shorthand
+const curriedAdd = (a) => (b) => (c) => a + b + c;
+```
+
+## Real-World Use Cases
+
+### Config Functions
+
+```javascript
+const createLogger = (level) => (module) => (message) =>
+  console.log(`[${level}] [${module}] ${message}`);
+
+const errorLog = createLogger("ERROR");
+const authError = errorLog("AUTH");
+
+authError("Invalid token");     // [ERROR] [AUTH] Invalid token
+authError("Session expired");   // [ERROR] [AUTH] Session expired
+```
+
+### Event Handlers
+
+```javascript
+const handleChange = (field) => (event) => {
+  setFormData(prev => ({ ...prev, [field]: event.target.value }));
+};
+
+// In JSX: onChange={handleChange("email")}
+```
+
+### API Endpoint Builder
+
+```javascript
+const api = (baseUrl) => (endpoint) => (params) =>
+  fetch(`${baseUrl}${endpoint}?${new URLSearchParams(params)}`);
+
+const myApi = api("https://api.example.com");
+const getUsers = myApi("/users");
+
+getUsers({ page: 1, limit: 10 });
+```
+
+## Generic Curry Utility
+
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args);
+    }
+    return function (...moreArgs) {
+      return curried.apply(this, [...args, ...moreArgs]);
+    };
+  };
+}
+
+// Usage
+const add = curry((a, b, c) => a + b + c);
+
+add(1)(2)(3);    // 6
+add(1, 2)(3);    // 6
+add(1)(2, 3);    // 6
+add(1, 2, 3);    // 6
+```
+
+## Partial Application
+
+Partial application fixes **some arguments** and returns a function for the rest. Unlike currying, it doesn't require one argument at a time.
+
+```javascript
+function partial(fn, ...presetArgs) {
+  return function (...laterArgs) {
+    return fn(...presetArgs, ...laterArgs);
+  };
+}
+
+const multiply = (a, b) => a * b;
+const double = partial(multiply, 2);
+const triple = partial(multiply, 3);
+
+double(5);  // 10
+triple(5);  // 15
+
+// Using bind for partial application
+const double = multiply.bind(null, 2);
+```
+
+## Currying vs Partial Application
+
+| | Currying | Partial Application |
+|---|---|---|
+| **Arguments** | One at a time | Some now, rest later |
+| **Returns** | Chain of unary functions | Single function |
+| **Example** | `add(1)(2)(3)` | `add(1, 2)(3)` |
+
+## Interview Implementation
+
+### Q: Implement `curry` that supports both `add(1)(2)(3)` and `add(1, 2, 3)`
+
+```javascript
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    }
+    return (...more) => curried(...args, ...more);
+  };
+}
+```
+
+### Q: Implement `sum(1)(2)(3)()` — variable arguments with empty call to get result
+
+```javascript
+function sum(a) {
+  return function (b) {
+    if (b === undefined) return a;
+    return sum(a + b);
+  };
+}
+
+sum(1)(2)(3)();  // 6
+sum(5)(10)();    // 15
+```
+

@@ -1,0 +1,231 @@
+---
+title: Flexbox
+description: One-dimensional layout — aligning, distributing, and ordering elements with CSS Flexbox
+---
+
+Flexbox is the **go-to layout system** for aligning items in a row or column. Master this and you can build 90% of all UI layouts.
+
+## Enabling Flexbox
+
+```css
+.container {
+  display: flex;
+}
+```
+
+This makes all **direct children** into flex items.
+
+## The Two Axes
+
+```text
+Main Axis →→→→→→→→→→→→→→  (default: horizontal)
+↓
+Cross Axis
+↓
+↓
+```
+
+- **Main axis** — direction items flow (controlled by `flex-direction`)
+- **Cross axis** — perpendicular to main axis
+
+## Container Properties (Parent)
+
+### flex-direction
+
+```css
+.container { flex-direction: row; }            /* ← default: left to right */
+.container { flex-direction: row-reverse; }    /* right to left */
+.container { flex-direction: column; }         /* top to bottom */
+.container { flex-direction: column-reverse; } /* bottom to top */
+```
+
+### justify-content — Main Axis Alignment
+
+```css
+.container { justify-content: flex-start; }    /* ←← default: packed to start */
+.container { justify-content: flex-end; }      /* packed to end →→ */
+.container { justify-content: center; }        /* ←→ centered ←→ */
+.container { justify-content: space-between; } /* ← ←→ → first/last at edges */
+.container { justify-content: space-around; }  /* equal space around each */
+.container { justify-content: space-evenly; }  /* equal space between all */
+```
+
+### align-items — Cross Axis Alignment
+
+```css
+.container { align-items: stretch; }    /* default: stretch to fill */
+.container { align-items: flex-start; } /* align to top */
+.container { align-items: flex-end; }   /* align to bottom */
+.container { align-items: center; }     /* center vertically */
+.container { align-items: baseline; }   /* align by text baseline */
+```
+
+### flex-wrap
+
+```css
+.container { flex-wrap: nowrap; }  /* default: all in one line */
+.container { flex-wrap: wrap; }    /* wrap to next line when needed */
+```
+
+### gap
+
+```css
+.container {
+  gap: 16px;           /* equal gap between all items */
+  gap: 16px 24px;      /* row-gap | column-gap */
+  row-gap: 16px;
+  column-gap: 24px;
+}
+```
+
+## Item Properties (Children)
+
+### flex-grow — How Much Extra Space to Take
+
+```css
+.item { flex-grow: 0; }  /* default: don't grow */
+.item { flex-grow: 1; }  /* take equal share of extra space */
+
+/* Proportional: */
+.sidebar { flex-grow: 1; }  /* 1 part */
+.content { flex-grow: 3; }  /* 3 parts */
+```
+
+### flex-shrink — How Much to Shrink
+
+```css
+.item { flex-shrink: 1; }  /* default: shrink equally */
+.item { flex-shrink: 0; }  /* never shrink */
+```
+
+### flex-basis — Initial Size
+
+```css
+.item { flex-basis: auto; }   /* default: use width/height */
+.item { flex-basis: 300px; }  /* start at 300px before grow/shrink */
+.item { flex-basis: 0; }      /* ignore content size, distribute space */
+```
+
+### The `flex` Shorthand
+
+```css
+.item { flex: 1; }           /* grow: 1, shrink: 1, basis: 0 */
+.item { flex: 0 0 300px; }   /* don't grow, don't shrink, 300px wide */
+.item { flex: 1 1 auto; }    /* grow and shrink from auto size */
+```
+
+### align-self — Override Cross Axis for One Item
+
+```css
+.special-item {
+  align-self: center;    /* center this item, others stay stretched */
+}
+```
+
+### order — Change Visual Order
+
+```css
+.first-visually { order: -1; }  /* moves before other items */
+.last-visually { order: 99; }   /* moves after other items */
+```
+
+## Common Patterns
+
+### Center a Div (The Most Asked Question)
+
+```css
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+```
+
+### Navbar with Logo Left, Links Right
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+```
+
+### Equal-Width Cards in a Row
+
+```css
+.card-grid {
+  display: flex;
+  gap: 16px;
+}
+
+.card {
+  flex: 1; /* all cards take equal width */
+}
+```
+
+### Responsive Card Row (Wrap)
+
+```css
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.card {
+  flex: 1 1 300px; /* min 300px, grow to fill */
+}
+```
+
+### Footer Stuck to Bottom
+
+```css
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1; /* takes all available space, pushing footer down */
+}
+```
+
+### Sidebar Layout
+
+```css
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  flex: 0 0 250px; /* fixed 250px width */
+}
+
+.content {
+  flex: 1; /* takes remaining space */
+}
+```
+
+## Interview Questions
+
+### Q: Difference between `justify-content` and `align-items`?
+
+`justify-content` aligns items along the **main axis** (horizontal by default). `align-items` aligns items along the **cross axis** (vertical by default).
+
+### Q: How do you center a div horizontally and vertically?
+
+```css
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+### Q: What does `flex: 1` mean?
+
+It's shorthand for `flex-grow: 1; flex-shrink: 1; flex-basis: 0;` — the item will take its **equal share** of available space.

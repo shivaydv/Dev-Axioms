@@ -1,0 +1,216 @@
+---
+title: The this Keyword
+description: How this works in every context — global, methods, arrows, classes, and callbacks
+---
+
+The `this` keyword is one of the **most confusing** parts of JavaScript. Its value depends entirely on **how** a function is called, not where it's defined.
+
+> **"this tells WHO called the function."**
+
+## Rule 1: Global Context
+
+```javascript
+// In browser
+console.log(this); // Window object
+
+// In Node.js (module)
+console.log(this); // {} (empty module object)
+
+// In strict mode
+"use strict";
+function test() {
+  console.log(this); // undefined
+}
+```
+
+## Rule 2: Object Method
+
+When a function is called as an **object method**, `this` refers to the object:
+
+```javascript
+const user = {
+  name: "Shiva",
+  greet() {
+    console.log(this.name); // "Shiva"
+    console.log(this === user); // true
+  }
+};
+
+user.greet(); // this = user
+```
+
+## Rule 3: Standalone Function
+
+When called without an object, `this` is `window` (or `undefined` in strict mode):
+
+```javascript
+function showThis() {
+  console.log(this);
+}
+
+showThis(); // Window (sloppy mode) / undefined (strict mode)
+```
+
+## Rule 4: Arrow Functions — Lexical `this`
+
+Arrow functions **do NOT have their own `this`**. They inherit `this` from the enclosing scope:
+
+```javascript
+const user = {
+  name: "Shiva",
+
+  // ❌ Arrow — inherits `this` from outer scope (window/undefined)
+  greetArrow: () => {
+    console.log(this.name); // undefined
+  },
+
+  // ✅ Normal method — `this` is the object
+  greetNormal() {
+    console.log(this.name); // "Shiva"
+
+    // ✅ Arrow inside method — inherits `this` from greetNormal
+    const inner = () => {
+      console.log(this.name); // "Shiva" ← lexical this
+    };
+    inner();
+  }
+};
+```
+
+**This is the #1 `this` interview question**: Why does arrow function `this` differ from normal function `this` in object methods?
+
+## Rule 5: Constructor / Class
+
+In constructors and classes, `this` refers to the **new instance**:
+
+```javascript
+function Person(name) {
+  this.name = name;
+}
+
+const p = new Person("Shiva");
+console.log(p.name); // "Shiva"
+
+// ES6 Class
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    return `Hi, I'm ${this.name}`;
+  }
+}
+
+const u = new User("Shiva");
+u.greet(); // "Hi, I'm Shiva"
+```
+
+## Rule 6: Event Handlers
+
+In DOM event handlers, `this` refers to the **element** that received the event:
+
+```javascript
+const button = document.querySelector("button");
+
+// Normal function — `this` = the button element
+button.addEventListener("click", function () {
+  console.log(this); // <button> element
+  this.style.color = "red";
+});
+
+// Arrow function — `this` = outer scope (probably window)
+button.addEventListener("click", () => {
+  console.log(this); // Window — NOT the button!
+});
+```
+
+## The `this` Binding Priority
+
+When multiple rules apply, this is the priority order:
+
+```text
+1. new binding      → this = new instance
+2. Explicit binding → call/apply/bind
+3. Method binding   → this = owning object
+4. Default binding  → window or undefined (strict)
+```
+
+```javascript
+const obj = {
+  name: "Method",
+  fn() { return this.name; }
+};
+
+const fn = obj.fn;
+
+fn();              // undefined (default binding)
+obj.fn();          // "Method" (method binding)
+fn.call({ name: "Explicit" }); // "Explicit" (explicit binding)
+new fn();          // {} (new binding — ignores everything else)
+```
+
+## The Classic Bug — Lost `this`
+
+```javascript
+const user = {
+  name: "Shiva",
+  greet() {
+    console.log(`Hello, ${this.name}`);
+  }
+};
+
+// ✅ Works
+user.greet(); // "Hello, Shiva"
+
+// ❌ Lost `this`
+const greetFn = user.greet;
+greetFn(); // "Hello, undefined" — `this` is now window/undefined
+
+// Fixes:
+const greetFn = user.greet.bind(user); // Fix 1: bind
+greetFn(); // "Hello, Shiva"
+
+setTimeout(user.greet.bind(user), 100); // Fix 2: bind in callback
+setTimeout(() => user.greet(), 100);    // Fix 3: arrow wrapper
+```
+
+## Interview Output Questions
+
+### Question 1
+
+```javascript
+const obj = {
+  name: "JS",
+  getName() {
+    return this.name;
+  },
+  getNameArrow: () => {
+    return this.name;
+  }
+};
+
+console.log(obj.getName());       // ?
+console.log(obj.getNameArrow());  // ?
+```
+
+**Answer**: `"JS"`, then `undefined`.
+
+### Question 2
+
+```javascript
+function User(name) {
+  this.name = name;
+  this.greet = function () {
+    console.log(this.name);
+  };
+}
+
+const a = new User("Alice");
+const b = { name: "Bob", greet: a.greet };
+
+a.greet(); // ?
+b.greet(); // ?
+```
+
+**Answer**: `"Alice"`, then `"Bob"`. `this` is determined by HOW the function is called, not where it was defined.
+

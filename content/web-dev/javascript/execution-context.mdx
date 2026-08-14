@@ -1,0 +1,214 @@
+---
+title: Execution Context
+description: How JavaScript runs your code — the creation phase, execution phase, and the environment record
+---
+
+Every line of JavaScript runs inside an **Execution Context**. Understanding this is key to understanding hoisting, scope, and `this`.
+
+## What is an Execution Context?
+
+An execution context is a **container** that holds all the information needed to execute a piece of code: its variables, functions, scope chain, and `this` value.
+
+## Types of Execution Contexts
+
+### 1. Global Execution Context (GEC)
+Created automatically when your script starts. There is only ONE global context.
+
+### 2. Function Execution Context (FEC)
+Created every time a function is called. Each call gets its own context.
+
+### 3. Eval Execution Context
+Created when code runs inside `eval()`. Avoid using `eval()`.
+
+## The Two Phases
+
+Every execution context goes through two phases:
+
+### Phase 1: Creation (Memory Allocation)
+
+Before any code runs, JavaScript scans the code and:
+
+1. Creates the **Variable Environment** — allocates memory for variables and functions
+2. Sets up the **Scope Chain**
+3. Determines the value of **`this`**
+
+```javascript
+console.log(x);     // undefined (not ReferenceError!)
+console.log(greet); // function greet() { ... }
+
+var x = 10;
+function greet() {
+  return "Hello";
+}
+```
+
+During creation phase:
+```text
+Memory:
+  x → undefined        (var declaration hoisted)
+  greet → function(){…} (entire function hoisted)
+```
+
+### Phase 2: Execution (Line by Line)
+
+Code runs line by line, assigning values:
+
+```text
+Line 1: console.log(x) → prints undefined
+Line 2: console.log(greet) → prints function
+Line 3: x = 10 → assigns 10 to x
+Line 4: greet already in memory
+```
+
+## Step-by-Step Example
+
+```javascript
+var a = 10;
+var b = 20;
+
+function add(x, y) {
+  var result = x + y;
+  return result;
+}
+
+var sum = add(a, b);
+```
+
+### Step 1: Global Execution Context — Creation Phase
+
+```text
+Global Execution Context:
+┌─────────────────────────────────┐
+│ Memory (Variable Environment)   │
+│   a: undefined                  │
+│   b: undefined                  │
+│   add: function(){...}          │
+│   sum: undefined                │
+│                                 │
+│ this: window (browser)          │
+└─────────────────────────────────┘
+```
+
+### Step 2: Global Execution Context — Execution Phase
+
+```text
+a = 10
+b = 20
+add is already in memory
+sum = add(10, 20) → creates new execution context
+```
+
+### Step 3: Function Execution Context for `add(10, 20)` — Creation Phase
+
+```text
+add() Execution Context:
+┌─────────────────────────────────┐
+│ Memory (Variable Environment)   │
+│   x: 10 (parameter)            │
+│   y: 20 (parameter)            │
+│   result: undefined             │
+│                                 │
+│ Scope Chain: add → global       │
+│ this: window                    │
+└─────────────────────────────────┘
+```
+
+### Step 4: Function Execution Context — Execution Phase
+
+```text
+result = x + y = 30
+return 30 → context destroyed, control returns to global
+```
+
+### Step 5: Back to Global
+
+```text
+sum = 30
+```
+
+## The Call Stack
+
+The Call Stack manages execution contexts using **LIFO** (Last In, First Out):
+
+```javascript
+function first() {
+  console.log("first");
+  second();
+}
+
+function second() {
+  console.log("second");
+  third();
+}
+
+function third() {
+  console.log("third");
+}
+
+first();
+```
+
+```text
+Call Stack:
+                    ┌─────────┐
+                    │ third() │ ← runs, then pops
+           ┌───────┤─────────┤
+           │second()│        │
+  ┌────────┤────────┤────────┤
+  │ first()│        │        │
+  ├────────┤────────┤────────┤
+  │ global │ global │ global │
+  └────────┴────────┴────────┘
+```
+
+### Stack Overflow
+
+Infinite recursion fills the stack:
+
+```javascript
+function infinite() {
+  infinite(); // calls itself forever
+}
+
+infinite(); // ❌ RangeError: Maximum call stack size exceeded
+```
+
+## What Each Context Contains
+
+```text
+Execution Context
+├── Variable Environment (LexicalEnvironment)
+│   ├── Environment Record (variables, functions)
+│   └── Outer Environment Reference (scope chain)
+├── this binding
+└── (in modules) import/export bindings
+```
+
+## How `let`/`const` Differs
+
+With `let` and `const`, the variables are in the **Temporal Dead Zone** during the creation phase:
+
+```javascript
+console.log(a); // ❌ ReferenceError (TDZ)
+console.log(b); // undefined
+
+let a = 10;
+var b = 20;
+```
+
+```text
+Creation Phase:
+  a: <uninitialized> (TDZ — in memory but not accessible)
+  b: undefined (accessible as undefined)
+```
+
+## Interview Angle
+
+When an interviewer asks "How does JavaScript execute code?", they want to hear:
+
+1. **Global Execution Context** is created first
+2. It goes through **Creation Phase** (hoisting) and **Execution Phase**
+3. Every function call creates a **new execution context**
+4. Contexts are managed on the **Call Stack** (LIFO)
+5. When a function returns, its context is **popped off** the stack
+

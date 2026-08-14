@@ -1,0 +1,342 @@
+---
+title: "Interview Prep: Mid Level"
+description: JavaScript interview questions for 2-4 year experience — async, prototypes, event loop, this keyword, and design patterns
+---
+
+These questions test your **deeper understanding** of JavaScript internals, async patterns, and OOP. Expect these at mid-level (2-4 YOE) interviews.
+
+---
+
+## `this` Keyword & Binding
+
+### 1. Explain the `this` keyword.
+
+`this` depends on **how** a function is called:
+
+| Call Style | `this` Value |
+|-----------|-------------|
+| Global | `window` / `undefined` (strict) |
+| Method (`obj.fn()`) | The object |
+| Arrow function | Inherited from parent scope |
+| Constructor (`new Fn()`) | The new instance |
+| `call`/`apply`/`bind` | Explicitly set |
+
+Priority: `new` > `call/apply/bind` > method > default.
+
+📖 Deep dive: [The this Keyword](/web-dev/javascript/this-keyword)
+
+---
+
+### 2. What is the difference between `call`, `apply`, and `bind`?
+
+```javascript
+fn.call(obj, arg1, arg2);    // invoke now, comma args
+fn.apply(obj, [arg1, arg2]); // invoke now, array args
+const bound = fn.bind(obj);  // returns new function, invoke later
+```
+
+Once bound, `this` **cannot be re-bound** — a second `.bind()` is ignored.
+
+📖 Deep dive: [call, apply, bind](/web-dev/javascript/call-apply-bind)
+
+---
+
+### 3. What happens to `this` when you extract a method?
+
+```javascript
+const user = {
+  name: "Shiva",
+  greet() { console.log(this.name); }
+};
+
+user.greet();         // "Shiva" ✅
+const fn = user.greet;
+fn();                 // undefined ❌ — `this` is now window/undefined
+```
+
+**Fixes**: `fn.bind(user)`, or `() => user.greet()`.
+
+---
+
+## Event Loop & Async
+
+### 4. Explain the Event Loop.
+
+JavaScript is single-threaded. The event loop manages async code:
+
+```text
+1. Run all synchronous code (Call Stack)
+2. Stack empty → run ALL microtasks (Promise.then, queueMicrotask)
+3. Run ONE macrotask (setTimeout, setInterval)
+4. Repeat from step 2
+```
+
+**Key rule**: Microtasks ALWAYS run before the next macrotask.
+
+📖 Deep dive: [Event Loop](/web-dev/javascript/event-loop)
+
+---
+
+### 5. What is the output?
+
+```javascript
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+```
+
+**Output**: `1, 4, 3, 2`
+
+Sync first (`1`, `4`) → microtask (`3`) → macrotask (`2`).
+
+---
+
+### 6. What is the output?
+
+```javascript
+async function foo() {
+  console.log("A");
+  await Promise.resolve();
+  console.log("B");
+}
+console.log("C");
+foo();
+console.log("D");
+```
+
+**Output**: `C, A, D, B`
+
+`C` runs. `foo()` starts, logs `A`. `await` pauses — `B` becomes a microtask. `D` runs. Microtask `B` runs.
+
+---
+
+### 7. Difference between `Promise.all`, `allSettled`, `race`, and `any`?
+
+| Method | Resolves When | Rejects When |
+|--------|--------------|-------------|
+| `all` | ALL succeed | ANY fails |
+| `allSettled` | ALL complete | Never |
+| `race` | First settles | First settles |
+| `any` | First succeeds | ALL fail |
+
+📖 Deep dive: [Async JavaScript](/web-dev/javascript/async-javascript)
+
+---
+
+### 8. What does `setTimeout(fn, 0)` actually do?
+
+It does NOT run immediately. It schedules `fn` as a **macrotask** — it runs after the call stack is empty AND all microtasks are processed. The `0` is a **minimum delay**, not a guarantee.
+
+---
+
+## Prototypes & OOP
+
+### 9. What is the prototype chain?
+
+When you access a property, JavaScript searches:
+
+```text
+object itself → object.__proto__ → __proto__.__proto__ → ... → null
+```
+
+If not found anywhere, returns `undefined`. This is how inheritance works in JS.
+
+📖 Deep dive: [Prototypes](/web-dev/javascript/prototypes)
+
+---
+
+### 10. What is the difference between `__proto__` and `prototype`?
+
+| | `__proto__` | `prototype` |
+|---|------------|-----------|
+| Exists on | Every object | Only functions |
+| What it is | Link to parent | Template for instances via `new` |
+
+```javascript
+const arr = [1, 2, 3];
+arr.__proto__ === Array.prototype;  // true
+```
+
+---
+
+### 11. How does `class` work under the hood?
+
+Classes are **syntactic sugar** over constructor functions and prototypes:
+
+```javascript
+class Dog extends Animal {
+  constructor(name) { super(name); }
+  bark() { return "Woof!"; }
+}
+
+// is essentially:
+function Dog(name) { Animal.call(this, name); }
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.bark = function() { return "Woof!"; };
+```
+
+📖 Deep dive: [OOP in JavaScript](/web-dev/javascript/oop)
+
+---
+
+## Closures & Functions
+
+### 12. What is the classic loop closure bug?
+
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 0);
+}
+// Output: 3, 3, 3
+```
+
+`var` is function-scoped — all callbacks share the same `i` (which is `3` after the loop). **Fix**: use `let` (creates new scope per iteration).
+
+📖 Deep dive: [Closures](/web-dev/javascript/closures)
+
+---
+
+### 13. What is debouncing vs throttling?
+
+- **Debounce**: Wait until user **stops**, then execute once (search input)
+- **Throttle**: Execute at most **once per interval** while event continues (scroll)
+
+```javascript
+// Debounce
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+```
+
+📖 Deep dive: [Debounce & Throttle](/web-dev/javascript/debounce-throttle)
+
+---
+
+### 14. What is currying?
+
+Transforming `f(a, b, c)` into `f(a)(b)(c)`:
+
+```javascript
+const add = a => b => c => a + b + c;
+add(1)(2)(3); // 6
+```
+
+📖 Deep dive: [Currying & Partial Application](/web-dev/javascript/currying-partial)
+
+---
+
+### 15. What is a higher-order function?
+
+A function that **takes a function as an argument** or **returns a function**:
+
+```javascript
+// Takes function: map, filter, reduce
+[1, 2, 3].map(n => n * 2);
+
+// Returns function: factory
+const multiplier = (factor) => (n) => n * factor;
+const double = multiplier(2);
+```
+
+📖 Deep dive: [Higher-Order Functions](/web-dev/javascript/higher-order-functions)
+
+---
+
+## Practical Knowledge
+
+### 16. Deep copy vs shallow copy?
+
+**Shallow** (`{...obj}`, `Object.assign`): Copies top level only — nested objects are shared.
+
+**Deep** (`structuredClone(obj)`): Completely independent copies at all levels.
+
+```javascript
+const a = { nested: { x: 1 } };
+const shallow = { ...a };
+shallow.nested.x = 99;
+a.nested.x; // 99 ← shared!
+
+const deep = structuredClone(a);
+deep.nested.x = 99;
+a.nested.x; // 1 ← independent
+```
+
+📖 Deep dive: [Objects](/web-dev/javascript/objects)
+
+---
+
+### 17. What is event delegation?
+
+Adding **one listener on a parent** instead of many on children:
+
+```javascript
+document.querySelector("#list").addEventListener("click", (e) => {
+  if (e.target.matches(".delete-btn")) {
+    deleteTodo(e.target.dataset.id);
+  }
+});
+```
+
+Benefits: performance, works for dynamically added elements, less memory.
+
+📖 Deep dive: [Events](/web-dev/javascript/events)
+
+---
+
+### 18. What is the difference between `localStorage` and `sessionStorage`?
+
+| | `localStorage` | `sessionStorage` |
+|---|---------------|-----------------|
+| Persists | Until cleared | Until tab closes |
+| Shared | Same origin | Same origin + tab |
+| Size | ~5-10MB | ~5-10MB |
+| Sent to server | No | No |
+
+📖 Deep dive: [Browser APIs](/web-dev/javascript/browser-apis)
+
+---
+
+## Guess the Output
+
+### Q1
+
+```javascript
+const obj = {
+  name: "JS",
+  greet: () => console.log(this.name)
+};
+obj.greet();
+```
+
+**Output**: `undefined` — arrow functions inherit `this` from the enclosing scope (global), not the object.
+
+---
+
+### Q2
+
+```javascript
+let a = { x: 1 };
+let b = a;
+b.x = 2;
+console.log(a.x);
+```
+
+**Output**: `2` — objects are stored by reference. `a` and `b` point to the same object.
+
+---
+
+### Q3
+
+```javascript
+console.log("start");
+setTimeout(() => console.log("timeout"), 0);
+Promise.resolve().then(() => console.log("promise"));
+console.log("end");
+```
+
+**Output**: `start, end, promise, timeout`

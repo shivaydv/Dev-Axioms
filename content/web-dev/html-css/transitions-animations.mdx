@@ -1,0 +1,262 @@
+---
+title: Transitions & Animations
+description: Smooth transitions, CSS transforms, and keyframe animations for interactive UI
+---
+
+Transitions and animations add **polish and personality** to your UI. They make interactions feel smooth and professional.
+
+## CSS Transitions
+
+A transition smoothly **animates a property** from one value to another when it changes:
+
+```css
+.button {
+  background: #2563eb;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.button:hover {
+  background: #1d4ed8;
+}
+```
+
+### Transition Syntax
+
+```css
+transition: property duration timing-function delay;
+
+/* Examples */
+transition: all 0.3s ease;
+transition: background 0.2s ease-in-out;
+transition: transform 0.3s ease, opacity 0.3s ease;
+transition: color 0.2s ease 0.1s; /* 0.1s delay */
+```
+
+### Timing Functions
+
+| Function | Behavior |
+|----------|----------|
+| `ease` | Slow start, fast middle, slow end (default) |
+| `ease-in` | Slow start |
+| `ease-out` | Slow end |
+| `ease-in-out` | Slow start and end |
+| `linear` | Constant speed |
+| `cubic-bezier(...)` | Custom curve |
+
+### What Can Be Transitioned?
+
+✅ `color`, `background`, `opacity`, `transform`, `width`, `height`, `padding`, `margin`, `border`, `box-shadow`, `font-size`
+
+❌ `display`, `position`, `visibility` (sort of), `grid-template-columns`
+
+**Performance tip**: Only transition `transform` and `opacity` for smooth 60fps animations. These are GPU-accelerated.
+
+## CSS Transforms
+
+Transforms change an element's **shape, size, or position** without affecting layout:
+
+```css
+.box {
+  transform: translateX(100px);  /* move right 100px */
+  transform: translateY(-50px);  /* move up 50px */
+  transform: translate(100px, -50px); /* both */
+
+  transform: scale(1.5);        /* 150% size */
+  transform: scale(1.05);       /* subtle grow on hover */
+
+  transform: rotate(45deg);     /* rotate 45 degrees */
+  transform: rotate(-90deg);
+
+  transform: skew(10deg, 5deg); /* skew/tilt */
+}
+
+/* Combine multiple transforms */
+.box:hover {
+  transform: scale(1.05) translateY(-4px);
+}
+```
+
+### Transform Origin
+
+```css
+.box {
+  transform-origin: center;       /* default */
+  transform-origin: top left;     /* rotate from top-left corner */
+  transform-origin: 50% 100%;     /* bottom center */
+}
+```
+
+## Practical Transition Patterns
+
+### Hover Card Lift
+
+```css
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+```
+
+### Button Press Effect
+
+```css
+.btn {
+  transition: transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+```
+
+### Fade In/Out
+
+```css
+.element {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.element.visible {
+  opacity: 1;
+}
+```
+
+### Smooth Color Change
+
+```css
+a {
+  color: #2563eb;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1d4ed8;
+}
+```
+
+## CSS Animations (@keyframes)
+
+For more complex, multi-step, or auto-playing animations:
+
+```css
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.element {
+  animation: fadeIn 0.5s ease forwards;
+}
+```
+
+### Animation Properties
+
+```css
+.element {
+  animation-name: fadeIn;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-delay: 0.2s;
+  animation-iteration-count: 1;      /* infinite for looping */
+  animation-direction: normal;       /* normal, reverse, alternate */
+  animation-fill-mode: forwards;     /* keeps final state */
+
+  /* Shorthand */
+  animation: fadeIn 0.5s ease 0.2s 1 normal forwards;
+}
+```
+
+### Multi-Step Animation
+
+```css
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 2s ease infinite;
+}
+```
+
+### Practical Animations
+
+```css
+/* Spinning loader */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Slide in from bottom */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.4s ease forwards;
+}
+
+/* Bounce */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+```
+
+## Transition vs Animation
+
+| | Transition | Animation |
+|---|-----------|-----------|
+| **Trigger** | Needs a state change (hover, class) | Can auto-play |
+| **Steps** | Only start → end | Multiple keyframes |
+| **Looping** | No | Yes (`infinite`) |
+| **Best for** | Hover effects, simple changes | Loading spinners, entrances |
+
+## Performance Tips
+
+1. Only animate `transform` and `opacity` — they're GPU-accelerated
+2. Avoid animating `width`, `height`, `top`, `left` — they trigger layout recalculation
+3. Use `will-change: transform` sparingly to hint at upcoming animations
+4. Respect `prefers-reduced-motion`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
