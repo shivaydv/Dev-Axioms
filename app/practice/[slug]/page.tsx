@@ -4,6 +4,7 @@ import PracticeHeader from "@/components/playground/PracticeHeader";
 import ResponsivePracticeLayout from "@/components/playground/ResponsivePracticeLayout";
 import { getQuestionBySlug } from "@/server/functions/questions";
 import { getUserInteractionData } from "@/server/actions/user-interactions-actions";
+import { getUserSession } from "@/server/functions/getUserSession";
 import { Metadata } from "next";
 
 interface PracticePageProps {
@@ -22,6 +23,8 @@ export default async function PracticePage({ params }: PracticePageProps) {
 
   // Fetch interaction data promise
   const interactionDataPromise = getUserInteractionData(question.id);
+  const session = await getUserSession();
+  const isLoggedIn = !!session?.user;
 
   return (
     <div className="bg-background flex h-screen w-full flex-col">
@@ -33,6 +36,7 @@ export default async function PracticePage({ params }: PracticePageProps) {
       <ResponsivePracticeLayout
         question={question}
         interactionDataPromise={interactionDataPromise}
+        isLoggedIn={isLoggedIn}
       />
     </div>
   );

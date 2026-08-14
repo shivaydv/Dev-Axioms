@@ -1,13 +1,16 @@
 "use client";
 import { Question } from "@/types/Question";
 import { MDXPreview } from "./MDXPreview";
-import { FileText, Lightbulb, Tag } from "lucide-react";
+import { FileText, Lightbulb, Tag, Lock } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface PracticeSidebarContentProps {
   question: Question;
+  isLoggedIn?: boolean;
 }
 
-export function createPracticeSidebarTabs(question: Question) {
+export function createPracticeSidebarTabs(question: Question, isLoggedIn?: boolean) {
   return [
     {
       id: "question",
@@ -19,7 +22,7 @@ export function createPracticeSidebarTabs(question: Question) {
       id: "solution",
       label: "Solution",
       icon: <Lightbulb className="h-3.5 w-3.5" />,
-      content: <SolutionContent question={question} />,
+      content: <SolutionContent question={question} isLoggedIn={isLoggedIn} />,
     },
   ];
 }
@@ -62,12 +65,29 @@ function QuestionContent({ question }: PracticeSidebarContentProps) {
 }
 
 // Solution Tab Content
-function SolutionContent({ question }: PracticeSidebarContentProps) {
+function SolutionContent({ question, isLoggedIn }: PracticeSidebarContentProps) {
   const hasSolution = question.solution && question.solution.trim() !== "";
 
   return (
     <div className="h-full overflow-y-auto scrollbar-hide">
-      {hasSolution ? (
+      {!isLoggedIn ? (
+        <div className="flex h-full flex-col items-center justify-center space-y-4 p-8 text-center min-h-[250px]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-card border border-border/50 text-muted-foreground">
+            <Lock className="h-5 w-5 text-[#FF5A26]" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-foreground text-sm font-semibold">
+              Sign in to view solution
+            </h3>
+            <p className="text-muted-foreground max-w-[220px] text-xs leading-relaxed">
+              Unlock step-by-step explanations and code solutions by logging into your account.
+            </p>
+          </div>
+          <Button asChild size="sm" className="mt-2 bg-[#FF5A26] hover:bg-[#FF5A26]/90 text-white shadow-xs">
+            <Link href={`/login?from=/practice/${question.slug}`}>Log in to Unlock</Link>
+          </Button>
+        </div>
+      ) : hasSolution ? (
         <div className="space-y-6 p-4 sm:p-5 pb-20">
           <MDXPreview
             content={question.solution!}

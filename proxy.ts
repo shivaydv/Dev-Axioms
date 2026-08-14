@@ -3,7 +3,7 @@ import { getSessionCookie } from "better-auth/cookies";
 import { isMarkdownPreferred, rewritePath } from 'fumadocs-core/negotiation';
 const { rewrite: rewriteLLM } = rewritePath('/docs{/*path}', '/llms.mdx/docs{/*path}');
 
-const ProtectedRoutes = ["/practice/"];
+const ProtectedRoutes: string[] = [];
 const AuthRoutes = ["/login"];
 
 export async function proxy(request: NextRequest) {
@@ -26,11 +26,7 @@ export async function proxy(request: NextRequest) {
 
 
   
-  // ✅ Allow non-document requests (like metadata/head/images)
-  const secFetchDest = request.headers.get("sec-fetch-dest");
-  if (isProtectedRoute && !isLoggedIn && secFetchDest !== "document") {
-    return NextResponse.next();
-  }
+  // ✅ Auth check happens for both full page loads and Next.js client-side navigations
 
   // block login if already logged in
   if (isAuthRoute && isLoggedIn) {

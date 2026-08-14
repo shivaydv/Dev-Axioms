@@ -4,6 +4,8 @@ import { useMemo, memo, useRef, useEffect } from "react";
 import EditorLayout from "@/components/playground/EditorLayout";
 import { Question } from "@/types/Question";
 import { Sidebar } from "@/components/playground/Sidebar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useSidebar } from "@/store/PlaygroundSidebarStore";
 import { SandpackFiles, SandpackProvider } from "@codesandbox/sandpack-react";
 import SandpackWatcher from "../sandpack/SandpackWatcher";
@@ -67,11 +69,13 @@ interface ResponsivePracticeLayoutProps {
     isLiked: boolean;
     isBookmarked: boolean;
   }>;
+  isLoggedIn?: boolean;
 }
 
 export default function ResponsivePracticeLayout({
   question,
   interactionDataPromise,
+  isLoggedIn,
 }: ResponsivePracticeLayoutProps) {
   const { isCollapsed } = useSidebar();
   const { isMobile, isMounted } = useResponsive();
@@ -113,13 +117,35 @@ export default function ResponsivePracticeLayout({
             <Sidebar
               question={question}
               interactionDataPromise={interactionDataPromise}
+              isLoggedIn={isLoggedIn}
             />
           </ResizablePanel>
           <ResizableHandle
             className="bg-border/40 hover:bg-[#FF5A26]/60 relative z-20 w-1 transition-colors cursor-col-resize"
           />
           <ResizablePanel defaultSize={72} className="min-w-0">
-            <MemoizedSandpackProvider question={question} />
+            {isLoggedIn ? (
+              <MemoizedSandpackProvider question={question} />
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center p-8 bg-card/20 text-center">
+                <div className="flex flex-col items-center justify-center max-w-sm space-y-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FF5A26]/10 text-[#FF5A26] border border-[#FF5A26]/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h2 className="text-xl font-bold tracking-tight">Sign in to solve</h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      You need to be logged in to use the code editor, compile your answers, and track your progress.
+                    </p>
+                  </div>
+                  <div className="pt-2">
+                    <Button asChild className="bg-[#FF5A26] hover:bg-[#FF5A26]/90 text-white shadow-xs">
+                      <Link href={`/login?from=/practice/${question.slug}`}>Log in / Sign up</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>

@@ -37,7 +37,7 @@ export default function CommonLayout({
         },
         {
           text: "Practice",
-          url: "#",
+          url: "/practice",
         },
         {
           text: "Blogs",

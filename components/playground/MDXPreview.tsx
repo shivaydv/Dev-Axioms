@@ -9,6 +9,13 @@ import rehypeHighlight from "rehype-highlight";
 import { CodeBlock } from "./CodeBlock";
 import { cn } from "@/lib/utils";
 
+const extractText = (node: any): string => {
+  if (!node) return "";
+  if (node.type === "text") return node.value || "";
+  if (node.children) return node.children.map(extractText).join("");
+  return "";
+};
+
 interface MDXPreviewProps {
   content: string;
   className?: string;
@@ -34,7 +41,7 @@ export function MDXPreview({ content, className }: MDXPreviewProps) {
           code({ node, inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || "");
             const language = match ? match[1] : "";
-            const content = String(children).replace(/\n$/, "");
+            const content = extractText(node).replace(/\n$/, "");
             const isShort = content.length < 50 && !content.includes("\n");
 
             if (!inline && !isShort) {

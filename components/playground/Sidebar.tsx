@@ -18,6 +18,7 @@ interface SidebarProps {
     isLiked: boolean;
     isBookmarked: boolean;
   }>;
+  isLoggedIn?: boolean;
 }
 
 function SidebarInteractionsSkeleton() {
@@ -36,7 +37,7 @@ const difficultyStyles = {
   Hard: "bg-rose-500/10 text-rose-500 border-rose-500/20",
 };
 
-export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
+export function Sidebar({ question, interactionDataPromise, isLoggedIn }: SidebarProps) {
   const {
     toggle: toggleSidebar,
     isCollapsed,
@@ -46,7 +47,7 @@ export function Sidebar({ question, interactionDataPromise }: SidebarProps) {
 
   const [shareModalOpen, setShareModalOpen] = useState(false);
 
-  const sidebarTabs = createPracticeSidebarTabs(question);
+  const sidebarTabs = createPracticeSidebarTabs(question, isLoggedIn);
   const activeTabData = sidebarTabs.find((tab) => tab.id === activeTab);
 
   if (isCollapsed) {
