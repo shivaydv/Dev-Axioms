@@ -57,7 +57,7 @@ export default async function Page(props: {
       toc={toc}
       full={page.data.full}
       tableOfContent={{ style: "clerk" }}
-      className="mx-auto min-w-0 w-full max-w-full"
+      className="*:mx-auto *:w-full"
     >
       <div className="space-y-4 mb-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground/90">
