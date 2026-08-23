@@ -19,6 +19,7 @@ interface NavLink {
 export const NAVLINKS: NavLink[] = [
   { title: "Docs", href: "/web-dev" },
   { title: "Practice", href: "/practice" },
+  { title: "Playground", href: "/playground" },
   { title: "Blogs", href: "/blog" },
   {
     title: "Community",

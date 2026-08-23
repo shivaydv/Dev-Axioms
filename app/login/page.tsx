@@ -58,7 +58,7 @@ const LoginForm = () => {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4 overflow-hidden select-none">
       {/* Background Accent Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF5A26]/5 rounded-full blur-3xl pointer-events-none" />
+      {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF5A26]/5 rounded-full blur-3xl pointer-events-none" /> */}
 
       {/* Back to Home Button */}
       <Link
