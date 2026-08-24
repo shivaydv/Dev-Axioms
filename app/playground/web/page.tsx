@@ -19,8 +19,8 @@ export const metadata: Metadata = {
 
 export default function WebPlaygroundPage() {
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] bg-background">
-      <div className="w-full flex-1 flex flex-col p-4 md:p-6 pb-6 gap-4">
+    <div className="flex flex-col h-[calc(100dvh-64px)] bg-background">
+      <div className="w-full flex-1 flex flex-col p-2 sm:p-4 md:p-6 pb-2 sm:pb-6 gap-2 sm:gap-4">
         <div className="flex-1 w-full min-h-0">
           <WebPlayground />
         </div>

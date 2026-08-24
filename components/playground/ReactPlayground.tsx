@@ -7,6 +7,7 @@ import { DependencyManager } from "./DependencyManager";
 import { CustomFileExplorer } from "./CustomFileExplorer";
 import { ReactPlaygroundControls } from "./ReactPlaygroundControls";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { useResponsive } from "@/hooks/useResponsive";
 
 
 
@@ -27,15 +28,58 @@ function ReactPlaygroundContent({ onReset }: { onReset: () => void }) {
     return () => clearTimeout(timer);
   }, [sandpack.files]);
 
+  // Listen for native exit fullscreen (e.g. Esc key)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isNativeFull = !!(
+        document.fullscreenElement || 
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      if (!isNativeFull && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+    };
+  }, [isFullscreen]);
+
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().catch(err => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
+    if (isFullscreen) {
       setIsFullscreen(false);
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if ((document as any).webkitFullscreenElement && (document as any).webkitExitFullscreen) {
+          (document as any).webkitExitFullscreen();
+        }
+      } catch (err) {
+        console.warn("Native exit fullscreen error:", err);
+      }
+    } else {
+      setIsFullscreen(true);
+      try {
+        const el = containerRef.current as any;
+        if (el) {
+          if (el.requestFullscreen) {
+            el.requestFullscreen().catch(() => {});
+          } else if (el.webkitRequestFullscreen) {
+            el.webkitRequestFullscreen();
+          } else if (el.mozRequestFullScreen) {
+            el.mozRequestFullScreen();
+          } else if (el.msRequestFullscreen) {
+            el.msRequestFullscreen();
+          }
+        }
+      } catch (err) {
+        console.warn("Native request fullscreen error:", err);
+      }
     }
   };
 
@@ -46,8 +90,10 @@ function ReactPlaygroundContent({ onReset }: { onReset: () => void }) {
     <div 
       ref={containerRef}
       className={`flex flex-col bg-background border border-border/40 ${
-        isFullscreen ? "rounded-none" : "rounded-xl overflow-hidden"
-      } w-full h-full transition-all duration-300`}
+        isFullscreen 
+          ? "fixed inset-0 z-50 h-screen w-screen rounded-none border-none overflow-hidden" 
+          : "w-full h-full rounded-xl overflow-hidden"
+      } transition-all duration-300 [&_.sp-pre-placeholder]:!hidden [&_.sp-placeholder]:!hidden [&_.sp-run-button]:!hidden [&_button.sp-button]:!hidden`}
     >
       <ReactPlaygroundControls 
         layout={layout} 
@@ -91,6 +137,7 @@ function ReactPlaygroundContent({ onReset }: { onReset: () => void }) {
                         showLineNumbers 
                         showTabs
                         showInlineErrors
+                        showRunButton={false}
                         wrapContent
                         style={{ height: '100%', overflow: 'hidden' }}
                       />
@@ -191,6 +238,7 @@ export function ReactPlayground() {
   const [mounted, setMounted] = useState(false);
   const [initialFiles, setInitialFiles] = useState(DEFAULT_REACT_FILES);
   const [resetKey, setResetKey] = useState(0);
+  const { isMobile, isMounted } = useResponsive();
 
   useEffect(() => {
     const saved = localStorage.getItem("devaxioms_react_playground");
@@ -208,8 +256,30 @@ export function ReactPlayground() {
     setResetKey(prev => prev + 1);
   };
 
-  if (!mounted) {
-    return <div className="w-full h-[800px] bg-background border border-border/40 rounded-xl"></div>;
+  if (!mounted || !isMounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center bg-background rounded-xl border border-border/40 h-full w-full">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#FF5A26] border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col flex-1 items-center justify-center p-6 bg-background rounded-xl border border-border/40 h-full w-full min-h-[350px]">
+        <div className="bg-card text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-8 shadow-xs border border-border/60 space-y-4 text-center">
+          <div className="w-12 h-12 bg-[#FF5A26]/10 rounded-xl flex items-center justify-center text-[#FF5A26]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-bold tracking-tight">Desktop Optimized</h2>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The React playground is designed for desktop viewports. Please switch devices or use a desktop screen to code.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

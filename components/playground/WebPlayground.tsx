@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview, SandpackFileExplorer, useSandpack } from "@codesandbox/sandpack-react";
+import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview, useSandpack } from "@codesandbox/sandpack-react";
 import { CustomConsole } from "./CustomConsole";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Maximize, Minimize, TerminalSquare, Wand2, Loader2, RotateCcw } from "lucide-react";
+import { RefreshCw, Maximize, Minimize, TerminalSquare, Wand2, Loader2, RotateCcw, Columns, Rows } from "lucide-react";
+import { useResponsive } from "@/hooks/useResponsive";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -28,7 +29,15 @@ interface PlaygroundControlsProps {
   onReset: () => void;
 }
 
-function WebPlaygroundControls({ layout, setLayout, isFullscreen, toggleFullscreen, isConsoleVisible, toggleConsole, onReset }: PlaygroundControlsProps) {
+function WebPlaygroundControls({ 
+  layout, 
+  setLayout, 
+  isFullscreen, 
+  toggleFullscreen, 
+  isConsoleVisible, 
+  toggleConsole, 
+  onReset,
+}: PlaygroundControlsProps) {
   const { sandpack } = useSandpack();
   const [isFormatting, setIsFormatting] = useState(false);
 
@@ -62,43 +71,36 @@ function WebPlaygroundControls({ layout, setLayout, isFullscreen, toggleFullscre
   };
   
   return (
-    <div className="flex items-center justify-between p-2 border-b bg-muted/40 gap-2 relative">
-      <div className="flex items-center gap-2">
-      </div>
-      
-      <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
-        <span className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">Web Playground</span>
-      </div>
-      
-      <div className="flex items-center gap-2">
+    <div className="flex items-center justify-between p-2 border-b bg-muted/40 gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         <Button 
-          variant={isConsoleVisible ? "secondary" : "outline"} 
-          size="icon" 
-          className="w-6 h-6 shrink-0"
-          onClick={toggleConsole} 
-          title="Toggle Console"
+          onClick={() => sandpack.runSandpack()} 
+          className="gap-1.5 bg-[#FF5A26] hover:bg-[#FF5A26]/90 text-white shrink-0 h-8 px-2.5 sm:px-3 text-xs sm:text-sm font-medium" 
+          size="sm"
+          title="Run / Refresh Preview"
         >
-          <TerminalSquare className="w-3.5 h-3.5" />
+          <RefreshCw className="w-3.5 h-3.5" /> 
+          <span className="inline">Run Preview</span>
         </Button>
         <Button 
           variant="outline" 
           size="icon" 
-          className="w-6 h-6 shrink-0"
+          className="w-8 h-8 shrink-0 flex"
           onClick={formatCode} 
           disabled={isFormatting}
           title="Format Code (Prettier)"
         >
-          {isFormatting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Wand2 className="w-3.5 h-3.5" />}
+          {isFormatting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
         </Button>
         <Dialog>
           <DialogTrigger asChild>
             <Button 
-              variant="outline"
-              size="icon"
-              className="w-6 h-6 shrink-0 text-red-500 hover:text-red-400 hover:bg-red-500/10"
+              variant="outline" 
+              size="icon" 
+              className="w-8 h-8 shrink-0 flex text-red-500 hover:text-red-400 hover:bg-red-500/10"
               title="Reset to Defaults (Clear Storage)"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-4 h-4" />
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
@@ -120,23 +122,45 @@ function WebPlaygroundControls({ layout, setLayout, isFullscreen, toggleFullscre
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <Button 
-          variant="outline"
-          size="icon"
-          className="w-6 h-6 shrink-0 bg-[#FF5A26] hover:bg-[#FF5A26]/90 text-white border-0"
-          onClick={() => sandpack.runSandpack()}
-          title="Refresh Preview"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-        </Button>
+      </div>
+      
+      <div className="hidden lg:flex items-center pointer-events-none">
+        <span className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">Web Playground</span>
+      </div>
+      
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="hidden md:flex items-center gap-1.5 sm:gap-2">
+          <Button 
+            variant={isConsoleVisible ? "secondary" : "outline"} 
+            size="sm" 
+            className="gap-2 h-8 px-2.5 text-xs sm:text-sm"
+            onClick={toggleConsole} 
+            title="Toggle Console"
+          >
+            <TerminalSquare className="w-4 h-4" />
+            <span className="hidden sm:inline">Console</span>
+          </Button>
+          {isConsoleVisible && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-2 h-8 px-2.5 text-xs sm:text-sm"
+              onClick={() => setLayout(layout === "vertical" ? "horizontal" : "vertical")} 
+              title="Toggle Layout"
+            >
+              {layout === "vertical" ? <Columns className="w-4 h-4" /> : <Rows className="w-4 h-4" />}
+              <span className="hidden sm:inline">{layout === "vertical" ? "Side-by-side" : "Top-bottom"}</span>
+            </Button>
+          )}
+        </div>
         <Button 
           variant="outline" 
           size="icon"
-          className="w-6 h-6 shrink-0"
+          className="w-8 h-8 shrink-0"
           onClick={toggleFullscreen} 
           title="Toggle Fullscreen"
         >
-          {isFullscreen ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+          {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
         </Button>
       </div>
     </div>
@@ -147,7 +171,6 @@ function WebPlaygroundContent({ onReset }: { onReset: () => void }) {
   const [layout, setLayout] = useState<"vertical" | "horizontal">("horizontal");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isConsoleVisible, setIsConsoleVisible] = useState(true);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { sandpack } = useSandpack();
@@ -160,22 +183,69 @@ function WebPlaygroundContent({ onReset }: { onReset: () => void }) {
     return () => clearTimeout(timer);
   }, [sandpack.files]);
 
+  // Listen for native exit fullscreen (e.g. Esc key)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isNativeFull = !!(
+        document.fullscreenElement || 
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+      if (!isNativeFull && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+    };
+  }, [isFullscreen]);
+
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().catch(err => {
-        console.error(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen();
+    if (isFullscreen) {
       setIsFullscreen(false);
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        } else if ((document as any).webkitFullscreenElement && (document as any).webkitExitFullscreen) {
+          (document as any).webkitExitFullscreen();
+        }
+      } catch (err) {
+        console.warn("Native exit fullscreen error:", err);
+      }
+    } else {
+      setIsFullscreen(true);
+      try {
+        const el = containerRef.current as any;
+        if (el) {
+          if (el.requestFullscreen) {
+            el.requestFullscreen().catch(() => {});
+          } else if (el.webkitRequestFullscreen) {
+            el.webkitRequestFullscreen();
+          } else if (el.mozRequestFullScreen) {
+            el.mozRequestFullScreen();
+          } else if (el.msRequestFullscreen) {
+            el.msRequestFullscreen();
+          }
+        }
+      } catch (err) {
+        console.warn("Native request fullscreen error:", err);
+      }
     }
   };
 
   return (
     <div 
       ref={containerRef} 
-      className={`flex flex-col w-full h-full bg-background border border-border/40 ${isFullscreen ? 'rounded-none' : 'rounded-xl overflow-hidden'} [&_.sp-pre-placeholder]:!hidden [&_.sp-placeholder]:!hidden`}
+      className={`flex flex-col w-full bg-background border border-border/40 ${
+        isFullscreen 
+          ? 'fixed inset-0 z-50 h-screen w-screen rounded-none border-none overflow-hidden' 
+          : 'h-full rounded-xl overflow-hidden'
+      } [&_.sp-pre-placeholder]:!hidden [&_.sp-placeholder]:!hidden [&_.sp-run-button]:!hidden [&_button.sp-button]:!hidden`}
     >
       <WebPlaygroundControls 
         layout={layout} 
@@ -191,23 +261,24 @@ function WebPlaygroundContent({ onReset }: { onReset: () => void }) {
         <SandpackLayout style={{ height: "100%", width: "100%", borderRadius: 0, border: "none" }}>
           <ResizablePanelGroup direction={layout} className="h-full w-full">
             <ResizablePanel defaultSize={50} minSize={20}>
-                  <div className="h-full w-full relative min-h-0">
-                    <div className="absolute inset-0 overflow-hidden [&_.sp-editor]:h-full [&_.sp-cm]:h-full [&_.cm-editor]:h-full [&_.cm-scroller]:h-full [&_.cm-scroller]:overflow-auto [&_.sp-file]:h-full [&_.sp-tabs]:border-b [&_.sp-tabs]:border-border/40">
-                      <SandpackCodeEditor 
-                        showLineNumbers 
-                        showTabs
-                        showInlineErrors
-                        wrapContent
-                        style={{ height: '100%', overflow: 'hidden' }}
-                      />
-                    </div>
-                  </div>
-                </ResizablePanel>
-                
-                <ResizableHandle className={`bg-border/60 hover:bg-[#FF5A26] transition-colors relative z-20 ${layout === 'vertical' ? 'h-[2px] cursor-row-resize' : 'w-[2px] cursor-col-resize'}`} />
-                
-                <ResizablePanel defaultSize={50} minSize={20}>
-                  <ResizablePanelGroup direction="vertical">
+              <div className="h-full w-full relative min-h-0">
+                <div className="absolute inset-0 overflow-hidden [&_.sp-editor]:h-full [&_.sp-cm]:h-full [&_.cm-editor]:h-full [&_.cm-scroller]:overflow-auto [&_.sp-file]:h-full [&_.sp-tabs]:border-b [&_.sp-tabs]:border-border/40">
+                  <SandpackCodeEditor 
+                    showLineNumbers 
+                    showTabs
+                    showInlineErrors
+                    showRunButton={false}
+                    wrapContent
+                    style={{ height: '100%', overflow: 'hidden' }}
+                  />
+                </div>
+              </div>
+            </ResizablePanel>
+            
+            <ResizableHandle className={`bg-border/60 hover:bg-[#FF5A26] transition-colors relative z-20 ${layout === 'vertical' ? 'h-[2px] cursor-row-resize' : 'w-[2px] cursor-col-resize'}`} />
+            
+            <ResizablePanel defaultSize={50} minSize={20}>
+              <ResizablePanelGroup direction="vertical">
                 <ResizablePanel defaultSize={isConsoleVisible ? 70 : 100} minSize={20}>
                   <div className="h-full w-full [&_.sp-preview]:h-full [&_.sp-preview-container]:h-full">
                     <SandpackPreview 
@@ -286,6 +357,7 @@ export function WebPlayground() {
   const [mounted, setMounted] = useState(false);
   const [initialFiles, setInitialFiles] = useState(DEFAULT_WEB_FILES);
   const [resetKey, setResetKey] = useState(0);
+  const { isMobile, isMounted } = useResponsive();
 
   useEffect(() => {
     const saved = localStorage.getItem("devaxioms_web_playground");
@@ -303,8 +375,30 @@ export function WebPlayground() {
     setResetKey(prev => prev + 1);
   };
 
-  if (!mounted) {
-    return <div className="w-full h-full bg-background border border-border/40 rounded-xl"></div>;
+  if (!mounted || !isMounted) {
+    return (
+      <div className="flex flex-1 items-center justify-center bg-background rounded-xl border border-border/40 h-full w-full">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#FF5A26] border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col flex-1 items-center justify-center p-6 bg-background rounded-xl border border-border/40 h-full w-full min-h-[350px]">
+        <div className="bg-card text-foreground flex w-full max-w-sm flex-col items-center justify-center rounded-2xl p-8 shadow-xs border border-border/60 space-y-4 text-center">
+          <div className="w-12 h-12 bg-[#FF5A26]/10 rounded-xl flex items-center justify-center text-[#FF5A26]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-bold tracking-tight">Desktop Optimized</h2>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              The Web playground is designed for desktop viewports. Please switch devices or use a desktop screen to code.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

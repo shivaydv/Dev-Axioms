@@ -75,7 +75,7 @@ export function ReactPlaygroundControls({ layout, setLayout, isFullscreen, toggl
         </Button>
       </div>
       
-      <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
+      <div className="hidden lg:flex items-center pointer-events-none">
         <span className="text-xs font-semibold tracking-wider uppercase text-muted-foreground">React Playground</span>
       </div>
       
