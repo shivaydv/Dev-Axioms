@@ -43,7 +43,7 @@ export function MinimalHero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.08, duration: 0.4 }}
-                        className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-foreground leading-[1.08] mb-6"
+                        className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground leading-[1.12] mb-4"
                     >
                         Everything You Need to Prepare for Developer Interviews.
                     </motion.h1>
@@ -53,7 +53,7 @@ export function MinimalHero() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.16, duration: 0.4 }}
-                        className="text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed mb-8"
+                        className="text-sm sm:text-base text-muted-foreground max-w-xl leading-relaxed mb-6"
                     >
                         Dev Axioms helps you quickly revise core technical concepts, explore real interview questions, and practice machine coding rounds — all in one focused workspace.
                     </motion.p>
@@ -68,8 +68,8 @@ export function MinimalHero() {
                         <Link
                             href="/practice"
                             className={cn(
-                                buttonVariants({ size: "lg" }),
-                                "w-full sm:w-auto rounded-xl px-7 h-11 text-xs font-semibold bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 shadow-md flex items-center justify-center gap-2 group"
+                                buttonVariants({ size: "default" }),
+                                "w-full sm:w-auto rounded-xl px-6 h-10 text-xs font-semibold bg-[#FF5A26] text-white hover:bg-[#FF5A26]/90 transition-all shadow-md shadow-[#FF5A26]/20 flex items-center justify-center gap-2 group border border-[#FF5A26]/40"
                             )}
                         >
                             <FaCode className="w-3.5 h-3.5" />
@@ -80,8 +80,8 @@ export function MinimalHero() {
                         <Link
                             href="/web-dev"
                             className={cn(
-                                buttonVariants({ variant: "outline", size: "lg" }),
-                                "w-full sm:w-auto rounded-xl px-7 h-11 text-xs font-semibold bg-card/60 border-border/80 hover:bg-muted/80 backdrop-blur-sm flex items-center justify-center gap-2"
+                                buttonVariants({ variant: "outline", size: "default" }),
+                                "w-full sm:w-auto rounded-xl px-6 h-10 text-xs font-semibold bg-card/60 border-border/80 hover:bg-muted/80 backdrop-blur-sm flex items-center justify-center gap-2"
                             )}
                         >
                             <FaBookOpen className="w-3.5 h-3.5 text-muted-foreground" />
@@ -90,7 +90,7 @@ export function MinimalHero() {
                     </motion.div>
 
                     {/* Platform Domains Badge */}
-                    <motion.div
+                    {/* <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.35 }}
@@ -105,7 +105,7 @@ export function MinimalHero() {
                             <span className="text-border">•</span>
                             <span className="text-foreground font-semibold">System Architecture</span>
                         </div>
-                    </motion.div>
+                    </motion.div> */}
                 </div>
 
                 {/* Dual Showcase Cards - Side by Side Product Display */}
